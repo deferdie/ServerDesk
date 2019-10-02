@@ -17,18 +17,12 @@ const useStyles = makeStyles(theme => ({
   spacer: {
     flexGrow: 1
   },
-  importButton: {
-    marginRight: theme.spacing(1)
-  },
-  exportButton: {
-    marginRight: theme.spacing(1)
-  },
   searchInput: {
     marginRight: theme.spacing(1)
   }
 }));
 
-const UsersToolbar = props => {
+const ServersToolbar = props => {
   const { className, ...rest } = props;
 
   const classes = useStyles();
@@ -40,27 +34,25 @@ const UsersToolbar = props => {
     >
       <div className={classes.row}>
         <span className={classes.spacer} />
-        <Button className={classes.importButton}>Import</Button>
-        <Button className={classes.exportButton}>Export</Button>
         <Button
           color="primary"
           variant="contained"
         >
-          Add user
+          Add Server
         </Button>
       </div>
       <div className={classes.row}>
         <SearchInput
           className={classes.searchInput}
-          placeholder="Search user"
+          placeholder="Search server"
         />
       </div>
     </div>
   );
 };
 
-UsersToolbar.propTypes = {
+ServersToolbar.propTypes = {
   className: PropTypes.string
 };
 
-export default UsersToolbar;
+export default ServersToolbar;

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
+import axios from 'axios';
 
-import { UsersToolbar, UsersTable } from './components';
-import mockData from './data';
+// Components
+import { ServersToolbar, ServerTable } from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,13 +17,20 @@ const useStyles = makeStyles(theme => ({
 const UserList = () => {
   const classes = useStyles();
 
-  const [users] = useState(mockData);
+  const [servers, setServers] = useState([]);
+
+  useEffect(() => {
+    // Fetch all of the servers for the user
+    axios.get('/api/servers').then((data) => {
+      setServers(data.data.data);
+    });
+  }, []);
 
   return (
     <div className={classes.root}>
-      <UsersToolbar />
+      <ServersToolbar />
       <div className={classes.content}>
-        <UsersTable users={users} />
+        <ServerTable servers={servers} />
       </div>
     </div>
   );

@@ -22,18 +22,11 @@ const Footer = props => {
     >
       <Typography variant="body1">
         &copy;{' '}
-        <Link
-          component="a"
-          href="https://devias.io/"
-          target="_blank"
-        >
-          Devias IO
-        </Link>
+        ServerDesk
         . 2019
       </Typography>
       <Typography variant="caption">
-        Created with love for the environment. By designers and developers who
-        love to work together in offices!
+        Created with love for developers. By developers.
       </Typography>
     </div>
   );
