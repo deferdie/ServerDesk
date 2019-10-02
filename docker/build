@@ -1,0 +1,2 @@
+docker build -f nginx/Dockerfile -t sslchecker/nginx:latest ./nginx
+docker build -f php/Dockerfile -t sslchecker/php:latest ./php

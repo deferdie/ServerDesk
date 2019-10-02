@@ -1,0 +1,50 @@
+version: "2"
+services:
+  # The php-fpm service for serverdesk
+  php:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    image: serverdesk/serverdesk-php
+    volumes:
+      - '.:/app'
+    environment:
+      DB_PASSWORD: secret
+      DB_DATABASE: serverdesk
+      DB_USER: serverdesk
+      DB_PASSWORD: secret
+      DB_HOST: serverdesk-mysql
+    container_name: serverdesk-php
+  
+  # The Nginx service for serverdesk
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    image: serverdesk/serverdesk-nginx
+    volumes:
+      - '.:/app'
+    ports:
+      - '80:80'
+    container_name: serverdesk-nginx
+    depends_on:
+      - php
+
+  # The MySql service for serverdesk
+  mysql:
+    image: 'mysql:5.7'
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: serverdesk
+      MYSQL_USER: serverdesk
+      MYSQL_PASSWORD: secret
+    volumes:
+      - 'mysqldata:/var/lib/mysql'
+    container_name: serverdesk-mysql
+volumes:
+  mysqldata:
+    driver: local
+  redisdata:
+    driver: local
