@@ -7,6 +7,7 @@ import _ from 'lodash';
 import { ServersToolbar, ServerTable, ServerForm } from './components';
 import Modal from '../../components/Modal';
 import { useToasts } from 'react-toast-notifications';
+import { destructServerErrors } from '../../helpers/error';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,6 +27,9 @@ const ServerList = () => {
   const [serverFormErrors, setServerFormErrors] = useState([]);
   const [serverFormData, setServerFormData] = useState({
     name: '',
+    plan: null,
+    wants_php: false,
+    php_version: false,
     server_provider_id: '',
     user_server_provider_credential_id: ''
   });
@@ -51,7 +55,16 @@ const ServerList = () => {
   }, []);
 
   const submitServerCreateForm = () => {
-    console.log('submitting form');
+    axios.post('/api/servers', serverFormData).then(data => {
+      let server = data.data.data;
+      setShowServerForm(false);
+      addToast(`Creating server '${server.name}'`, { appearance: 'success', autoDismiss: true });
+
+      // Lets listen to the servers channel then add the server to the servers list
+      Echo.private(`server.${server.id}`).listen('ServerUpdated', data => {
+        addToast(`Server '${data.server.name}' updated`, { appearance: 'success', autoDismiss: true });
+      });
+    }).catch(error => setServerFormErrors(destructServerErrors(error)));
   };
 
   return (

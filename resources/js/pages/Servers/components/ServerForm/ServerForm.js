@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Grid,
-  TextField
+  Switch,
+  TextField,
+  FormControlLabel
 } from '@material-ui/core';
 import axios from 'axios';
 import _ from 'lodash';
@@ -28,6 +30,7 @@ const ServerForm = (props) => {
   }, []);
 
   const handleChange = event => {
+    console.log(event.target.name, event.target.value);
     setServerFormData({
       ...serverFormData,
       [event.target.name]: event.target.value
@@ -144,36 +147,102 @@ const ServerForm = (props) => {
       )}
 
       {serverFormData.server_provider_id !== '' && (
-        <Grid
-          item
-          md={12}
-          xs={12}
-        >
-          <TextField
-            fullWidth
-            label="Select your plan"
-            margin="dense"
-            name="plan"
-            onChange={serverChanged}
-            required
-            select
-            SelectProps={{ native: true }}
-            value={serverFormData.plan}
-            variant="outlined"
-            helperText={hasError(formErrors, 'plan') ? getError(formErrors, 'plan') : 'Please select your plan for this provider'}
-            error={hasError(formErrors, 'plan')}
+        <React.Fragment>
+          <Grid
+            item
+            md={12}
+            xs={12}
           >
-            <option selected>Please select</option>
-            {_.get(serverProviderPlans, serverFormData.server_provider_id, []).map(option => (
-              <option
-                key={option.name}
-                value={option.name}
+            <TextField
+              fullWidth
+              label="Select your plan"
+              margin="dense"
+              name="plan"
+              onChange={handleChange}
+              required
+              select
+              SelectProps={{ native: true }}
+              value={serverFormData.plan}
+              variant="outlined"
+              helperText={hasError(formErrors, 'plan') ? getError(formErrors, 'plan') : 'Please select your plan for this provider'}
+              error={hasError(formErrors, 'plan')}
+            >
+              <option selected>Please select</option>
+              {_.get(serverProviderPlans, serverFormData.server_provider_id, []).map(option => (
+                <option
+                  key={option.name}
+                  value={option.name}
+                >
+                  {option.name}
+                </option>
+              ))}
+            </TextField>
+          </Grid>
+
+          <Grid
+            item
+            md={12}
+            xs={12}
+          >
+            <FormControlLabel
+              value={serverFormData.wants_php}
+              control={(
+                <Switch
+                  color="primary"
+                  onChange={(e) => {
+                    handleChange({
+                      target: {
+                        value: e.target.value === 'false',
+                        name: 'wants_php'
+                      }
+                    });
+                  }}
+                  name="wants_php"
+                />
+              )}
+              label="Install PHP"
+              labelPlacement="start"
+            />
+          </Grid>
+
+          {serverFormData.wants_php && (
+            <Grid
+              item
+              md={12}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Select PHP version"
+                margin="dense"
+                name="php_version"
+                onChange={handleChange}
+                required
+                select
+                SelectProps={{ native: true }}
+                value={serverFormData.php_version}
+                variant="outlined"
+                helperText={hasError(formErrors, 'php_version') ? getError(formErrors, 'php_version') : 'Please select your required PHP version'}
+                error={hasError(formErrors, 'php_version')}
               >
-                {option.name}
-              </option>
-            ))}
-          </TextField>
-        </Grid>
+                <option selected>Please select</option>
+                {[
+                  '7.0',
+                  '7.1',
+                  '7.2',
+                  '7.3'
+                ].map(option => (
+                  <option
+                    key={option}
+                    value={option}
+                  >
+                    {option}
+                  </option>
+                ))}
+              </TextField>
+            </Grid>
+          )}
+        </React.Fragment>
       )}
     </Grid>
   );
