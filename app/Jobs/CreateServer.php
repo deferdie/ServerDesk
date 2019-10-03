@@ -104,6 +104,7 @@ class CreateServer implements ShouldQueue
             }
 
             $this->server->status = 'running';
+            $this->server->save();
             $this->server = $this->server->fresh();
 
             broadcast(new ServerUpdated($this->server));
