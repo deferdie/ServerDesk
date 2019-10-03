@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
+import _ from 'lodash';
 
 // Components
 import { ServersToolbar, ServerTable, ServerForm } from './components';
@@ -16,14 +17,25 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ServerList = () => {
+  const { Echo } = window;
   const classes = useStyles();
-
   const [servers, setServers] = useState([]);
 
   useEffect(() => {
     // Fetch all of the servers for the user
     axios.get('/api/servers').then((data) => {
-      setServers(data.data.data);
+      let servers = data.data.data;
+      setServers(servers);
+
+      servers.map((server) => {
+        Echo.private(`server.${server.id}`).listen('ServerUpdated', data => {
+          const s = [...servers];
+          let serverToUpdate = _.findIndex(s, function (o) { return o.id === data.server.id; });
+
+          s.splice(serverToUpdate, 1, data.server);
+          setServers(s);
+        });
+      });
     });
   }, []);
 

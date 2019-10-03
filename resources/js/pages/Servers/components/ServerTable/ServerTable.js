@@ -16,6 +16,9 @@ import {
 } from '@material-ui/core';
 import _ from 'lodash';
 
+// Components
+import ServerStatusIcon from '../ServerStatusIcon';
+
 const useStyles = makeStyles(theme => ({
   root: {},
   content: {
@@ -52,6 +55,7 @@ const ServerTable = props => {
                   <TableCell>IP</TableCell>
                   <TableCell>RAM / CPU</TableCell>
                   <TableCell>Server created</TableCell>
+                  <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -64,15 +68,18 @@ const ServerTable = props => {
                     <TableCell>
                       <Typography variant="body1">{_.get(server, 'name')}</Typography>
                     </TableCell>
-                    <TableCell>{_.get(server, 'serverProvider.name')}</TableCell>
+                    <TableCell>{_.get(server, 'server_provider.name')}</TableCell>
                     <TableCell>
                       {_.get(server, 'ip_address')}
                     </TableCell>
                     <TableCell>
-                      {_.get(server, 'ram')} / {_.get(server, 'cpu')}
+                      {_.get(server, 'memory')} / {_.get(server, 'cpus')}
                     </TableCell>
                     <TableCell>
                       {moment(server.created_at).format('DD/MM/YYYY')}
+                    </TableCell>
+                    <TableCell>
+                      <ServerStatusIcon server={server} />
                     </TableCell>
                   </TableRow>
                 ))}

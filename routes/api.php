@@ -46,4 +46,6 @@ Route::name('api.')->namespace('Api')->group(function () {
         Route::get('/user/server-providers', 'UserServerProviderCredentialController@index')->name('user.server-providers.index');
         Route::post('/user/server-providers', 'UserServerProviderCredentialController@store')->name('user.server-providers.store');
     });
+
+    Broadcast::routes();
 });

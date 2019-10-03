@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\ServerUpdated;
 use App\Server;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;

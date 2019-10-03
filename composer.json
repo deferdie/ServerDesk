@@ -14,10 +14,10 @@
         "laravel/framework": "^6.0",
         "laravel/helpers": "^1.1",
         "laravel/tinker": "^1.0",
-        "tymon/jwt-auth": "^1.0",
         "phpseclib/phpseclib": "~2.0",
         "pusher/pusher-php-server": "~4.0",
-        "toin0u/digitalocean-v2": "^2.2"
+        "toin0u/digitalocean-v2": "^2.2",
+        "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
         "filp/whoops": "^2.0",

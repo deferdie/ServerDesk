@@ -9,5 +9,15 @@
 @import './_variables';
 @import './components/authnav';
 
+.icon-spin {
+	animation: spin 3s linear infinite;
+}
 
-
+@keyframes spin {
+	0% {
+		transform: rotateZ(0);
+	}
+	100% {
+		transform: rotateZ(360deg);
+	}
+}
