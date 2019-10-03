@@ -69,17 +69,15 @@ class CreateServer implements ShouldQueue
                 false, // Enable backups
                 false, // Enable IPV6
                 false, // Option for private netowrking
-                [$this->server->credential->server_provider_key_id]
+                [$this->server->credential->server_provider_key_id],
+                view('scripts.provision-ubuntu1804', [
+                    'server' => $this->server
+                ])->render()
             );
 
             $this->server->provider_server_id = $server->id;
 
-            $server = $do->droplet()->getById($server->id);
-
-            while ($server->status === 'new') {
-                sleep(5);
-                $server = $do->droplet()->getById($server->id);
-            }
+            $server = $do->droplet()->waitForActive($do->droplet()->getById($server->id), 300);
 
             foreach ($server->networks as $network) {
                 if ($network->type == 'public' && $network->version == 4) {
@@ -88,39 +86,7 @@ class CreateServer implements ShouldQueue
                 break;
             }
 
-            $this->server->save();
-            $this->server = $this->server->fresh();
-
-            $softwareInstalled = false;
-
-            $ssh = new SSH2($this->server->ip_address);
-            $key = new RSA();
-            $key->loadKey($this->server->credential->private_key);
-
-            while ($softwareInstalled === false) {
-                try {
-                    sleep(5);
-                    \Log::info('installing sogftware');
-
-                    if ($ssh->login('root', $key)) {
-                        $ssh->exec(
-                            view('scripts.provision-ubuntu1804', [
-                                'server' => $this->server
-                            ])->render()
-                        );
-                        $softwareInstalled = true;
-                    } else {
-                        \Log::info('login failed');
-                    }
-                } catch (\Exception $e) {
-                    \Log::info($e);
-                    sleep(5);
-                    $softwareInstalled = false;
-                }
-            }
-
             $this->server->status = 'running';
-            $this->server->save();
             $this->server = $this->server->fresh();
 
             broadcast(new ServerUpdated($this->server));

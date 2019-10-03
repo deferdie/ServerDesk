@@ -38,6 +38,14 @@ class UserServerProviderCredentialController extends Controller
 
         $rsa->loadKey($keys['privatekey']);
 
+        if (UserServerProviderCredential::where('user_id', auth()->user()->id)
+            ->where('key', $request->key)->exists()
+        ) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'key' => ['This key already exists for this account']
+            ]);
+        }
+
         $credential = UserServerProviderCredential::create($request->all() + [
             'user_id' => auth()->user()->id,
             'public_key' => $keys['publickey'],
@@ -47,12 +55,12 @@ class UserServerProviderCredentialController extends Controller
 
         if ($credential->serverProvider->name === 'Digital Ocean') {
             $do = new DigitalOcean($credential);
-            $key = $do->key()->create('serverConfig', $keys['publickey']);
 
+            $key = $do->key()->create('serverConfig', $keys['publickey']);
             $credential->server_provider_key_id = $key->id;
             $credential->save();
+            
+            return new UserServerProviderCredentialResource($credential);       
         }
-
-        return new UserServerProviderCredentialResource($credential);
     }
 }
