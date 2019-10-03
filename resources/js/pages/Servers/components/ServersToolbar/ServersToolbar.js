@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ServersToolbar = props => {
-  const { className, ...rest } = props;
+  const { className, onAddServer, ...rest } = props;
 
   const classes = useStyles();
 
@@ -37,8 +37,9 @@ const ServersToolbar = props => {
         <Button
           color="primary"
           variant="contained"
+          onClick={onAddServer}
         >
-          Add Server
+          Create Server
         </Button>
       </div>
       <div className={classes.row}>
@@ -52,7 +53,8 @@ const ServersToolbar = props => {
 };
 
 ServersToolbar.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  onAddServer: PropTypes.func
 };
 
 export default ServersToolbar;

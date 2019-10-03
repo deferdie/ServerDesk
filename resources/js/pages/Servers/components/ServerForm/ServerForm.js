@@ -7,13 +7,11 @@ import {
 import axios from 'axios';
 import _ from 'lodash';
 
-const ServerForm = (props) => {
+// Components
+import { hasError, getError } from '../.././../../helpers/error';
 
-  const [values, setValues] = useState({
-    name: null,
-    server_provider_id: '',
-    plan: null
-  });
+const ServerForm = (props) => {
+  const { setServerFormData, formErrors, serverFormData } = props;
 
   const [serverProviders, setServerProviders] = useState([]);
   const [serverProviderPlans, setServerProviderPlans] = useState({});
@@ -25,8 +23,8 @@ const ServerForm = (props) => {
   }, []);
 
   const handleChange = event => {
-    setValues({
-      ...values,
+    setServerFormData({
+      ...serverFormData,
       [event.target.name]: event.target.value
     });
   };
@@ -42,8 +40,8 @@ const ServerForm = (props) => {
       setServerProviderPlans(providerPlans);
     });
 
-    setValues({
-      ...values,
+    setServerFormData({
+      ...serverFormData,
       [event.target.name]: event.target.value
     });
   };
@@ -60,14 +58,15 @@ const ServerForm = (props) => {
       >
         <TextField
           fullWidth
-          helperText="Please specify the server name"
-          label="First name"
+          label="Server name"
           margin="dense"
-          name="firstName"
+          name="name"
           onChange={handleChange}
           required
-          value={values.firstName}
+          value={serverFormData.name}
           variant="outlined"
+          helperText={hasError(formErrors, 'name') ? getError(formErrors, 'name') : 'Please specify the server name'}
+          error={hasError(formErrors, 'name')}
         />
       </Grid>
 
@@ -79,15 +78,16 @@ const ServerForm = (props) => {
         <TextField
           fullWidth
           label="Select server provider"
-          helperText="Please select your server provider"
           margin="dense"
           name="server_provider_id"
           onChange={serverChanged}
           required
           select
           SelectProps={{ native: true }}
-          value={values.server_provider_id}
+          value={serverFormData.server_provider_id}
           variant="outlined"
+          helperText={hasError(formErrors, 'server_provider_id') ? getError(formErrors, 'server_provider_id') : 'Please select your server provider'}
+          error={hasError(formErrors, 'server_provider_id')}
         >
           <option selected>Please select</option>
           {serverProviders.map(option => (
@@ -101,7 +101,7 @@ const ServerForm = (props) => {
         </TextField>
       </Grid>
 
-      {values.server_provider_id !== '' && (
+      {serverFormData.server_provider_id !== '' && (
         <Grid
           item
           md={12}
@@ -109,16 +109,17 @@ const ServerForm = (props) => {
         >
           <TextField
             fullWidth
-            label="Select server provider"
-            helperText="Please select your server provider"
+            label="Select your plan"
             margin="dense"
-            name="server_provider_id"
+            name="plan"
             onChange={serverChanged}
             required
             select
             SelectProps={{ native: true }}
-            value={values.server_provider_id}
+            value={serverFormData.plan}
             variant="outlined"
+            helperText={hasError(formErrors, 'plan') ? getError(formErrors, 'plan') : 'Please select your plan for this provider'}
+            error={hasError(formErrors, 'plan')}
           >
             <option selected>Please select</option>
             {serverProviders.map(option => (
@@ -137,7 +138,8 @@ const ServerForm = (props) => {
 };
 
 ServerForm.propTypes = {
-
+  serverFormData: PropTypes.object.isRequired,
+  setServerFormData: PropTypes.func.isRequired
 };
 
 export default ServerForm;

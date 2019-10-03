@@ -20,8 +20,11 @@ const useStyles = makeStyles(theme => ({
 const ServerList = () => {
   const { Echo } = window;
   const classes = useStyles();
-  const [servers, setServers] = useState([]);
   const { addToast } = useToasts();
+  const [servers, setServers] = useState([]);
+  const [showServerForm, setShowServerForm] = useState(false);
+  const [serverFormErrors, setServerFormErrors] = useState([]);
+  const [serverFormData, setServerFormData] = useState({});
 
   useEffect(() => {
     // Fetch all of the servers for the user
@@ -43,14 +46,28 @@ const ServerList = () => {
     });
   }, []);
 
+  const submitServerCreateForm = () => {
+    console.log('submitting form');
+  };
+
   return (
     <div className={classes.root}>
-      <ServersToolbar />
+      <ServersToolbar onAddServer={() => setShowServerForm(true)}/>
       <div className={classes.content}>
         <ServerTable servers={servers} />
       </div>
-      <Modal title="test">
-        <ServerForm />
+      <Modal
+        title="Add a new server"
+        saveButton="Add server"
+        open={showServerForm}
+        onClose={() => setShowServerForm(false)}
+        onSave={submitServerCreateForm}
+      >
+        <ServerForm
+          formErrors={serverFormErrors}
+          serverFormData={serverFormData}
+          setServerFormData={setServerFormData}
+        />
       </Modal>
     </div>
   );
