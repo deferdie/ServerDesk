@@ -26,6 +26,7 @@ class Server extends Model
         'mysql_version',
         'server_provider_id',
         'provider_server_id',
+        'user_server_provider_credential_id',
     ];
 
 

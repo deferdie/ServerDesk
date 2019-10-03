@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 
 // Components
-import { ServersToolbar, ServerTable } from './components';
+import { ServersToolbar, ServerTable, ServerForm } from './components';
 import Modal from '../../components/Modal';
 
 const useStyles = makeStyles(theme => ({
@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const UserList = () => {
+const ServerList = () => {
   const classes = useStyles();
 
   const [servers, setServers] = useState([]);
@@ -33,12 +33,11 @@ const UserList = () => {
       <div className={classes.content}>
         <ServerTable servers={servers} />
       </div>
-      <Modal open title="test">
-        <ServerTable servers={servers} />
-
+      <Modal title="test">
+        <ServerForm />
       </Modal>
     </div>
   );
 };
 
-export default UserList;
+export default ServerList;

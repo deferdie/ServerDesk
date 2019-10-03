@@ -6,7 +6,7 @@ import { setIntendedUrl } from '../helpers/auth';
 import PropTypes from 'prop-types';
 import { ThemeProvider } from '@material-ui/styles';
 import theme from '../theme';
-import { Main as MainLayout, Minimal as MinimalLayout } from '../layouts';
+import { Main as MainLayout } from '../layouts';
 
 const propTypes = {
   component: PropTypes.func.isRequired,

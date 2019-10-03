@@ -53,6 +53,11 @@ const Sidebar = props => {
       title: 'Servers',
       href: '/servers',
       icon: <DnsIcon />
+    },
+    {
+      title: 'Servers providers',
+      href: '/server-providers',
+      icon: <DnsIcon />
     }
   ];
 

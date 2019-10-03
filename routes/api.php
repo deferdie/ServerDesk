@@ -35,6 +35,14 @@ Route::name('api.')->namespace('Api')->group(function () {
             Route::post('logout', 'LogoutController@logout')->name('logout');
         });
 
+        // Servers
         Route::get('servers', 'ServerController@index')->name('server.index');
+
+        // Server Providers
+        Route::get('server-providers', 'ServerProviderController@index')->name('server-provider.index');
+        
+        // User Settings
+        // User server providers
+        Route::get('/user/server-providers', 'UserServerProviderCredentialController@index')->name('user.server-providers.index');
     });
 });

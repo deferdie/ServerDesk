@@ -4,19 +4,30 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardActions,
+  Divider,
+  Button
+} from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   modal: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    minWidth: '100% !important',
+    padding: '40px !important'
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
     border: '1px solid #666',
     borderRadius: '3px',
     boxShadow: theme.shadows[5],
-    width: '75%'
+    minWidth: '100% !important'
   },
   modalTitle: {
     padding: theme.spacing(2, 2, 2),
@@ -29,7 +40,7 @@ const useStyles = makeStyles(theme => ({
 
 const TransitionsModal = (props) => {
   const classes = useStyles();
-  const { open, onClose, title, children } = props;
+  const { open, onClose, title, subTitle, children, className, ...rest } = props;
 
   return (
     <div>
@@ -47,12 +58,28 @@ const TransitionsModal = (props) => {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <h2 id="transition-modal-title" className={classes.modalTitle}>
-              {title}
-            </h2>
-            <div className={classes.modalContent}>
-              {children}
-            </div>
+            <Card
+              {...rest}
+              className={clsx(classes.root, className)}
+            >
+              <CardHeader
+                subheader={subTitle}
+                title={title}
+              />
+              <Divider />
+              <CardContent>
+                {children}
+              </CardContent>
+              <Divider />
+              <CardActions>
+                <Button
+                  color="primary"
+                  variant="contained"
+                >
+                  Save details
+                </Button>
+              </CardActions>
+            </Card>
           </div>
         </Fade>
       </Modal>
@@ -64,6 +91,8 @@ TransitionsModal.propTypes = {
   title: PropTypes.string,
   onClose: PropTypes.func,
   children: PropTypes.any,
+  subTitle: PropTypes.string,
+  className: PropTypes.string,
   open: PropTypes.bool.isRequired
 };
 

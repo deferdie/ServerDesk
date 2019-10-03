@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Welcome from '../pages/Welcome';
-import SignIn from '../pages/auth/SignIn';
-import Register from '../pages/auth/Register';
-import ForgotPassword from '../pages/auth/ForgotPassword';
-import ResetPassword from '../pages/auth/ResetPassword';
-import NotFound from '../pages/404';
-import PropTypes from 'prop-types';
-import Dashboard from '../pages/Dashboard';
-import Servers from '../pages/Servers';
-import Profile from '../pages/Profile';
 import AuthRoute from './AuthRoute';
 import { connect } from 'react-redux';
 import { setLoading } from '../actions/loading';
 import { initAuthFromExistingToken } from '../actions/auth';
 import GuestRoute from './GuestRoute';
+
+// Pages
+import NotFound from '../pages/404';
+import PropTypes from 'prop-types';
+import Welcome from '../pages/Welcome';
+import Servers from '../pages/Servers';
+import Profile from '../pages/Profile';
+import SignIn from '../pages/auth/SignIn';
+import Dashboard from '../pages/Dashboard';
+import Register from '../pages/auth/Register';
+import ServerProviders from '../pages/ServerProviders';
+import ResetPassword from '../pages/auth/ResetPassword';
+import ForgotPassword from '../pages/auth/ForgotPassword';
 
 const propTypes = {
   setLoading: PropTypes.func.isRequired,
@@ -38,14 +41,20 @@ class App extends Component {
       <Router>
         <div className="flex flex-col min-h-screen">
           <Switch>
+            {/* Guest routes */}
             <GuestRoute exact path="/" component={Welcome} />
             <GuestRoute path="/register" component={Register} />
             <GuestRoute path="/signin" component={SignIn} />
             <GuestRoute path="/forgot-password" component={ForgotPassword} />
             <GuestRoute path="/password/reset/:token" component={ResetPassword} />
+
+            {/* Auth routes */}
             <AuthRoute path="/dashboard" component={Dashboard} />
+            <AuthRoute path="/server-providers" component={ServerProviders} />
             <AuthRoute path="/servers" component={Servers} />
             <AuthRoute path="/profile/:id" component={Profile} />
+
+            {/* Error routes */}
             <Route component={NotFound} />
           </Switch>
         </div>

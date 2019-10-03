@@ -17,7 +17,7 @@ class CreateServersTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('server_provider_id');
-            $table->unsignedInteger('provider_credential_id');
+            $table->unsignedInteger('user_server_provider_credential_id');
             $table->string('provider_server_id')->nullable();
             $table->string('name');
 

@@ -16,7 +16,7 @@ class CreateServerProvidersTable extends Migration
         Schema::create('server_providers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->boolean('status')->default(true);
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }
