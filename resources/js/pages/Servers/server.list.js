@@ -50,30 +50,43 @@ const ServerList = () => {
           setServers(s);
 
           addToast(`Server '${data.server.name}' updated`, { appearance: 'success', autoDismiss: true });
+        }).listen('ServerFailedToCreate', data => {
+          const s = [...servers];
+          let serverToRemove = _.findIndex(s, function (o) { return o.id === data.server.id; });
+
+          s.splice(serverToRemove, 1);
+          setServers(s);
         });
       });
     });
   }, []);
 
   const submitServerCreateForm = () => {
+    const serverCopy = [...servers];
+
     axios.post('/api/servers', serverFormData).then(data => {
-      let server = data.data.data;
+      const createdServer = data.data.data;
       setShowServerForm(false);
-      addToast(`Creating server '${server.name}'`, { appearance: 'success', autoDismiss: true });
+      addToast(`Creating server '${createdServer.name}'`, { appearance: 'success', autoDismiss: true });
+
+      serverCopy.push(createdServer);
+      setServers(serverCopy);
 
       // Lets listen to the servers channel then add the server to the servers list
-      Echo.private(`server.${server.id}`).listen('ServerUpdated', data => {
-        const s = [...servers];
-        let serverToUpdate = _.findIndex(s, function (o) { return o.id === data.server.id; });
+      Echo.private(`server.${createdServer.id}`).listen('ServerUpdated', data => {
+        let serverToUpdate = _.findIndex(serverCopy, function (o) { return o.id === data.server.id; });
 
-        s.splice(serverToUpdate, 1, data.server);
-        setServers(s);
+        serverCopy.splice(serverToUpdate, 1, data.server);
+        setServers(serverCopy);
         addToast(`Server '${data.server.name}' updated`, { appearance: 'success', autoDismiss: true });
+      }).listen('ServerFailedToCreate', data => {
+        let serverToRemove = _.findIndex(serverCopy, function (o) { return o.id === data.server; });
+        if (serverToRemove) {
+          serverCopy.splice(serverToRemove, 1);
+          setServers(serverCopy);
+          addToast(`Server failed to create`, { appearance: 'error', autoDismiss: true });
+        }
       });
-
-      const s = [...servers];
-      s.push(server);
-      setServers(s);
     }).catch(error => setServerFormErrors(destructServerErrors(error)));
   };
 

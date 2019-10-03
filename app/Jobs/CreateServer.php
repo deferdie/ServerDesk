@@ -3,15 +3,15 @@
 namespace App\Jobs;
 
 use App\Server;
-use phpseclib\Net\SSH2;
-use phpseclib\Crypt\RSA;
+use GuzzleHttp\Client;
 use App\Events\ServerCreated;
+use App\Events\ServerFailedToCreate;
 use App\Events\ServerUpdated;
 use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use App\ServerProviders\DigitalOcean\DigitalOcean;
 
 class CreateServer implements ShouldQueue
@@ -86,6 +86,23 @@ class CreateServer implements ShouldQueue
                 break;
             }
 
+            // Check if the server is ready
+            $client = new Client();
+            $siteReady = false;
+            
+            while($siteReady === false) {
+                try {
+                    $httpStatus = $client->request('GET', $this->server->ip_address)->getStatusCode();
+                    if ($httpStatus === 200) {
+                        $siteReady = true;
+                    }
+    
+                    sleep(3);
+                } catch (\Exception $e) {
+                    sleep(3);
+                }
+            }
+
             $this->server->status = 'running';
             $this->server = $this->server->fresh();
 
@@ -95,12 +112,13 @@ class CreateServer implements ShouldQueue
     }
 
     /**
-     * Install the software on the server
+     * When the the job fails
      *
      * @return void
      */
-    private function installSoftware($server)
+    public function failed()
     {
-        
+        broadcast(new ServerFailedToCreate($this->server->id));
+        $this->server->delete();
     }
 }
