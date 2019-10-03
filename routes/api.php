@@ -44,5 +44,6 @@ Route::name('api.')->namespace('Api')->group(function () {
         // User Settings
         // User server providers
         Route::get('/user/server-providers', 'UserServerProviderCredentialController@index')->name('user.server-providers.index');
+        Route::post('/user/server-providers', 'UserServerProviderCredentialController@store')->name('user.server-providers.store');
     });
 });

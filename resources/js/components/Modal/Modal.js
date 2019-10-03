@@ -40,7 +40,17 @@ const useStyles = makeStyles(theme => ({
 
 const TransitionsModal = (props) => {
   const classes = useStyles();
-  const { open, onClose, title, subTitle, children, className, ...rest } = props;
+  const {
+    open,
+    onClose,
+    title,
+    onSave,
+    subTitle,
+    children,
+    className,
+    saveButton,
+    ...rest
+  } = props;
 
   return (
     <div>
@@ -75,8 +85,9 @@ const TransitionsModal = (props) => {
                 <Button
                   color="primary"
                   variant="contained"
+                  onClick={onSave}
                 >
-                  Save details
+                  {saveButton}
                 </Button>
               </CardActions>
             </Card>
@@ -89,10 +100,12 @@ const TransitionsModal = (props) => {
 
 TransitionsModal.propTypes = {
   title: PropTypes.string,
+  onSave: PropTypes.func,
   onClose: PropTypes.func,
   children: PropTypes.any,
   subTitle: PropTypes.string,
   className: PropTypes.string,
+  saveButton: PropTypes.string,
   open: PropTypes.bool.isRequired
 };
 

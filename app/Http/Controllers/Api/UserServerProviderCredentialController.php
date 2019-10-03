@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\ServerProvider;
+use phpseclib\Crypt\RSA;
 use App\UserServerProviderCredential;
 use App\Http\Controllers\Controller;
 use App\ServerProviders\DigitalOcean\DigitalOcean;
 use App\Http\Resources\UserServerProviderCredentialResource;
-use App\Http\Resources\UserServerProviderCredentialStoreRequest;
+use App\Http\Requests\UserServerProviderCredentialStoreRequest;
 
 class UserServerProviderCredentialController extends Controller
 {
@@ -44,9 +45,11 @@ class UserServerProviderCredentialController extends Controller
             'fingerprint' => $rsa->getPublicKeyFingerprint(),
         ]);
 
-        if ($credential->provider->name === 'Digital Ocean') {
-            $do = new DigitalOcean($credential);
-            $do->key()->create('serverConfig', $keys['publickey']);
-        }
+        // if ($credential->provider->name === 'Digital Ocean') {
+        //     $do = new DigitalOcean($credential);
+        //     $do->key()->create('serverConfig', $keys['publickey']);
+        // }
+
+        return new UserServerProviderCredentialResource($credential);
     }
 }

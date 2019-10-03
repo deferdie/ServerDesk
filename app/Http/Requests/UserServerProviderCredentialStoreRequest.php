@@ -26,6 +26,7 @@ class UserServerProviderCredentialStoreRequest extends FormRequest
         return [
             'name' => 'required|string',
             'key' => 'required|string',
+            'server_provider_id' => 'required|integer',
         ];
     }
 }
