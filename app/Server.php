@@ -26,6 +26,7 @@ class Server extends Model
         'mysql_version',
         'server_provider_id',
         'provider_server_id',
+        'provider_server_region',
         'user_server_provider_credential_id',
     ];
 
@@ -36,7 +37,7 @@ class Server extends Model
      * @var array
      */
     protected $with = [
-        'serverProvider'
+        'serverProvider',
     ];
 
     /**
@@ -50,6 +51,16 @@ class Server extends Model
     }
 
     /**
+     * This servers credential
+     *
+     * @return void
+     */
+    public function credential()
+    {
+        return $this->hasOne(UserServerProviderCredential::class, 'id', 'user_server_provider_credential_id');
+    }
+
+    /**
      * This server belongs to a server provider
      *
      * @return void
@@ -57,19 +68,5 @@ class Server extends Model
     public function serverProvider()
     {
         return $this->belongsTo(ServerProvider::class);
-    }
-
-    /**
-     * Returns the config for connecting to the server
-     *
-     * @return array
-     */
-    public function getPrivateKey($user = null)
-    {
-        $user = $user ?? auth()->user()->id;
-
-        $provider = ProviderCredientials::where('server_provider_id', $this->server_provider_id)->where('user_id', $user)->first();
-
-        return $provider->private_key;
     }
 }

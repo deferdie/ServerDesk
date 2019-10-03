@@ -30,7 +30,6 @@ const ServerForm = (props) => {
   }, []);
 
   const handleChange = event => {
-    console.log(event.target.name, event.target.value);
     setServerFormData({
       ...serverFormData,
       [event.target.name]: event.target.value
@@ -178,6 +177,43 @@ const ServerForm = (props) => {
               ))}
             </TextField>
           </Grid>
+
+          {/* Regions */}
+          {serverFormData.plan !== null && (
+            <Grid
+              item
+              md={12}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Select your region"
+                margin="dense"
+                name="provider_server_region"
+                onChange={handleChange}
+                required
+                select
+                SelectProps={{ native: true }}
+                value={serverFormData.provider_server_region}
+                variant="outlined"
+                helperText={hasError(formErrors, 'provider_server_region') ? getError(formErrors, 'provider_server_region') : 'Please select your region for this plan'}
+                error={hasError(formErrors, 'provider_server_region')}
+              >
+                <option selected>Please select</option>
+                {
+                  _.get(_.find(_.get(serverProviderPlans, `${serverFormData.server_provider_id}`, []), (o) => {
+                    return o.name === serverFormData.plan;
+                  }), 'regions', []).map(option => (
+                    <option
+                      key={option}
+                      value={option}
+                    >
+                      {option}
+                    </option>
+                  ))}
+              </TextField>
+            </Grid>
+          )}
 
           <Grid
             item

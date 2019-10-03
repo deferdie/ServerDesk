@@ -28,9 +28,10 @@ const ServerList = () => {
   const [serverFormData, setServerFormData] = useState({
     name: '',
     plan: null,
+    php_version: '',
     wants_php: false,
-    php_version: false,
     server_provider_id: '',
+    provider_server_region: null,
     user_server_provider_credential_id: ''
   });
 
@@ -62,8 +63,17 @@ const ServerList = () => {
 
       // Lets listen to the servers channel then add the server to the servers list
       Echo.private(`server.${server.id}`).listen('ServerUpdated', data => {
+        const s = [...servers];
+        let serverToUpdate = _.findIndex(s, function (o) { return o.id === data.server.id; });
+
+        s.splice(serverToUpdate, 1, data.server);
+        setServers(s);
         addToast(`Server '${data.server.name}' updated`, { appearance: 'success', autoDismiss: true });
       });
+
+      const s = [...servers];
+      s.push(server);
+      setServers(s);
     }).catch(error => setServerFormErrors(destructServerErrors(error)));
   };
 

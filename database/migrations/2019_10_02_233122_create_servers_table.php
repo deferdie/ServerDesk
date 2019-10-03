@@ -26,6 +26,7 @@ class CreateServersTable extends Migration
             $table->unsignedInteger('cpus')->nullable();
             $table->unsignedInteger('disk')->nullable();
             $table->ipAddress('ip_address')->nullable();
+            $table->string('provider_server_region')->nullable();
 
             // PHP settings
             $table->boolean('wants_php')->default(false);

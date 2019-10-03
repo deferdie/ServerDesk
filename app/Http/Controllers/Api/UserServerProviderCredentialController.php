@@ -47,7 +47,10 @@ class UserServerProviderCredentialController extends Controller
 
         if ($credential->serverProvider->name === 'Digital Ocean') {
             $do = new DigitalOcean($credential);
-            $do->key()->create('serverConfig', $keys['publickey']);
+            $key = $do->key()->create('serverConfig', $keys['publickey']);
+
+            $credential->server_provider_key_id = $key->id;
+            $credential->save();
         }
 
         return new UserServerProviderCredentialResource($credential);

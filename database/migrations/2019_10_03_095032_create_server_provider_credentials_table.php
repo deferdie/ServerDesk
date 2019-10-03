@@ -23,6 +23,7 @@ class CreateServerProviderCredentialsTable extends Migration
             $table->string('fingerprint')->nullable();
             $table->text('public_key')->nullable();
             $table->text('private_key')->nullable();
+            $table->string('server_provider_key_id')->nullable();
             $table->timestamps();
         });
     }

@@ -21,6 +21,7 @@ class UserServerProviderCredential extends Model
         'private_key',
         'fingerprint',
         'server_provider_id',
+        'server_provider_key_id',
     ];
 
     /**

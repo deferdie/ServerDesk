@@ -26,7 +26,7 @@ class ServerStoreRequest extends FormRequest
         return [
             'name' => 'required|string',
             'wants_php' => 'required|bool',
-            'php_version' => 'required|string',
+            'php_version' => 'string|nullable',
             'server_provider_id' => 'required|integer',
             'user_server_provider_credential_id' => 'required|boolean',
         ];
