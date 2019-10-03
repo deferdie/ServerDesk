@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\ServerProvider;
 use App\Http\Controllers\Controller;
+use App\UserServerProviderCredential;
+use App\ServerProviders\DigitalOcean\DigitalOcean;
 
 class ServerProviderPlanController extends Controller
 {
@@ -13,12 +15,14 @@ class ServerProviderPlanController extends Controller
      * @param Provider $provider
      * @return void
      */
-    public function index(ServerProvider $provider)
+    public function index(ServerProvider $provider, UserServerProviderCredential $creds)
     {
         if ($provider->name == 'Digital Ocean') {
+            $do = new DigitalOcean($creds);
+
             $plans = [];
 
-            foreach (DigitalOcean::size()->getAll() as $plan) {
+            foreach ($do->size()->getAll() as $plan) {
                 array_push($plans, [
                     'name' => $plan->slug,
                     'label' => $plan->slug,

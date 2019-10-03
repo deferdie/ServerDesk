@@ -24,7 +24,11 @@ const ServerList = () => {
   const [servers, setServers] = useState([]);
   const [showServerForm, setShowServerForm] = useState(false);
   const [serverFormErrors, setServerFormErrors] = useState([]);
-  const [serverFormData, setServerFormData] = useState({});
+  const [serverFormData, setServerFormData] = useState({
+    name: '',
+    server_provider_id: '',
+    user_server_provider_credential_id: ''
+  });
 
   useEffect(() => {
     // Fetch all of the servers for the user

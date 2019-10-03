@@ -45,10 +45,10 @@ class UserServerProviderCredentialController extends Controller
             'fingerprint' => $rsa->getPublicKeyFingerprint(),
         ]);
 
-        // if ($credential->provider->name === 'Digital Ocean') {
-        //     $do = new DigitalOcean($credential);
-        //     $do->key()->create('serverConfig', $keys['publickey']);
-        // }
+        if ($credential->serverProvider->name === 'Digital Ocean') {
+            $do = new DigitalOcean($credential);
+            $do->key()->create('serverConfig', $keys['publickey']);
+        }
 
         return new UserServerProviderCredentialResource($credential);
     }

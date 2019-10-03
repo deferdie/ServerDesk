@@ -38,6 +38,9 @@ Route::name('api.')->namespace('Api')->group(function () {
         // Servers
         Route::get('servers', 'ServerController@index')->name('server.index');
 
+        // Server Provider plans
+        Route::get('server-providers/{provider}/{creds}', 'ServerProviderPlanController@index')->name('server-provider.plans.index');
+        
         // Server Providers
         Route::get('server-providers', 'ServerProviderController@index')->name('server-provider.index');
         
