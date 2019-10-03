@@ -43,6 +43,7 @@
         "react-perfect-scrollbar": "^1.5.3",
         "react-redux": "^5.0.7",
         "react-router-dom": "^4.3.1",
+        "react-toast-notifications": "^2.2.5",
         "redux": "^4.0.0",
         "redux-thunk": "^2.3.0"
     }

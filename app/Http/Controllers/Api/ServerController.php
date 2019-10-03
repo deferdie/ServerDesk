@@ -16,6 +16,7 @@ class ServerController extends Controller
      */
     public function index()
     {
+        broadcast(new ServerUpdated(Server::find(1)));
         return ServerResource::collection(Server::all());
     }
 

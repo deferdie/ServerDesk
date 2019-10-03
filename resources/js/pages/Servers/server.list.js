@@ -6,6 +6,7 @@ import _ from 'lodash';
 // Components
 import { ServersToolbar, ServerTable, ServerForm } from './components';
 import Modal from '../../components/Modal';
+import { useToasts } from 'react-toast-notifications';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,6 +21,7 @@ const ServerList = () => {
   const { Echo } = window;
   const classes = useStyles();
   const [servers, setServers] = useState([]);
+  const { addToast } = useToasts();
 
   useEffect(() => {
     // Fetch all of the servers for the user
@@ -34,6 +36,8 @@ const ServerList = () => {
 
           s.splice(serverToUpdate, 1, data.server);
           setServers(s);
+
+          addToast(`Server '${data.server.name}' updated`, { appearance: 'success', autoDismiss: true });
         });
       });
     });
