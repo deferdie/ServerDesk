@@ -53,18 +53,18 @@ const ServerProviderTable = props => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {providers.map(server => (
+                {providers.map(provider => (
                   <TableRow
                     className={classes.tableRow}
                     hover
-                    key={server.id}
+                    key={provider.id}
                   >
                     <TableCell>
-                      <Typography variant="body1">{_.get(server, 'name')}</Typography>
+                      <Typography variant="body1">{_.get(provider, 'name')}</Typography>
                     </TableCell>
-                    <TableCell>{_.get(server, 'serverProvider.name')}</TableCell>
+                    <TableCell>{_.get(provider, 'server_provider.name')}</TableCell>
                     <TableCell>
-                      {moment(server.created_at).format('DD/MM/YYYY')}
+                      {moment(provider.created_at).format('DD/MM/YYYY')}
                     </TableCell>
                   </TableRow>
                 ))}
