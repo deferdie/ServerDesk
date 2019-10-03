@@ -4,6 +4,7 @@ import axios from 'axios';
 
 // Components
 import { ServersToolbar, ServerTable } from './components';
+import Modal from '../../components/Modal';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,6 +33,10 @@ const UserList = () => {
       <div className={classes.content}>
         <ServerTable servers={servers} />
       </div>
+      <Modal open title="test">
+        <ServerTable servers={servers} />
+
+      </Modal>
     </div>
   );
 };
