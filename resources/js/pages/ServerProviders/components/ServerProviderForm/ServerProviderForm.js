@@ -5,7 +5,6 @@ import {
   TextField
 } from '@material-ui/core';
 import axios from 'axios';
-import _ from 'lodash';
 
 // Components
 import { hasError, getError } from '../.././../../helpers/error';

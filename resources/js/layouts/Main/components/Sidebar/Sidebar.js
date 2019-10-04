@@ -7,7 +7,9 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import CloudIcon from '@material-ui/icons/Cloud';
 import DnsIcon from '@material-ui/icons/Dns';
 import MergeTypeIcon from '@material-ui/icons/MergeType';
+import AppsIcon from '@material-ui/icons/Apps';
 
+// Components
 import { Profile, SidebarNav, UpgradePlan } from './components';
 
 const useStyles = makeStyles(theme => ({
@@ -43,6 +45,11 @@ const Sidebar = props => {
       title: 'Dashboard',
       href: '/dashboard',
       icon: <DashboardIcon />
+    },
+    {
+      title: 'Applications',
+      href: '/applications',
+      icon: <AppsIcon />
     },
     {
       title: 'Servers',

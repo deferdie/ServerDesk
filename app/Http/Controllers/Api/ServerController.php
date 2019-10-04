@@ -20,7 +20,7 @@ class ServerController extends Controller
      */
     public function index()
     {
-        return ServerResource::collection(Server::all());
+        return ServerResource::collection(Server::where('user_id', auth()->user()->id)->get());
     }
 
     /**

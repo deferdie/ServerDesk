@@ -15,6 +15,7 @@ import Profile from '../pages/Profile';
 import SignIn from '../pages/auth/SignIn';
 import Dashboard from '../pages/Dashboard';
 import Register from '../pages/auth/Register';
+import Applications from '../pages/Applications';
 import SourceProviders from '../pages/SourceProviders';
 import ServerProviders from '../pages/ServerProviders';
 import ResetPassword from '../pages/auth/ResetPassword';
@@ -50,6 +51,7 @@ class App extends Component {
 
             {/* Auth routes */}
             <AuthRoute path="/dashboard" component={Dashboard} />
+            <AuthRoute path="/applications" component={Applications} />
             <AuthRoute path="/server-providers" component={ServerProviders} />
             <AuthRoute path="/servers" component={Servers} />
             <AuthRoute path="/source-providers/:provider" component={SourceProviders} />

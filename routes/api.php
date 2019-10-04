@@ -55,6 +55,10 @@ Route::name('api.')->namespace('Api')->group(function () {
 
         // Source provider connectors
         Route::post('/source-providers/connect/github', 'GitHubConnectorController@connect');
+
+        // Applications
+        Route::get('/applications', 'ApplicationController@index')->name('application.index');
+        Route::post('/applications', 'ApplicationController@store')->name('application.store');
     });
 
     Broadcast::routes();
