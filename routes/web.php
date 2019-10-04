@@ -11,6 +11,12 @@
 |
 */
 
+Route::get('/test', function () {
+    return view('scripts.deployments.setup-nginx', [
+        'application' => \App\Application::find(7)
+    ]);
+});
+
 Route::get('/{uri?}', function () {
     return view('welcome');
 })->where('uri', '(.*)');

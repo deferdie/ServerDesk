@@ -71,20 +71,24 @@ class DeployApplication implements ShouldQueue
                             'application' => $this->application
                         ])->render()
                     ));
-
-                    $repositoryDirectory = explode('/', $this->application->respository)[1];
                     
                     // Get the application type and install it
                     if ($this->application->type === 'Laravel') {
                         \Log::info($ssh->exec(
                             view('scripts.deployments.install-laravel', [
                                 'application' => $this->application,
-                                'repositoryDirectory' => $repositoryDirectory,
+                                'repositoryDirectory' => $this->application->domain,
+                            ])->render()
+                        ));
+
+                        // Setup the Nginx config for this site
+                        \Log::info($ssh->exec(
+                            view('scripts.deployments.setup-nginx', [
+                                'application' => $this->application,
+                                'repositoryDirectory' => $this->application->domain,
                             ])->render()
                         ));
                     }
-
-                    \Log::info($ssh->exec('ls -la ~/serverdesk/' . $repositoryDirectory));
                 }
                 
             }
