@@ -2,7 +2,7 @@ server {
     listen 80;
     listen [::]:80;
     server_name {{$application->domain}};
-    root /home/forge/{{$application->domain}}/{{$application->directory}};
+    root /var/www/html/serverdesk/{{$application->domain}}/{{$application->directory}};
 
     add_header X-Frame-Options "SAMEORIGIN";
     add_header X-XSS-Protection "1; mode=block";
@@ -25,10 +25,10 @@ server {
     error_page 404 /index.php;
 
     location ~ \.php$ {
-        fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
-        fastcgi_index index.php;
+        fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include fastcgi_params;
+        include snippets/fastcgi-php.conf;
     }
 
     location ~ /\.(?!well-known).* {

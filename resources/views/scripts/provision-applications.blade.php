@@ -1,4 +1,4 @@
 #!/bin/bash
 
 ## Create the directory
-mkdir -p ~/serverdesk
+mkdir -p /var/www/html/serverdesk
