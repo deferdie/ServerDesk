@@ -17,7 +17,7 @@ class CreateUserSourceProvidersTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('source_provider_id');
-            $table->string('source_provider_ssh_key_id');
+            $table->string('source_provider_ssh_key_id')->nullable();
             $table->text('access_token')->nullable();
             $table->timestamps();
         });

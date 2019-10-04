@@ -103,6 +103,23 @@ class CreateServer implements ShouldQueue
                 }
             }
 
+            if ($this->server->wants_php) {
+                // Check if the PHP site is ready
+                $siteReady = false;
+                while ($siteReady === false) {
+                    try {
+                        $httpStatus = $client->request('GET', $this->server->ip_address . '/info.php')->getStatusCode();
+                        if ($httpStatus === 200) {
+                            $siteReady = true;
+                        }
+
+                        sleep(3);
+                    } catch (\Exception $e) {
+                        sleep(3);
+                    }
+                }
+            }
+
             $this->server->status = 'running';
             $this->server->save();
             $this->server = $this->server->fresh();

@@ -24,6 +24,7 @@ class ApplicationStoreRequest extends FormRequest
     public function rules()
     {
         return [
+            'type' => 'required',
             'domain' => 'required',
             'respository' => 'required',
             'directory' => 'required|string',

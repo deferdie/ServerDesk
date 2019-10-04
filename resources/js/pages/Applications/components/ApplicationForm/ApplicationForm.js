@@ -56,6 +56,40 @@ const ApplicationForm = (props) => {
       >
         <TextField
           fullWidth
+          label="What type of application do you want to deploy"
+          margin="dense"
+          name="type"
+          onChange={handleChange}
+          required
+          select
+          SelectProps={{ native: true }}
+          value={applicationFormData.type}
+          variant="outlined"
+          helperText={hasError(formErrors, 'type') ? getError(formErrors, 'type') : 'Please select your app type'}
+          error={hasError(formErrors, 'type')}
+        >
+          <option selected>Please select</option>
+          {[
+            'PHP',
+            'Laravel'
+          ].map(option => (
+            <option
+              key={option}
+              value={option}
+            >
+              {option}
+            </option>
+          ))}
+        </TextField>
+      </Grid>
+      
+      <Grid
+        item
+        md={12}
+        xs={12}
+      >
+        <TextField
+          fullWidth
           label="What server would you like to deploy to?"
           margin="dense"
           name="server_id"

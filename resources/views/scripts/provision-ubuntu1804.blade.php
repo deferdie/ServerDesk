@@ -11,9 +11,12 @@ sudo systemctl enable nginx
 
 ## Install php
 @if ($server->wants_php)
+    ## Remove previous versions of PHP
+    sudo apt-get purge `dpkg -l | grep php| awk '{print $2}' |tr "\n" " "`
+
     @if($server->php_version == '7.2')
         ## PHP software
-        sudo apt install php7.2 php7.2-fpm php7.2-mysql php-common php7.2-cli php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-mbstring php7.2-xml php7.2-gd php7.2-curl -y
+        sudo apt install php7.2 php7.2-fpm php7.2-mysql php-common php7.2-cli php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-mbstring php7.2-xml php7.2-gd php7.2-curl zip unzip php7.2-zip -y
 
         ## Enable php
         sudo systemctl start php7.2-fpm
@@ -28,6 +31,9 @@ sudo systemctl enable nginx
     ## Create the default site
     sudo touch /usr/share/nginx/html/info.php
     echo '{!! file_get_contents(resource_path("views/scripts/php/default.blade.php")) !!}' > /usr/share/nginx/html/info.php
+
+    ## Install composer
+    {!! file_get_contents(resource_path("views/scripts/php/composer-install.blade.php")) !!}
 @endif
 
 ## Start Nginx

@@ -22,6 +22,10 @@ class CreateApplicationsTable extends Migration
             $table->string('directory');
             $table->string('respository');
             $table->boolean('deploy_form_git')->default(true);
+            $table->enum('type', [
+                'PHP',
+                'Laravel'
+            ]);
             $table->enum('state', [
                 'ready',
                 'deploying'

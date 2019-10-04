@@ -66,13 +66,25 @@ class DeployApplication implements ShouldQueue
                     $gitHub = new GitHub($this->application->sourceProvider);
                     $gitHub->createSSHKey($server);
 
-                    $ssh->exec(
+                    \Log::info($ssh->exec(
                         view('scripts.deployments.github-deployment', [
                             'application' => $this->application
                         ])->render()
-                    );
+                    ));
+
+                    $repositoryDirectory = explode('/', $this->application->respository)[1];
                     
-                    \Log::info($ssh->exec('ls -la ~/serverdesk'));
+                    // Get the application type and install it
+                    if ($this->application->type === 'Laravel') {
+                        \Log::info($ssh->exec(
+                            view('scripts.deployments.install-laravel', [
+                                'application' => $this->application,
+                                'repositoryDirectory' => $repositoryDirectory,
+                            ])->render()
+                        ));
+                    }
+
+                    \Log::info($ssh->exec('ls -la ~/serverdesk/' . $repositoryDirectory));
                 }
                 
             }
