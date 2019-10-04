@@ -4,14 +4,9 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Divider, Drawer } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import PeopleIcon from '@material-ui/icons/People';
-import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
-import TextFieldsIcon from '@material-ui/icons/TextFields';
-import ImageIcon from '@material-ui/icons/Image';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import SettingsIcon from '@material-ui/icons/Settings';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
+import CloudIcon from '@material-ui/icons/Cloud';
 import DnsIcon from '@material-ui/icons/Dns';
+import MergeTypeIcon from '@material-ui/icons/MergeType';
 
 import { Profile, SidebarNav, UpgradePlan } from './components';
 
@@ -57,7 +52,12 @@ const Sidebar = props => {
     {
       title: 'Servers providers',
       href: '/server-providers',
-      icon: <DnsIcon />
+      icon: <CloudIcon />
+    },
+    {
+      title: 'Source provider',
+      href: '/source-providers',
+      icon: <MergeTypeIcon />
     }
   ];
 

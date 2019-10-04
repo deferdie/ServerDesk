@@ -15,10 +15,10 @@ import Profile from '../pages/Profile';
 import SignIn from '../pages/auth/SignIn';
 import Dashboard from '../pages/Dashboard';
 import Register from '../pages/auth/Register';
+import SourceProviders from '../pages/SourceProviders';
 import ServerProviders from '../pages/ServerProviders';
 import ResetPassword from '../pages/auth/ResetPassword';
 import ForgotPassword from '../pages/auth/ForgotPassword';
-
 const propTypes = {
   setLoading: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
@@ -52,6 +52,8 @@ class App extends Component {
             <AuthRoute path="/dashboard" component={Dashboard} />
             <AuthRoute path="/server-providers" component={ServerProviders} />
             <AuthRoute path="/servers" component={Servers} />
+            <AuthRoute path="/source-providers/:provider" component={SourceProviders} />
+            <AuthRoute path="/source-providers" component={SourceProviders} />
             <AuthRoute path="/profile/:id" component={Profile} />
 
             {/* Error routes */}
