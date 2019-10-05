@@ -22,9 +22,6 @@ composer install && npm install
 cp .env.example .env
 ```
 
-- Pusher
--- Add your pusher API keys to the .env file
-
 - Generate app key
 ```bash
 php artisan key:generate
@@ -46,4 +43,14 @@ php artisan jwt:secret
 
 ```bash
 npm run dev
+```
+
+- Pusher
+-- Add your pusher API keys to the .env file
+
+- Add GitHub secrets in .env
+```bash
+GITHUB_CLIENT_ID=
+GITHUB_REDIRECT_URI=
+GITHUB_CLIENT_SECRET=
 ```
