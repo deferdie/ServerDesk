@@ -1,22 +1,17 @@
-# Laravel-React SPA
-
-Starter Boilerplate SPA made with Laravel and React.
-
-## Features
-
-- Laravel 6, React, Redux, React Router
-- Authentication with JWT
-- Login, register, reset password
-- Socialite integration (Google Account Sign in)
-- Flexible Page Layout
-- Flexible, Protected Routing
-- Tailwind CSS
-- ESlint
+# Server Desk
 
 ## Installation
 
 - Clone the repo
 - Installing all Composer & NPM dependencies.
+
+```bash
+docker-compose up -d
+```
+- SSH into the container 
+```bash
+docker exec -it serverdesk-php sh
+```
 
 ```bash
 composer install && npm install
@@ -25,14 +20,11 @@ composer install && npm install
 - Copy .env.example to .env
 - Generate app key
 
+- Pusher
+-- Add your pusher API keys to the .env file
+
 ```bash
 php artisan key:generate
-```
-
-- Create an Application in the Google API Console, Add google client id to the env file.
-
-```env
-GOOGLE_CLIENT_ID=
 ```
 
 - Run database migration
@@ -51,10 +43,4 @@ php artisan jwt:secret
 
 ```bash
 npm run dev
-```
-
-- Boot up a server
-
-```bash
-php artisan serve
 ```
