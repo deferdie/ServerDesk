@@ -9,6 +9,11 @@ import _ from 'lodash';
 
 // Components
 import { hasError, getError } from '../../../../helpers/error';
+import ApplicationStepper from './ApplicationStepper';
+
+// Stepper pages
+import SelectServerStep from './ApplicationStepperPages/SelectServerStep';
+import SelectSourceProviderStep from './ApplicationStepperPages/SelectSourceProviderStep'
 
 const ApplicationForm = (props) => {
   const { applicationFormData, setApplicationFormData, formErrors } = props;
@@ -49,6 +54,40 @@ const ApplicationForm = (props) => {
       container
       spacing={3}
     >
+      <ApplicationStepper steps={[
+        {
+          title: 'Select your server',
+          content: (
+            <SelectServerStep
+              formErrors={formErrors}
+              applicationFormData={applicationFormData}
+              sourceProviderChanged={sourceProviderChanged}
+            />
+          ),
+          error: () => {
+            let fields = ['server_id'];
+            return fields.map((field) => {
+              return hasError(formErrors, field);
+            })[0];
+          }
+        },
+        {
+          title: 'Select your Git provider',
+          content: (
+            <SelectSourceProviderStep
+              formErrors={formErrors}
+              applicationFormData={applicationFormData}
+              sourceProviderChanged={sourceProviderChanged}
+            />
+          ),
+          error: () => {
+            let fields = ['user_source_provider_id'];
+            return fields.map((field) => {
+              return hasError(formErrors, field);
+            })[0];
+          }
+        }
+      ]} />
       <Grid
         item
         md={12}
