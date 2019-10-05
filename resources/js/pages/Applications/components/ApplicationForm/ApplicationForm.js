@@ -13,6 +13,7 @@ import ApplicationStepper from './ApplicationStepper';
 // Stepper pages
 import SelectServerStep from './ApplicationStepperPages/SelectServerStep';
 import ApplicationSettingStep from './ApplicationStepperPages/ApplicationSettingStep';
+import ApplicationEnvironmentStep from './ApplicationStepperPages/ApplicationEnvironmentStep';
 
 const ApplicationForm = (props) => {
   const {
@@ -88,6 +89,25 @@ const ApplicationForm = (props) => {
             ),
             error: () => {
               let fields = ['type', 'domain'];
+              return fields.map((field) => {
+                if (hasError(formErrors, field) === true) {
+                  return true;
+                }
+                return false;
+              })[0];
+            }
+          },
+          {
+            title: 'Environment Settings',
+            content: (
+              <ApplicationEnvironmentStep
+                formErrors={formErrors}
+                handleChange={handleChange}
+                applicationFormData={applicationFormData}
+              />
+            ),
+            error: () => {
+              let fields = ['env_variables'];
               return fields.map((field) => {
                 if (hasError(formErrors, field) === true) {
                   return true;

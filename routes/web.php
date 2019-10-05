@@ -11,10 +11,11 @@
 |
 */
 
+use App\Events\ServerUpdated;
+use App\Server;
+
 Route::get('/test', function () {
-    return view('scripts.deployments.setup-nginx', [
-        'application' => \App\Application::find(7)
-    ]);
+    broadcast(new ServerUpdated(Server::find(1)));
 });
 
 Route::get('/{uri?}', function () {

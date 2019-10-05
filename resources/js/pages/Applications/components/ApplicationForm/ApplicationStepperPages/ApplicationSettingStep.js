@@ -12,7 +12,7 @@ const ApplicationSettingStep = (props) => {
   const {
     formErrors,
     applicationFormData,
-    handleChange,
+    handleChange
   } = props;
 
   return (
@@ -46,7 +46,6 @@ const ApplicationSettingStep = (props) => {
         >
           <option selected>Please select</option>
           {[
-            'PHP',
             'Laravel'
           ].map(option => (
             <option
@@ -100,6 +99,12 @@ const ApplicationSettingStep = (props) => {
       </Grid>
     </React.Fragment>
   );
+};
+
+ApplicationSettingStep.propTypes = {
+  formErrors: PropTypes.object,
+  handleChange: PropTypes.func,
+  applicationFormData: PropTypes.object
 };
 
 export default ApplicationSettingStep;

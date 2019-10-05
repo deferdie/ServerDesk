@@ -42,21 +42,7 @@ const ServerList = () => {
       setServers(servers);
 
       servers.map((server) => {
-        Echo.private(`server.${server.id}`).listen('ServerUpdated', data => {
-          const s = [...servers];
-          let serverToUpdate = _.findIndex(s, function (o) { return o.id === data.server.id; });
-
-          s.splice(serverToUpdate, 1, data.server);
-          setServers(s);
-
-          addToast(`Server '${data.server.name}' updated`, { appearance: 'success', autoDismiss: true });
-        }).listen('ServerFailedToCreate', data => {
-          const s = [...servers];
-          let serverToRemove = _.findIndex(s, function (o) { return o.id === data.server.id; });
-
-          s.splice(serverToRemove, 1);
-          setServers(s);
-        });
+        connectServerToSocket(server);
       });
     });
   }, []);
@@ -73,28 +59,44 @@ const ServerList = () => {
       setServers(serverCopy);
 
       // Lets listen to the servers channel then add the server to the servers list
-      Echo.private(`server.${createdServer.id}`).listen('ServerUpdated', data => {
-        let serverToUpdate = _.findIndex(serverCopy, function (o) { return o.id === data.server.id; });
-
-        serverCopy.splice(serverToUpdate, 1, data.server);
-        setServers(serverCopy);
-        addToast(`Server '${data.server.name}' updated`, { appearance: 'success', autoDismiss: true });
-      }).listen('ServerFailedToCreate', data => {
-        let serverToRemove = _.findIndex(serverCopy, function (o) { return o.id === data.server; });
-        if (serverToRemove) {
-          serverCopy.splice(serverToRemove, 1);
-          setServers(serverCopy);
-          addToast(`Server failed to create`, { appearance: 'error', autoDismiss: true });
-        }
-      });
+      connectServerToSocket(createdServer);
     }).catch(error => setServerFormErrors(destructServerErrors(error)));
+  };
+
+  const connectServerToSocket = (server) => {
+    const serverCopy = [...servers];
+    Echo.private(`server.${server.id}`).listen('ServerUpdated', data => {
+      let serverToUpdate = _.findIndex(serverCopy, function (o) { return o.id === data.server.id; });
+
+      serverCopy.splice(serverToUpdate, 1, data.server);
+      setServers(serverCopy);
+      addToast(`Server '${data.server.name}' updated`, { appearance: 'success', autoDismiss: true });
+    }).listen('ServerFailedToCreate', data => {
+      let serverToRemove = _.findIndex(serverCopy, function (o) { return o.id === data.server; });
+      if (serverToRemove) {
+        serverCopy.splice(serverToRemove, 1);
+        setServers(serverCopy);
+        addToast(`Server failed to create`, { appearance: 'error', autoDismiss: true });
+      }
+    });
+  };
+
+  const deleteServer = (server, index) => {
+    axios.delete(`/api/server/${server.id}`).then(() => {
+      const s = [...servers];
+      s.splice(index, 1);
+      setServers(s);
+    });
   };
 
   return (
     <div className={classes.root}>
       <ServersToolbar onAddServer={() => setShowServerForm(true)}/>
       <div className={classes.content}>
-        <ServerTable servers={servers} />
+        <ServerTable
+          servers={servers}
+          deleteServer={deleteServer}
+        />
       </div>
       <Modal
         title="Add a new server"

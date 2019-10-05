@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import StopIcon from '@material-ui/icons/Stop';
 import CheckIcon from '@material-ui/icons/Check';
 import LoopIcon from '@material-ui/icons/Loop';
+import IconButton from '@material-ui/core/IconButton';
 
 const ServerStatusIcon = (props) => {
   const { server } = props;
@@ -22,7 +23,9 @@ const ServerStatusIcon = (props) => {
   };
 
   return (
-    renderIcon()
+    <IconButton>
+      {renderIcon()}
+    </IconButton>
   );
 };
 

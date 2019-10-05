@@ -24,10 +24,11 @@ const ApplicationList = () => {
   const [applicationFormErrors, setApplicationFormErrors] = useState({});
   const [applicationFormData, setApplicationFormData] = useState({
     type: '',
-    domain: null,
+    domain: '',
     directory: '',
-    respository: '',
     server_id: '',
+    respository: '',
+    env_variables: '',
     user_source_provider_id: ''
   });
 
