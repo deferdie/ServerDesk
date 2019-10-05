@@ -13,7 +13,6 @@ import ApplicationStepper from './ApplicationStepper';
 
 // Stepper pages
 import SelectServerStep from './ApplicationStepperPages/SelectServerStep';
-import SelectSourceProviderStep from './ApplicationStepperPages/SelectSourceProviderStep'
 
 const ApplicationForm = (props) => {
   const { applicationFormData, setApplicationFormData, formErrors } = props;
@@ -65,25 +64,12 @@ const ApplicationForm = (props) => {
             />
           ),
           error: () => {
-            let fields = ['server_id'];
+            let fields = ['server_id', 'user_source_provider_id'];
             return fields.map((field) => {
-              return hasError(formErrors, field);
-            })[0];
-          }
-        },
-        {
-          title: 'Select your Git provider',
-          content: (
-            <SelectSourceProviderStep
-              formErrors={formErrors}
-              applicationFormData={applicationFormData}
-              sourceProviderChanged={sourceProviderChanged}
-            />
-          ),
-          error: () => {
-            let fields = ['user_source_provider_id'];
-            return fields.map((field) => {
-              return hasError(formErrors, field);
+              if (hasError(formErrors, field) === true) {
+                return true;
+              }
+              return false;
             })[0];
           }
         }
