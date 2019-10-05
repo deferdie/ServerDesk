@@ -47,7 +47,9 @@ class AuthNav extends Component {
                 <NavLink
                   to="/dashboard"
                   activeClassName="font-bold"
-                  className="text-grey-darkest no-underline text-indigo">Laravel React SPA
+                  className="text-grey-darkest no-underline text-indigo"
+                >
+                  Server Desk
                 </NavLink>
               </li>
             </ul>

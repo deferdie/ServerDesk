@@ -59,7 +59,9 @@ class Register extends Component {
           <div className="p-4">
             <Link
               to="/"
-              className="text-grey-darkest text-bold no-underline text-indigo text-2xl">Laravel React SPA
+              className="text-grey-darkest text-bold no-underline text-indigo text-2xl"
+              >
+                Server Desk
             </Link>
           </div>
 

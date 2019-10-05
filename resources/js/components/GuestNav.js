@@ -8,7 +8,9 @@ const GuestNav = () => {
         <li className="px-2">
           <Link to=""
             className="no-underline text-grey-darker"
-          >Laravel React SPA</Link>
+          >
+            Server Desk
+          </Link>
         </li>
       </ul>
 
