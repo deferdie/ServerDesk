@@ -18,11 +18,14 @@ composer install && npm install
 ```
 
 - Copy .env.example to .env
-- Generate app key
+```bash
+cp .env.example .env
+```
 
 - Pusher
 -- Add your pusher API keys to the .env file
 
+- Generate app key
 ```bash
 php artisan key:generate
 ```
