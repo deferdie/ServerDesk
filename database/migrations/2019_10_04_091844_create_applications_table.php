@@ -26,7 +26,7 @@ class CreateApplicationsTable extends Migration
                 'PHP',
                 'Laravel'
             ]);
-            $table->enum('state', [
+            $table->enum('status', [
                 'ready',
                 'deploying'
             ])->default('deploying');

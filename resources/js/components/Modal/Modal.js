@@ -49,6 +49,7 @@ const TransitionsModal = (props) => {
     children,
     className,
     saveButton,
+    showActionButtons,
     ...rest
   } = props;
 
@@ -81,21 +82,27 @@ const TransitionsModal = (props) => {
                 {children}
               </CardContent>
               <Divider />
-              <CardActions>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  onClick={onSave}
-                >
-                  {saveButton}
-                </Button>
-              </CardActions>
+              {showActionButtons && (
+                <CardActions>
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    onClick={onSave}
+                  >
+                    {saveButton}
+                  </Button>
+                </CardActions>
+              )}
             </Card>
           </div>
         </Fade>
       </Modal>
     </div>
   );
+};
+
+TransitionsModal.defaultProps = {
+  showActionButtons: true
 };
 
 TransitionsModal.propTypes = {
@@ -106,7 +113,8 @@ TransitionsModal.propTypes = {
   subTitle: PropTypes.string,
   className: PropTypes.string,
   saveButton: PropTypes.string,
-  open: PropTypes.bool.isRequired
+  open: PropTypes.bool.isRequired,
+  showActionButtons: PropTypes.bool
 };
 
 export default TransitionsModal;

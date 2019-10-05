@@ -25,21 +25,36 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ApplicationStepper (props) {
-  const { steps } = props;
+  const { steps, onFinish } = props;
 
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1);
+
+    if (activeStep + 1 === steps.length) {
+      onFinish();
+    }
   };
 
   const handleBack = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1);
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
+  const stepperHasError = () => {
+    let hasError = false;
+    steps.map((page) => {
+      if (page.error() === true) {
+        hasError = true;
+      }
+    })
+
+    return hasError;
+  };
+
+  const lastStep = () => {
+    return activeStep === steps.length - 1;
   };
 
   return (
@@ -65,7 +80,7 @@ export default function ApplicationStepper (props) {
                     onClick={handleNext}
                     className={classes.button}
                   >
-                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                    {lastStep() ? 'Finish' : 'Next'}
                   </Button>
                 </div>
               </div>
@@ -75,10 +90,19 @@ export default function ApplicationStepper (props) {
       </Stepper>
       {activeStep === steps.length && (
         <Paper square elevation={0} className={classes.resetContainer}>
-          <Typography>All steps completed - you&apos;re finished</Typography>
-          <Button onClick={handleReset} className={classes.button}>
-            Reset
-          </Button>
+          {stepperHasError() ? (
+            <Button
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              className={classes.button}
+            >
+              Back
+            </Button>
+          ) : (
+            <Typography>
+              Please wait whilst we deploy your app.
+            </Typography>
+          )}
         </Paper>
       )}
     </div>

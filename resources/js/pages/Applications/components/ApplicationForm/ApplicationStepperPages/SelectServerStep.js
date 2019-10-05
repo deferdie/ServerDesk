@@ -12,6 +12,7 @@ import { hasError, getError } from '../../../../../helpers/error';
 const SelectServerStep = (props) => {
   const {
     formErrors,
+    handleChange,
     applicationFormData,
     sourceProviderChanged,
   } = props;
@@ -95,6 +96,27 @@ const SelectServerStep = (props) => {
             ))}
           </TextField>
         </Grid>
+      </Grid>
+
+      <Grid
+        item
+        md={12}
+        xs={12}
+      >
+        <TextField
+          fullWidth
+          required
+          type="text"
+          margin="dense"
+          variant="outlined"
+          name="respository"
+          onChange={handleChange}
+          defaultValue={applicationFormData.respository}
+          error={hasError(formErrors, 'respository')}
+          placeholder="you_github_user/repository_name"
+          label="Enter your GitHub repository that you would like to deploy"
+          helperText={hasError(formErrors, 'respository') ? getError(formErrors, 'respository') : 'The GitHub repository of the application'}
+        />
       </Grid>
     </React.Fragment>
   );

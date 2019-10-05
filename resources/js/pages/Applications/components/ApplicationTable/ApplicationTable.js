@@ -16,6 +16,9 @@ import {
 } from '@material-ui/core';
 import _ from 'lodash';
 
+// Components
+import ApplicationStatusIcon from '../ApplicationStatusIcon';
+
 const useStyles = makeStyles(theme => ({
   root: {},
   content: {
@@ -51,22 +54,37 @@ const ApplicationTable = props => {
                   <TableCell>Server Provider</TableCell>
                   <TableCell>Server Name</TableCell>
                   <TableCell>Application Created</TableCell>
+                  <TableCell>Status</TableCell>
                   <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {applications.map(provider => (
+                {applications.map(app => (
                   <TableRow
                     className={classes.tableRow}
                     hover
-                    key={provider.id}
+                    key={app.id}
                   >
                     <TableCell>
-                      <Typography variant="body1">{_.get(provider, 'name')}</Typography>
+                      <Typography variant="body1">
+                        {_.get(app, 'domain')}
+                      </Typography>
                     </TableCell>
-                    <TableCell>{_.get(provider, 'server_provider.name')}</TableCell>
+
                     <TableCell>
-                      {moment(provider.created_at).format('DD/MM/YYYY')}
+                      {_.get(app, 'server.server_provider.name')}
+                    </TableCell>
+
+                    <TableCell>
+                      {_.get(app, 'server.name')}
+                    </TableCell>
+
+                    <TableCell>
+                      <ApplicationStatusIcon application={app} />
+                    </TableCell>
+
+                    <TableCell>
+                      {moment(app.created_at).format('DD/MM/YYYY')}
                     </TableCell>
                   </TableRow>
                 ))}

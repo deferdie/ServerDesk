@@ -53,14 +53,14 @@ const ApplicationList = () => {
         <ApplicationTable applications={applications} />
       </div>
       <Modal
-        title="Add your new application"
-        saveButton="Add application"
+        showActionButtons={false}
         open={showApplicationForm}
+        title="Add your new application"
         onClose={() => setShowApplicationForm(false)}
-        onSave={submitApplicationCreateForm}
       >
         <ApplicationForm
           formErrors={applicationFormErrors}
+          formAction={submitApplicationCreateForm}
           applicationFormData={applicationFormData}
           setApplicationFormData={setApplicationFormData}
         />
