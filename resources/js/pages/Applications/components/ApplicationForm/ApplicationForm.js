@@ -56,40 +56,6 @@ const ApplicationForm = (props) => {
       >
         <TextField
           fullWidth
-          label="What type of application do you want to deploy"
-          margin="dense"
-          name="type"
-          onChange={handleChange}
-          required
-          select
-          SelectProps={{ native: true }}
-          value={applicationFormData.type}
-          variant="outlined"
-          helperText={hasError(formErrors, 'type') ? getError(formErrors, 'type') : 'Please select your app type'}
-          error={hasError(formErrors, 'type')}
-        >
-          <option selected>Please select</option>
-          {[
-            'PHP',
-            'Laravel'
-          ].map(option => (
-            <option
-              key={option}
-              value={option}
-            >
-              {option}
-            </option>
-          ))}
-        </TextField>
-      </Grid>
-      
-      <Grid
-        item
-        md={12}
-        xs={12}
-      >
-        <TextField
-          fullWidth
           label="What server would you like to deploy to?"
           margin="dense"
           name="server_id"
@@ -152,13 +118,55 @@ const ApplicationForm = (props) => {
       >
         <TextField
           fullWidth
+          label="What type of application do you want to deploy"
+          margin="dense"
+          name="type"
+          onChange={(e) => {
+            e.target.value === 'Laravel' && handleChange({
+              target: {
+                value: 'public',
+                name: 'directory'
+              }
+            });
+            handleChange(e);
+          }}
+          required
+          select
+          SelectProps={{ native: true }}
+          defaultValue={applicationFormData.type}
+          variant="outlined"
+          helperText={hasError(formErrors, 'type') ? getError(formErrors, 'type') : 'Please select your app type'}
+          error={hasError(formErrors, 'type')}
+        >
+          <option selected>Please select</option>
+          {[
+            'PHP',
+            'Laravel'
+          ].map(option => (
+            <option
+              key={option}
+              value={option}
+            >
+              {option}
+            </option>
+          ))}
+        </TextField>
+      </Grid>
+
+      <Grid
+        item
+        md={12}
+        xs={12}
+      >
+        <TextField
+          fullWidth
           required
           type="text"
           margin="dense"
           variant="outlined"
           name="domain"
           onChange={handleChange}
-          value={applicationFormData.domain}
+          defaultValue={applicationFormData.domain}
           error={hasError(formErrors, 'domain')}
           label="Enter domain for this application"
           helperText={hasError(formErrors, 'domain') ? getError(formErrors, 'domain') : 'The domain which the application will be accessed on'}
@@ -178,7 +186,7 @@ const ApplicationForm = (props) => {
           variant="outlined"
           name="respository"
           onChange={handleChange}
-          value={applicationFormData.respository}
+          defaultValue={applicationFormData.respository}
           error={hasError(formErrors, 'respository')}
           placeholder="you_github_user/repository_name"
           label="Enter your GitHub repository that you would like to deploy"
@@ -200,7 +208,7 @@ const ApplicationForm = (props) => {
           variant="outlined"
           name="directory"
           onChange={handleChange}
-          value={applicationFormData.directory}
+          defaultValue={applicationFormData.directory}
           error={hasError(formErrors, 'directory')}
           label="Enter directory the application should be served from"
           helperText={hasError(formErrors, 'directory') ? getError(formErrors, 'directory') : 'The directory which the application will be accessed on'}
