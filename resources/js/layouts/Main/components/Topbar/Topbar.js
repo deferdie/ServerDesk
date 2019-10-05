@@ -34,7 +34,7 @@ const Topbar = props => {
     >
       <Toolbar>
         <RouterLink to="/">
-          ServerDesk
+          <img src="/logo.png" style={{height: '50px'}} />
         </RouterLink>
         <div className={classes.flexGrow} />
         <Hidden mdDown>
