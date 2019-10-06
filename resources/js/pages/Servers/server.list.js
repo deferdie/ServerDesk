@@ -101,15 +101,15 @@ const ServerList = () => {
         />
       </div>
       <Modal
+        showActionButtons={false}
         title="Add a new server"
-        saveButton="Add server"
         open={showServerForm}
         onClose={() => setShowServerForm(false)}
-        onSave={submitServerCreateForm}
       >
         <ServerForm
           formErrors={serverFormErrors}
           serverFormData={serverFormData}
+          formAction={submitServerCreateForm}
           setServerFormData={setServerFormData}
         />
       </Modal>
