@@ -29,7 +29,9 @@ const ServerList = () => {
     name: '',
     plan: null,
     php_version: '',
+    mysql_version: '',
     wants_php: false,
+    wants_mysql: false,
     server_provider_id: '',
     provider_server_region: null,
     user_server_provider_credential_id: ''

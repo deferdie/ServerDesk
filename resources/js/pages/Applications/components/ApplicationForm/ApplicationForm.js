@@ -8,7 +8,7 @@ import _ from 'lodash';
 
 // Components
 import { hasError } from '../../../../helpers/error';
-import ApplicationStepper from './ApplicationStepper';
+import VerticalStepper from '../../../../components/VerticalStepper';
 
 // Stepper pages
 import SelectServerStep from './ApplicationStepperPages/SelectServerStep';
@@ -55,7 +55,7 @@ const ApplicationForm = (props) => {
       container
       spacing={3}
     >
-      <ApplicationStepper
+      <VerticalStepper
         onFinish={formAction}
         steps={[
           {

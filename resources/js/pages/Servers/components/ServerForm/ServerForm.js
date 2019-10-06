@@ -11,6 +11,10 @@ import _ from 'lodash';
 
 // Components
 import { hasError, getError } from '../.././../../helpers/error';
+import VerticalStepper from '../../../../components/VerticalStepper';
+
+// Stepper pages
+import ServerDetailsStep from './ServerFormSteps/ServerDetailsStep';
 
 const ServerForm = (props) => {
   const { setServerFormData, formErrors, serverFormData } = props;
@@ -62,56 +66,31 @@ const ServerForm = (props) => {
       container
       spacing={3}
     >
-      <Grid
-        item
-        md={12}
-        xs={12}
-      >
-        <TextField
-          fullWidth
-          label="Server name"
-          margin="dense"
-          name="name"
-          onChange={handleChange}
-          required
-          value={serverFormData.name}
-          variant="outlined"
-          helperText={hasError(formErrors, 'name') ? getError(formErrors, 'name') : 'Please specify the server name'}
-          error={hasError(formErrors, 'name')}
-        />
-      </Grid>
-
-      <Grid
-        item
-        md={12}
-        xs={12}
-      >
-        <TextField
-          fullWidth
-          label="Select your login"
-          margin="dense"
-          name="user_server_provider_credential_id"
-          onChange={serverChanged}
-          required
-          select
-          SelectProps={{ native: true }}
-          value={serverFormData.user_server_provider_credential_id}
-          variant="outlined"
-          helperText={hasError(formErrors, 'user_server_provider_credential_id') ? getError(formErrors, 'user_server_provider_credential_id') : 'Please select your credentials for this provider'}
-          error={hasError(formErrors, 'user_server_provider_credential_id')}
-        >
-          <option selected>Please select</option>
-          {userServerCreds.map(option => (
-            <option
-              key={option.name}
-              value={option.id}
-            >
-              {option.name}
-            </option>
-          ))}
-        </TextField>
-      </Grid>
-
+      <VerticalStepper
+        steps={[
+          {
+            title: 'Server details',
+            content: (
+              <ServerDetailsStep
+                formErrors={formErrors}
+                handleChange={handleChange}
+                serverChanged={serverChanged}
+                formData={serverFormData}
+                userServerCreds={userServerCreds}
+              />
+            ),
+            error: () => {
+              let fields = ['name', 'user_server_provider_credential_id'];
+              return fields.map((field) => {
+                if (hasError(formErrors, field) === true) {
+                  return true;
+                }
+                return false;
+              })[0];
+            }
+          },
+        ]}
+      />
       {serverFormData.user_server_provider_credential_id !== '' && (
         <Grid
           item
@@ -263,10 +242,68 @@ const ServerForm = (props) => {
               >
                 <option selected>Please select</option>
                 {[
-                  '7.0',
-                  '7.1',
-                  '7.2',
-                  '7.3'
+                  '7.2'
+                ].map(option => (
+                  <option
+                    key={option}
+                    value={option}
+                  >
+                    {option}
+                  </option>
+                ))}
+              </TextField>
+            </Grid>
+          )}
+
+          <Grid
+            item
+            md={12}
+            xs={12}
+          >
+            <FormControlLabel
+              value={serverFormData.wants_mysql}
+              control={(
+                <Switch
+                  color="primary"
+                  onChange={(e) => {
+                    handleChange({
+                      target: {
+                        value: e.target.value === 'false',
+                        name: 'wants_mysql'
+                      }
+                    });
+                  }}
+                  name="wants_mysql"
+                />
+              )}
+              label="Install MySQL"
+              labelPlacement="start"
+            />
+          </Grid>
+
+          {serverFormData.wants_mysql && (
+            <Grid
+              item
+              md={12}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Select a MySQL version"
+                margin="dense"
+                name="mysql_version"
+                onChange={handleChange}
+                required
+                select
+                SelectProps={{ native: true }}
+                value={serverFormData.mysql_version}
+                variant="outlined"
+                helperText={hasError(formErrors, 'mysql_version') ? getError(formErrors, 'mysql_version') : 'Please select your required MySQL version'}
+                error={hasError(formErrors, 'mysql_version')}
+              >
+                <option selected>Please select</option>
+                {[
+                  '5.7'
                 ].map(option => (
                   <option
                     key={option}
