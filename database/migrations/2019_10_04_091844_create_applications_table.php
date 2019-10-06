@@ -27,8 +27,8 @@ class CreateApplicationsTable extends Migration
                 'Laravel'
             ]);
             $table->enum('status', [
-                'ready',
-                'deploying'
+                'running',
+                'creating'
             ])->default('deploying');
             $table->boolean('active')->default(true);
             $table->timestamps();

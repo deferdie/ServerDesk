@@ -92,7 +92,7 @@ class DeployApplication implements ShouldQueue
                 }
 
                 // Set the application status as deployed
-                $this->application->status = 'ready';
+                $this->application->status = 'running';
                 $this->application->save();
             }
         } catch (\Exception $e) {
