@@ -5,6 +5,7 @@ import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
 import {
+  Fab,
   Card,
   CardContent,
   Table,
@@ -14,6 +15,7 @@ import {
   TableRow,
   Typography
 } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
 import _ from 'lodash';
 
 // Components
@@ -85,6 +87,11 @@ const ApplicationTable = props => {
 
                     <TableCell>
                       {moment(app.created_at).format('DD/MM/YYYY')}
+                    </TableCell>
+                    <TableCell>
+                    <Fab color="secondary" aria-label="edit" size="small" componen="button" to="test">
+                      <EditIcon />
+                    </Fab>
                     </TableCell>
                   </TableRow>
                 ))}
