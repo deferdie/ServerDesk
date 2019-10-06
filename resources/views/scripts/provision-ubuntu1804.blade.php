@@ -9,7 +9,7 @@ sudo apt install git nginx -y
 ## Enable Nginx
 sudo systemctl enable nginx
 
-## Install php
+## Install PHP
 @if ($server->wants_php)
     ## Remove previous versions of PHP
     sudo apt-get purge `dpkg -l | grep php| awk '{print $2}' |tr "\n" " "`
@@ -33,7 +33,14 @@ sudo systemctl enable nginx
     echo '{!! file_get_contents(resource_path("views/scripts/php/default.blade.php")) !!}' > /usr/share/nginx/html/info.php
 
     ## Install composer
-    {!! file_get_contents(resource_path("views/scripts/php/composer-install.blade.php")) !!}
+    @include('scripts.php.composer-install')
+@endif
+
+## Install MySQL
+@if ($server->wants_mysql)
+    @if($server->mysql_version == '5.7')
+        @include('scripts.mysql.install-mysql57')
+    @endif
 @endif
 
 ## Start Nginx

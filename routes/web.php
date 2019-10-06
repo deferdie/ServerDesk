@@ -15,7 +15,9 @@ use App\Events\ServerUpdated;
 use App\Server;
 
 Route::get('/test', function () {
-    broadcast(new ServerUpdated(Server::find(1)));
+    return view('scripts.provision-ubuntu1804', [
+        'server' => Server::find(2)
+    ]);
 });
 
 Route::get('/{uri?}', function () {
