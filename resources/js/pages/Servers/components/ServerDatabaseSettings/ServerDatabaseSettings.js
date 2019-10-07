@@ -4,7 +4,10 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
 import {
   Card,
+  Button,
+  Divider,
   CardContent,
+  CardActions,
   Typography
 } from '@material-ui/core';
 
@@ -34,10 +37,27 @@ const ServerDatabaseSettings = (props) => {
               gutterBottom
               variant="h4"
             >
-              Database settings
+              Database settings - MySQL
             </Typography>
+            {/* Databases */}
+
           </React.Fragment>
         </CardContent>
+        <Divider />
+        <CardActions>
+          <Button
+            color="primary"
+            variant="contained"
+          >
+            Create database
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+          >
+            Add user
+          </Button>
+        </CardActions>
       </Card>
     </React.Fragment>
   );

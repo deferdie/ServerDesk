@@ -6,7 +6,7 @@ cd /var/www/html/serverdesk/{{$repositoryDirectory}}
 
 if [[ `composer --help` ]]; then
     if [ -f composer.json -a -f composer.lock ]; then
-        composer install
+        composer install --no-interaction --prefer-dist --optimize-autoloader
     fi
 else
     {!! file_get_contents(resource_path("views/scripts/php/composer-install.blade.php")) !!}
