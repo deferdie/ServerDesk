@@ -9,6 +9,13 @@ sudo apt install git nginx -y
 ## Enable Nginx
 sudo systemctl enable nginx
 
+@if ($server->wants_mysql)
+    ## Install MySQL
+    @if($server->mysql_version == '5.7')
+        @include('scripts.mysql.install-mysql57')
+    @endif
+@endif
+
 ## Install PHP
 @if ($server->wants_php)
     ## Remove previous versions of PHP
@@ -34,13 +41,6 @@ sudo systemctl enable nginx
 
     ## Install composer
     @include('scripts.php.composer-install')
-@endif
-
-## Install MySQL
-@if ($server->wants_mysql)
-    @if($server->mysql_version == '5.7')
-        @include('scripts.mysql.install-mysql57')
-    @endif
 @endif
 
 ## Start Nginx

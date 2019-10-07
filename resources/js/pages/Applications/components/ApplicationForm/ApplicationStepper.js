@@ -99,9 +99,13 @@ export default function ApplicationStepper (props) {
               Back
             </Button>
           ) : (
-            <Typography>
-              Please wait whilst we deploy your app.
-            </Typography>
+              <Button
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                className={classes.button}
+              >
+                Back
+              </Button>
           )}
         </Paper>
       )}

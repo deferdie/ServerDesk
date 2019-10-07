@@ -29,3 +29,10 @@ sudo find /var/www/html/serverdesk/{{$repositoryDirectory}} -type f -exec chmod 
 sudo find /var/www/html/serverdesk/{{$repositoryDirectory}} -type d -exec chmod 755 {} \;
 sudo chgrp -R www-data storage bootstrap/cache
 sudo chmod -R ug+rwx storage bootstrap/cache
+
+## Check if the user has set any predefined .env variables when creating the application
+@isset($request->env_variables)
+    @if(! is_null($request->env_variables) && $request->env_variables != '')
+        echo '{{$request->env_variables}}' > .env
+    @endif
+@endisset

@@ -3,10 +3,10 @@
 namespace App\Jobs;
 
 use App\Application;
-use App\SourceProviders\GitHub\GitHub;
 use phpseclib\Net\SSH2;
 use phpseclib\Crypt\RSA;
 use Illuminate\Bus\Queueable;
+use App\SourceProviders\GitHub\GitHub;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -22,14 +22,22 @@ class DeployApplication implements ShouldQueue
      * @var App\Application
      */
     public $application;
+    
+    /**
+     * The original request to create the application
+     *
+     * @var App\Application
+     */
+    public $request;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Application $application)
+    public function __construct(Application $application, $request)
     {
+        $this->request = $request;
         $this->application = $application;
     }
 
@@ -66,28 +74,29 @@ class DeployApplication implements ShouldQueue
                     $gitHub = new GitHub($this->application->sourceProvider);
                     $gitHub->createSSHKey($server);
 
-                    \Log::info($ssh->exec(
+                    $ssh->exec(
                         view('scripts.deployments.github-deployment', [
                             'application' => $this->application
                         ])->render()
-                    ));
+                    );
                     
                     // Get the application type and install it
                     if ($this->application->type === 'Laravel') {
-                        \Log::info($ssh->exec(
+                        $ssh->exec(
                             view('scripts.deployments.install-laravel', [
+                                'request' => $this->request,
                                 'application' => $this->application,
                                 'repositoryDirectory' => $this->application->domain,
                             ])->render()
-                        ));
+                        );
 
                         // Setup the Nginx config for this site
-                        \Log::info($ssh->exec(
+                        $ssh->exec(
                             view('scripts.deployments.setup-nginx', [
                                 'application' => $this->application,
                                 'repositoryDirectory' => $this->application->domain,
                             ])->render()
-                        ));
+                        );
                     }
                 }
 

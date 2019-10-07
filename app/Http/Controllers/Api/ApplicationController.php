@@ -53,7 +53,7 @@ class ApplicationController extends Controller
             'user_id' => $user->id
         ]);
 
-        DeployApplication::dispatch($application->fresh());
+        DeployApplication::dispatch($application->fresh(), json_decode(json_encode($request->all())));
 
         return new ApplicationResource($application);
     }
