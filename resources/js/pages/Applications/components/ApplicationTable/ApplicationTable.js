@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { NavLink as RouterLink } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
 import {
@@ -40,6 +41,10 @@ const useStyles = makeStyles(theme => ({
 const ApplicationTable = props => {
   const { className, applications, ...rest } = props;
   const classes = useStyles();
+
+  const CustomRouterLink = forwardRef((props, ref) => (
+    <RouterLink {...props} ref={ref} />
+  ));
 
   return (
     <Card
@@ -89,9 +94,15 @@ const ApplicationTable = props => {
                       {moment(app.created_at).format('DD/MM/YYYY')}
                     </TableCell>
                     <TableCell>
-                    <Fab color="secondary" aria-label="edit" size="small" componen="button" to="test">
-                      <EditIcon />
-                    </Fab>
+                      <Fab
+                        to={`/applications/${app.id}`}
+                        size="small"
+                        color="secondary"
+                        aria-label="edit"
+                        component={CustomRouterLink}
+                      >
+                        <EditIcon />
+                      </Fab>
                     </TableCell>
                   </TableRow>
                 ))}

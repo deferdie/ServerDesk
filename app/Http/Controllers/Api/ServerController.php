@@ -24,6 +24,16 @@ class ServerController extends Controller
     }
 
     /**
+     * Show a server
+     *
+     * @return void
+     */
+    public function show(Server $server)
+    {
+        return new ServerResource($server);
+    }
+
+    /**
      * Create a server
      *
      * @param ServerStoreRequest $request

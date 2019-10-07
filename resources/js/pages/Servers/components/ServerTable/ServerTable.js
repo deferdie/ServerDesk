@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { NavLink as RouterLink } from 'react-router-dom';
 import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
 import {
+  Fab,
   Card,
   CardContent,
   Table,
@@ -17,6 +19,7 @@ import {
 import _ from 'lodash';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
 
 // Components
 import ServerStatusIcon from '../ServerStatusIcon';
@@ -45,6 +48,10 @@ const ServerTable = props => {
     ...rest
   } = props;
   const classes = useStyles();
+
+  const CustomRouterLink = forwardRef((props, ref) => (
+    <RouterLink {...props} ref={ref} />
+  ));
 
   return (
     <Card
@@ -98,6 +105,16 @@ const ServerTable = props => {
                         >
                           <DeleteIcon />
                         </IconButton>
+
+                        <Fab
+                          to={`/servers/${server.id}`}
+                          size="small"
+                          color="secondary"
+                          aria-label="edit"
+                          component={CustomRouterLink}
+                        >
+                          <EditIcon />
+                        </Fab>
                       </React.Fragment>
                     </TableCell>
                   </TableRow>
