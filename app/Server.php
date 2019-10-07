@@ -37,6 +37,7 @@ class Server extends Model
      * @var array
      */
     protected $with = [
+        'mySQLDatabase',
         'serverProvider',
     ];
 
@@ -68,5 +69,15 @@ class Server extends Model
     public function serverProvider()
     {
         return $this->belongsTo(ServerProvider::class);
+    }
+    
+    /**
+     * This server has many MySQL databases
+     *
+     * @return void
+     */
+    public function mySQLDatabase()
+    {
+        return $this->hasMany(MySQLDatabase::class);
     }
 }
