@@ -11,7 +11,7 @@ This email contains all of your your server credentials so please destroy this e
 | IP Address | {{$server->ip_address}} |  |
 | Root password | {{$data['rootPassword']}} | The root password the server |
 @isset($data['dbRootPass'])
-| Database User | root | The default user for the database |
+| Database User | serverdesk | The default user for the database |
 | Database host | 127.0.0.1 | The default host for the database |
 | Database port | 3306 | The default port for the database |
 | Database Password | {{$data['dbRootPass']}} | The root password for MySQL |

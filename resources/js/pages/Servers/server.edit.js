@@ -29,9 +29,8 @@ const ServerEdit = (props) => {
       {server && (
         <div className={classes.content}>
           <ServerProfile server={server} />
-
           {server.wants_mysql === 1 && (
-            <MySQLDatabaseManager server={server} databases={server.mySQLDatabases} />
+            <MySQLDatabaseManager server={server} databases={server.my_s_q_l_database} />
           )}
         </div>
       )}

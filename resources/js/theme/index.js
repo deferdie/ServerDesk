@@ -1,4 +1,5 @@
 import { createMuiTheme } from '@material-ui/core';
+import 'sweetalert/dist/sweetalert.css';
 
 import palette from './palette';
 import typography from './typography';

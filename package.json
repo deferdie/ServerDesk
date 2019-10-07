@@ -22,8 +22,8 @@
         "eslint-plugin-standard": "^3.1.0",
         "laravel-mix": "^2.0",
         "lodash": "^4.17.4",
-        "react": "next",
-        "react-dom": "next",
+        "react": "^16.10.2",
+        "react-dom": "^16.10.2",
         "tailwindcss": "^0.5.3"
     },
     "dependencies": {
@@ -46,6 +46,7 @@
         "react-toast-notifications": "^2.2.5",
         "redux": "^4.0.0",
         "redux-thunk": "^2.3.0",
+        "sweetalert-react": "^0.4.11",
         "uuid": "^3.3.3"
     }
 }

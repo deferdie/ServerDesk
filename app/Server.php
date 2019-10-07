@@ -2,6 +2,8 @@
 
 namespace App;
 
+use phpseclib\Net\SSH2;
+use phpseclib\Crypt\RSA;
 use Illuminate\Database\Eloquent\Model;
 
 class Server extends Model
@@ -79,5 +81,28 @@ class Server extends Model
     public function mySQLDatabase()
     {
         return $this->hasMany(MySQLDatabase::class);
+    }
+
+    /**
+     * Runs a single command in a server
+     *
+     * @param string $cmd
+     * @return void
+     */
+    public function exec(string $cmd)
+    {
+        $ssh = new SSH2($this->ip_address);
+        $key = new RSA();
+        $key->loadKey($this->credential->private_key);
+
+        $ssh->login('root', $key);
+
+        $ssh->exec($cmd);
+
+        if ($ssh->getExitStatus() > 0) {
+            return false;
+        }
+
+        return true;
     }
 }
