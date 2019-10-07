@@ -26,6 +26,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 // Components
 import Modal from '../../../../components/Modal';
 import MySQLDatabaseForm from './MySQLDatabaseForm';
+import ListManager from '../../../../components/ListManager';
 import { destructServerErrors } from '../../../../helpers/error';
 
 const useStyles = makeStyles(theme => ({
@@ -143,7 +144,7 @@ const MySQLDatabaseManager = (props) => {
             color="primary"
             variant="contained"
           >
-            Add user
+            Manage users
           </Button>
         </CardActions>
       </Card>
@@ -172,6 +173,8 @@ const MySQLDatabaseManager = (props) => {
           setShowDatabaseDeleteConfirm(false);
         }}
       />
+
+      <ListManager selectedList={[]} avaliableList={[]} />
     </React.Fragment>
   );
 };
