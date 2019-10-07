@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import {
-  Card,
-  CardContent
-} from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 
 // Components
-import { ServerProfile } from './components';
+import { ServerProfile, ServerDatabaseSettings } from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ServerEdit = (props) => {
-  const { className, match } = props;
+  const { match } = props;
   const classes = useStyles();
   const [server, setServer] = useState(null);
 
@@ -34,6 +29,10 @@ const ServerEdit = (props) => {
       {server && (
         <div className={classes.content}>
           <ServerProfile server={server} />
+
+          {server.wants_mysql === 1 && (
+            <ServerDatabaseSettings server={server} />
+          )}
         </div>
       )}
     </div>
@@ -41,7 +40,7 @@ const ServerEdit = (props) => {
 };
 
 ServerEdit.propTypes = {
-  className: PropTypes.object
+  match: PropTypes.object
 };
 
 export default ServerEdit;

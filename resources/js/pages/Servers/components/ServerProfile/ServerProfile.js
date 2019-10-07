@@ -13,7 +13,9 @@ import {
 import { ServerProviderLogo } from '../../../ServerProviders/components';
 
 const useStyles = makeStyles(theme => ({
-  root: {},
+  root: {
+    marginBottom: '15px'
+  },
   details: {
     display: 'flex'
   },
