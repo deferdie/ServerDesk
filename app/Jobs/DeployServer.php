@@ -2,19 +2,23 @@
 
 namespace App\Jobs;
 
+use App\User;
 use App\Server;
 use GuzzleHttp\Client;
+use Illuminate\Support\Str;
 use App\Events\ServerCreated;
-use App\Events\ServerFailedToCreate;
 use App\Events\ServerUpdated;
 use Illuminate\Bus\Queueable;
+use App\Events\ServerFailedToCreate;
+use App\Mail\ServerCreatedMail;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\ServerProviders\DigitalOcean\DigitalOcean;
+use Illuminate\Support\Facades\Mail;
 
-class CreateServer implements ShouldQueue
+class DeployServer implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -61,6 +65,12 @@ class CreateServer implements ShouldQueue
         if ($this->provider->name === 'Digital Ocean') {
             $do = new DigitalOcean($this->server->credential);
 
+            $data = [
+                'server' => $this->server,
+                'dbRootPass' => Str::random(26),
+                'rootPassword' => Str::random(26),
+            ];
+
             $server = $do->droplet()->create(
                 $this->server->name,
                 $this->server->provider_server_region,
@@ -70,9 +80,7 @@ class CreateServer implements ShouldQueue
                 false, // Enable IPV6
                 false, // Option for private netowrking
                 [$this->server->credential->server_provider_key_id],
-                view('scripts.provision-ubuntu1804', [
-                    'server' => $this->server
-                ])->render()
+                view('scripts.provision-ubuntu1804', $data)->render()
             );
 
             $this->server->provider_server_id = $server->id;
@@ -126,6 +134,10 @@ class CreateServer implements ShouldQueue
 
             broadcast(new ServerUpdated($this->server));
             broadcast(new ServerCreated($this->server));
+
+            // Lets send an email to the user to provide them their credentials
+            Mail::to(User::find($this->server->user_id))
+                ->send(new ServerCreatedMail($this->server, $data));
         }
     }
 

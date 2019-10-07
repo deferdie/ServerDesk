@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Server;
 use App\ServerProvider;
-use App\Jobs\CreateServer;
+use App\Jobs\DeployServer;
 use App\Http\Controllers\Controller;
 use App\UserServerProviderCredential;
 use App\Http\Resources\ServerResource;
@@ -62,7 +62,7 @@ class ServerController extends Controller
                 'user_server_provider_credential_id' => $request->user_server_provider_credential_id,
             ]);
 
-            CreateServer::dispatch($server, $plan, $provider);
+            DeployServer::dispatch($server, $plan, $provider);
 
             return new ServerResource($server->fresh());
         }

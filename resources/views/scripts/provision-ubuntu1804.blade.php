@@ -12,7 +12,9 @@ sudo systemctl enable nginx
 @if ($server->wants_mysql)
     ## Install MySQL
     @if($server->mysql_version == '5.7')
-        @include('scripts.mysql.install-mysql57')
+        @include('scripts.mysql.install-mysql57', [
+            'dbRootPass' => $dbRootPass
+        ])
     @endif
 @endif
 
@@ -47,3 +49,6 @@ sudo systemctl enable nginx
 sudo nginx -t
 sudo systemctl start nginx
 sudo systemctl reload nginx
+
+## Reset the password for root
+echo -e "{{$rootPassword}}\n{{$rootPassword}}" | passwd root

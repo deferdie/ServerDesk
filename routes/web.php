@@ -15,8 +15,8 @@ use App\Events\ServerUpdated;
 use App\Server;
 
 Route::get('/test', function () {
-    return view('scripts.provision-ubuntu1804', [
-        'server' => Server::find(2)
+    return new \App\Mail\ServerCreatedMail(Server::find(2), [
+        'dbRootPass' => 'Hi Ferdie'
     ]);
 });
 
