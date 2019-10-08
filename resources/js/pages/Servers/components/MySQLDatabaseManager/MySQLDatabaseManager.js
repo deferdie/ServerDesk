@@ -28,6 +28,7 @@ import Modal from '../../../../components/Modal';
 import MySQLDatabaseForm from './MySQLDatabaseForm';
 import ListManager from '../../../../components/ListManager';
 import { destructServerErrors } from '../../../../helpers/error';
+import { MySQLDatabaseTable } from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -90,43 +91,10 @@ const MySQLDatabaseManager = (props) => {
             {/* Databases */}
             <PerfectScrollbar>
               <div className={classes.inner}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Name</TableCell>
-                      <TableCell>Database created</TableCell>
-                      <TableCell>Actions</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {databases.map((database, index) => {
-                      return (
-                        <TableRow
-                          className={classes.tableRow}
-                          hover
-                          key={database.id}
-                        >
-                          <TableCell>
-                            <Typography variant="body1">{_.get(database, 'name')}</Typography>
-                          </TableCell>
-                          <TableCell>
-                            {moment(database.created_at).format('DD/MM/YYYY')}
-                          </TableCell>
-                          <TableCell>
-                            <Fab
-                              size="small"
-                              color="secondary"
-                              aria-label="edit"
-                              onClick={() => setShowDatabaseDeleteConfirm(index)}
-                            >
-                              <DeleteForeverIcon />
-                            </Fab>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
+                <MySQLDatabaseTable
+                  databases={databases}
+                  setShowDatabaseDeleteConfirm={setShowDatabaseDeleteConfirm}
+                />
               </div>
             </PerfectScrollbar>
           </React.Fragment>
@@ -174,7 +142,7 @@ const MySQLDatabaseManager = (props) => {
         }}
       />
 
-      <ListManager selectedList={[]} avaliableList={[]} />
+      <ListManager selectedList={[]} avaliableList={databases} />
     </React.Fragment>
   );
 };
