@@ -22,6 +22,15 @@ class MySQLDatabase extends Model
         'name',
         'server_id',
     ];
+    
+    /**
+     * The models that will be eagerloaded
+     *
+     * @var array
+     */
+    protected $with = [
+        'users'
+    ];
 
     /**
      * A MySQL database belongs to a server
@@ -38,7 +47,7 @@ class MySQLDatabase extends Model
      *
      * @return void
      */
-    public function database()
+    public function users()
     {
         return $this->hasMany(MySQLDatabaseUser::class, 'mysql_database_id', 'id');
     }
