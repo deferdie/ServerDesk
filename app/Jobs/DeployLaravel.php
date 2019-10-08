@@ -37,8 +37,14 @@ class DeployLaravel implements ShouldQueue
      */
     public function handle()
     {
+        $this->application->status = 'deploying';
+        $this->application->save();
+        
         $this->application->server->exec(view('scripts.deployments.install-laravel', [
             'application' => $this->application
         ])->render());
+
+        $this->application->status = 'running';
+        $this->application->save();
     }
 }

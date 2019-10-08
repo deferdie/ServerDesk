@@ -39,49 +39,47 @@ const ApplicationProfile = (props) => {
   const classes = useStyles();
 
   return (
-    <React.Fragment>
-      <Card
-        {...rest}
-        className={clsx(classes.root, className)}
-      >
-        <CardContent>
-          <div className={classes.details}>
-            <div>
-              <Typography
-                gutterBottom
-                variant="h2"
-              >
-                {application.domain}
-              </Typography>
-              <Typography
-                className={classes.ip_address}
-                color="textSecondary"
-                variant="body1"
-              >
-                Deployed on : {application.server.name}
-              </Typography>
-              <Typography
-                className={classes.dateText}
-                color="textSecondary"
-                variant="body1"
-              >
-                {moment(application.created_at).format('DD/MM/YYYY')}
-              </Typography>
-            </div>
-            <ApplicationAvatar className={classes.avatar} application={application} />
+    <Card
+      {...rest}
+      className={clsx(classes.root, className)}
+    >
+      <CardContent>
+        <div className={classes.details}>
+          <div>
+            <Typography
+              gutterBottom
+              variant="h2"
+            >
+              {application.domain}
+            </Typography>
+            <Typography
+              className={classes.ip_address}
+              color="textSecondary"
+              variant="body1"
+            >
+              Deployed on : {application.server.name}
+            </Typography>
+            <Typography
+              className={classes.dateText}
+              color="textSecondary"
+              variant="body1"
+            >
+              {moment(application.created_at).format('DD/MM/YYYY')}
+            </Typography>
           </div>
-        </CardContent>
-        <CardActions className={classes.cardAction}>
-          <DeployApplication application={application} />
-          <Button
-            className={classes.deploy}
-            variant="contained"
-          >
-            Run migrations
-          </Button>
-        </CardActions>
-      </Card>
-    </React.Fragment>
+          <ApplicationAvatar className={classes.avatar} application={application} />
+        </div>
+      </CardContent>
+      <CardActions className={classes.cardAction}>
+        <DeployApplication application={application} />
+        <Button
+          className={classes.deploy}
+          variant="contained"
+        >
+          Run migrations
+        </Button>
+      </CardActions>
+    </Card>
   );
 };
 

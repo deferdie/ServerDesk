@@ -4,3 +4,4 @@ export { default as ApplicationForm } from './ApplicationForm';
 export { default as ApplicationProfile } from './ApplicationProfile';
 export { default as ApplicationAvatar } from './ApplicationAvatar';
 export { default as DeployApplication } from './DeployApplication';
+export { default as DeploymentScriptEditor } from './DeploymentScriptEditor';

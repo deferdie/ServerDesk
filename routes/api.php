@@ -78,6 +78,7 @@ Route::name('api.')->namespace('Api')->group(function () {
         Route::get('/applications', 'ApplicationController@index')->name('application.index');
         Route::get('/applications/{application}', 'ApplicationController@show')->name('application.show');
         Route::post('/applications', 'ApplicationController@store')->name('application.store');
+        Route::put('/applications/{application}', 'ApplicationController@update')->name('application.update');
     });
 
     Broadcast::routes();

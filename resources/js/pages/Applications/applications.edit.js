@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 
 // Components
-import { ApplicationProfile } from './components';
+import { ApplicationProfile, DeploymentScriptEditor } from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,6 +29,11 @@ const ApplicationEdit = (props) => {
       {application && (
         <div className={classes.content}>
           <ApplicationProfile application={application} />
+
+          <DeploymentScriptEditor
+            application={application}
+            setApplication={setApplication}
+          />
         </div>
       )}
     </div>

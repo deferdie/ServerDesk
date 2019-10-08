@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Server;
 use App\Application;
+use App\UserSourceProvider;
+use App\Jobs\DeployApplication;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApplicationResource;
 use App\Http\Requests\ApplicationStoreRequest;
-use App\Jobs\DeployApplication;
-use App\UserSourceProvider;
+use App\Http\Requests\ApplicationUpdateRequest;
 
 class ApplicationController extends Controller
 {
@@ -31,6 +32,19 @@ class ApplicationController extends Controller
      */
     public function show(Application $application)
     {
+        return new ApplicationResource($application);
+    }
+    
+    /**
+     * Update an application
+     *
+     * @return void
+     */
+    public function update(Application $application, ApplicationUpdateRequest $request)
+    {
+        $application->update($request->all());
+        $application->save();
+        
         return new ApplicationResource($application);
     }
     

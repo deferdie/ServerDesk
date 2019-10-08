@@ -6,6 +6,9 @@ import {
 } from '@material-ui/core';
 import axios from 'axios';
 
+// Components
+import ApplicationStatusIcon from '../ApplicationStatusIcon';
+
 const useStyles = makeStyles(theme => ({
   deploy: {
     background: '#dd8d3a'
@@ -27,8 +30,9 @@ const DeployApplication = (props) => {
       className={classes.deploy}
       variant="contained"
       onClick={deploy}
+      disabled={application.status === 'deploying'}
     >
-      Deploy
+      {application.status === 'running' ? 'Deploy' : <ApplicationStatusIcon application={application} />}
     </Button>
   );
 };
