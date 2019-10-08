@@ -16,6 +16,7 @@ import SignIn from '../pages/auth/SignIn';
 import Dashboard from '../pages/Dashboard';
 import Register from '../pages/auth/Register';
 import Applications from '../pages/Applications';
+import ApplicationEdit from '../pages/Applications/applications.edit';
 import ServerEdit from '../pages/Servers/server.edit';
 import SourceProviders from '../pages/SourceProviders';
 import ServerProviders from '../pages/ServerProviders';
@@ -53,6 +54,7 @@ class App extends Component {
 
             {/* Auth routes */}
             <AuthRoute path="/dashboard" component={Dashboard} />
+            <AuthRoute path="/applications/:application" component={ApplicationEdit} />
             <AuthRoute path="/applications" component={Applications} />
             <AuthRoute path="/server-providers" component={ServerProviders} />
             <AuthRoute path="/servers/:server" component={ServerEdit} {...this.props} />

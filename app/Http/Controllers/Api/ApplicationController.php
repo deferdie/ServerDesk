@@ -25,6 +25,16 @@ class ApplicationController extends Controller
     }
     
     /**
+     * Show an application
+     *
+     * @return void
+     */
+    public function show(Application $application)
+    {
+        return new ApplicationResource($application);
+    }
+    
+    /**
      * Create an application
      *
      * @return void
