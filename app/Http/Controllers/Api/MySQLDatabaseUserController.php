@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\MySQLUser;
 use App\MySQLDatabase;
 use App\MySQLDatabaseUser;
+use App\Jobs\AddUserToDatabase;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\MySQLDatabaseUserResource;
 use App\Http\Requests\MySQLDatabaseUserStoreRequest;
+use App\Jobs\RemoveUserFromDatabase;
 
 class MySQLDatabaseUserController extends Controller
 {
@@ -25,11 +27,13 @@ class MySQLDatabaseUserController extends Controller
             'mysql_user_id' => $request->mysql_user_id,
         ]);
 
+        AddUserToDatabase::dispatch($database, $user);
+
         return new MySQLDatabaseUserResource($user->fresh());
     }
 
     /**
-     * Create a new database user
+     * Delete a database user
      *
      * @param MySQLDatabase $database
      * @param MySQLUser $user
@@ -37,9 +41,11 @@ class MySQLDatabaseUserController extends Controller
      */
     public function destroy(MySQLDatabase $database, MySQLUser $user)
     {
-        MySQLDatabaseUser::where([
+        $databaseUser = MySQLDatabaseUser::firstOrCreate([
             'mysql_database_id' => $database->id,
             'mysql_user_id' => $user->id,
-        ])->delete();
+        ])->first();
+
+        RemoveUserFromDatabase::dispatch($database, $databaseUser);
     }
 }
