@@ -4,6 +4,7 @@ import {
   Grid
 } from '@material-ui/core';
 import _ from 'lodash';
+import axios from 'axios';
 
 // Components
 import ListManager from '../../../../../../components/ListManager';
@@ -20,23 +21,29 @@ const MySQLDatabaseUserForm = (props) => {
   }, []);
 
   const itemAdded = (item, index) => {
-    let selected = [...selectedUsers];
-    selected.push(item);
-    setSelectedUsers(selected);
+    axios.post(`/api/mysql/${database.id}/user`, {
+      mysql_user_id: item.id
+    }).then(data => {
+      let selected = [...selectedUsers];
+      selected.push(data.data.data);
+      setSelectedUsers(selected);
 
-    let avaliable = [...avaliableUsers];
-    avaliable.splice(index, 1);
-    setAvaliableUsers(avaliable);
+      let avaliable = [...avaliableUsers];
+      avaliable.splice(index, 1);
+      setAvaliableUsers(avaliable);
+    });
   };
 
   const itemRemoved = (item, index) => {
-    let avaliable = [...avaliableUsers];
-    avaliable.push(item);
-    setAvaliableUsers(avaliable);
+    axios.delete(`/api/mysql/${database.id}/user/${item.mysql_user_id}`).then(data => {
+      let avaliable = [...avaliableUsers];
+      avaliable.push(item.user);
+      setAvaliableUsers(avaliable);
 
-    let selected = [...selectedUsers];
-    selected.splice(index, 1);
-    setSelectedUsers(selected);
+      let selected = [...selectedUsers];
+      selected.splice(index, 1);
+      setSelectedUsers(selected);
+    });
   };
 
   return (
@@ -52,7 +59,7 @@ const MySQLDatabaseUserForm = (props) => {
         <ListManager
           itemAdded={itemAdded}
           itemRemoved={itemRemoved}
-          selectedListLabel="name"
+          selectedListLabel="user.name"
           avaliableListLabel="name"
           avaliableList={avaliableUsers}
           selectedList={selectedUsers}

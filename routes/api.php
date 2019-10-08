@@ -35,9 +35,14 @@ Route::name('api.')->namespace('Api')->group(function () {
             Route::post('logout', 'LogoutController@logout')->name('logout');
         });
 
-        // Mysql databases users
+        // Mysql users
         Route::get('servers/{server}/mysql-users', 'MySQLUserController@index')->name('server.mysql-user.index');
         Route::post('servers/{server}/mysql-user', 'MySQLUserController@store')->name('server.mysql-user.store');
+        Route::delete('servers/{server}/mysql-user/{user}', 'MySQLUserController@destroy')->name('server.mysql-user.destroy');
+        
+        // Mysql database users
+        Route::post('/mysql/{database}/user', 'MySQLDatabaseUserController@store')->name('mysql.user.store');
+        Route::delete('/mysql/{database}/user/{user}', 'MySQLDatabaseUserController@destroy')->name('mysql.user.destroy');
 
         // Mysql database
         Route::post('servers/{server}/mysql', 'MySQLDatabaseController@store')->name('server.mysql.store');

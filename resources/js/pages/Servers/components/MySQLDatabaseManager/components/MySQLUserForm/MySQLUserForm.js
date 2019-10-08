@@ -27,15 +27,35 @@ const MySQLUserForm = (props) => {
       >
         <TextField
           fullWidth
-          label="Database name"
+          label="Database user name"
           margin="dense"
           name="name"
           onChange={handleChange}
           required
           value={formData.name}
           variant="outlined"
-          helperText={hasError(formErrors, 'name') ? getError(formErrors, 'name') : 'Please specify the database name'}
+          helperText={hasError(formErrors, 'name') ? getError(formErrors, 'name') : 'Please specify the name for the user to add to the database'}
           error={hasError(formErrors, 'name')}
+        />
+      </Grid>
+
+      <Grid
+        item
+        md={12}
+        xs={12}
+      >
+        <TextField
+          fullWidth
+          label="Password for the user (This is optional)"
+          margin="dense"
+          type="password"
+          name="password"
+          onChange={handleChange}
+          required
+          value={formData.password}
+          variant="outlined"
+          helperText={hasError(formErrors, 'password') ? getError(formErrors, 'password') : 'Please specify the password for the user to add to the database'}
+          error={hasError(formErrors, 'password')}
         />
       </Grid>
     </Grid>

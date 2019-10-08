@@ -14,7 +14,7 @@ import moment from 'moment';
 import _ from 'lodash';
 
 const MySQLUsersTable = (props) => {
-  const { users, setShowDatabaseDeleteConfirm } = props;
+  const { users, setShowUserDeleteConfirm } = props;
 
   return (
     <Table>
@@ -42,7 +42,7 @@ const MySQLUsersTable = (props) => {
                   size="small"
                   color="secondary"
                   aria-label="edit"
-                  onClick={() => setShowDatabaseDeleteConfirm(index)}
+                  onClick={() => setShowUserDeleteConfirm(index)}
                 >
                   <DeleteForeverIcon />
                 </Fab>
@@ -57,7 +57,7 @@ const MySQLUsersTable = (props) => {
 
 MySQLUsersTable.propTypes = {
   users: PropTypes.array,
-  setShowDatabaseDeleteConfirm: PropTypes.object
+  setShowUserDeleteConfirm: PropTypes.object
 };
 
 export default MySQLUsersTable;

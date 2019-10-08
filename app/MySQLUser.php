@@ -22,4 +22,14 @@ class MySQLUser extends Model
         'name',
         'server_id',
     ];
+
+    /**
+     * A MySQL user belongs to a server
+     *
+     * @return void
+     */
+    public function server()
+    {
+        return $this->belongsTo(Server::class, 'server_id', 'id');
+    }
 }

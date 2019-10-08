@@ -24,7 +24,8 @@ class MySQLUserStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required'
+            'name' => 'required',
+            'password' => 'string|nullable'
         ];
     }
 }

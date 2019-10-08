@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Server;
 use App\MySQLUser;
+use App\Jobs\DeleteDatabaseUser;
+use App\Jobs\InstallDatabaseUser;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\MySQLUserResource;
 use App\Http\Requests\MySQLUserStoreRequest;
@@ -34,6 +36,20 @@ class MySQLUserController extends Controller
             'server_id' => $server->id
         ]);
 
+        InstallDatabaseUser::dispatch($user, $request->password);
+
         return new MySQLUserResource($user);
+    }
+
+    /**
+     * Deletes a user from the database
+     *
+     * @param MySQLUser $user
+     * @return void
+     */
+    public function destroy(Server $server, MySQLUser $user)
+    {
+        // Delete all of the Database user records
+        DeleteDatabaseUser::dispatch($user);
     }
 }

@@ -19,10 +19,29 @@ class MySQLDatabaseUser extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
+        'mysql_user_id',
         'mysql_database_id',
     ];
 
+    /**
+     * The models that will be eager loaded
+     *
+     * @var array
+     */
+    protected $with = [
+        'user'
+    ];
+
+    /**
+     * The database user
+     *
+     * @return void
+     */
+    public function user()
+    {
+        return $this->hasOne(MySQLUser::class, 'id', 'mysql_user_id');
+    }
+    
     /**
      * A database user belongs to a database
      *

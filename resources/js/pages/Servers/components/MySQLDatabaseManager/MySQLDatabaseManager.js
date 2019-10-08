@@ -48,7 +48,7 @@ const MySQLDatabaseManager = (props) => {
 
   // Form states
   const [serverFormErrors, setServerFormErrors] = useState([]);
-  const [userFormData, setUserFormData] = useState({ name: '' });
+  const [userFormData, setUserFormData] = useState({ name: '', password: null });
   const [serverFormData, setServerFormData] = useState({ name: '' });
 
   // Modal states
@@ -65,7 +65,7 @@ const MySQLDatabaseManager = (props) => {
 
   const createDatabase = () => {
     axios.post(`/api/servers/${server.id}/mysql`, serverFormData).then(data => {
-      setServerFormData({name: ''});
+      setServerFormData({name: '', password: ''});
       setShowDatabaseCreateForm(false);
       let d = [...databases];
       d.push(data.data.data);
@@ -92,6 +92,16 @@ const MySQLDatabaseManager = (props) => {
         d.splice(showDatabaseDeleteConfirm, 1);
         setDatabases(d);
         setShowDatabaseDeleteConfirm(false);
+      });
+  };
+
+  const deleteUser = () => {
+    axios.delete(`/api/servers/${server.id}/mysql-user/${_.get(users, [showUserDeleteConfirm, 'id'])}`)
+      .then(() => {
+        let u = [...users];
+        u.splice(showUserDeleteConfirm, 1);
+        setUsers(u);
+        setShowUserDeleteConfirm(false);
       });
   };
 
@@ -242,11 +252,11 @@ const MySQLDatabaseManager = (props) => {
 
       {/* Alert to delete a user */}
       <SweetAlert
-        show={showUserDeleteConfirm}
+        show={showUserDeleteConfirm !== false}
         showCancelButton
-        title="Delete user?"
-        text={`This will delete a the database user from the server`}
-        onConfirm={deleteDatabase}
+        title={`Delete user - ${_.get(users, [showUserDeleteConfirm, 'name'])}?`}
+        text={`This will a user from the MySQL server and may prevent your application for functioning`}
+        onConfirm={deleteUser}
         onCancel={() => {
           setShowUserDeleteConfirm(false);
         }}

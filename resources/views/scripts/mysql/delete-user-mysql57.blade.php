@@ -1,0 +1,1 @@
+mysql --execute="DROP USER '{{$name}}'@'localhost';"

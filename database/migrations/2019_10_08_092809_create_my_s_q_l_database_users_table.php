@@ -15,8 +15,8 @@ class CreateMySQLDatabaseUsersTable extends Migration
     {
         Schema::create('mysql_database_users', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedInteger('mysql_user_id');
             $table->unsignedInteger('mysql_database_id');
-            $table->string('name');
             $table->timestamps();
         });
     }
