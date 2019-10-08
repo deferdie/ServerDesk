@@ -70,6 +70,10 @@ Route::name('api.')->namespace('Api')->group(function () {
         // Source provider connectors
         Route::post('/source-providers/connect/github', 'GitHubConnectorController@connect');
 
+        // Deploy application
+        Route::post('/applications/{application}/deploy', 'ApplicationDeployController@deploy')->name('application.deploy');
+        
+
         // Applications
         Route::get('/applications', 'ApplicationController@index')->name('application.index');
         Route::get('/applications/{application}', 'ApplicationController@show')->name('application.show');

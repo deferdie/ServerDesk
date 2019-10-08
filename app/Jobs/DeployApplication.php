@@ -97,6 +97,10 @@ class DeployApplication implements ShouldQueue
                                 'repositoryDirectory' => $this->application->domain,
                             ])->render()
                         );
+
+                        $this->application->deployment_script = view('scripts.apps.laravel.laravel-deploy-default', [
+                            'application' => $this->application
+                        ])->render();
                     }
                 }
 

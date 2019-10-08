@@ -19,6 +19,7 @@ class Application extends Model
         'directory',
         'respository',
         'deploy_form_git',
+        'deployment_script',
         'user_source_provider_id',
     ];
 

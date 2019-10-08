@@ -31,6 +31,7 @@ class CreateServersTable extends Migration
             // PHP settings
             $table->boolean('wants_php')->default(false);
             $table->string('php_version')->nullable();
+            $table->string('mysql_version')->nullable();
 
             // Database settings
             $table->boolean('wants_mysql')->default(false);

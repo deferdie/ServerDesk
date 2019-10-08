@@ -5,12 +5,14 @@ import moment from 'moment';
 import { makeStyles } from '@material-ui/styles';
 import {
   Card,
+  Button,
+  Typography,
   CardContent,
-  Typography
+  CardActions
 } from '@material-ui/core';
 
 // Components
-import { ApplicationAvatar } from '../../components';
+import { ApplicationAvatar, DeployApplication } from '../../components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,6 +27,9 @@ const useStyles = makeStyles(theme => ({
     width: 100,
     flexShrink: 0,
     flexGrow: 0
+  },
+  cardAction: {
+    background: '#e7e7e7'
   }
 }));
 
@@ -53,7 +58,7 @@ const ApplicationProfile = (props) => {
                 color="textSecondary"
                 variant="body1"
               >
-                on server : {application.server.name}
+                Deployed on : {application.server.name}
               </Typography>
               <Typography
                 className={classes.dateText}
@@ -66,6 +71,15 @@ const ApplicationProfile = (props) => {
             <ApplicationAvatar className={classes.avatar} application={application} />
           </div>
         </CardContent>
+        <CardActions className={classes.cardAction}>
+          <DeployApplication application={application} />
+          <Button
+            className={classes.deploy}
+            variant="contained"
+          >
+            Run migrations
+          </Button>
+        </CardActions>
       </Card>
     </React.Fragment>
   );

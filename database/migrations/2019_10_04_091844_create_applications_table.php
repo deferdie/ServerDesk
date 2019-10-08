@@ -26,9 +26,11 @@ class CreateApplicationsTable extends Migration
                 'PHP',
                 'Laravel'
             ]);
+            $table->text('deployment_script')->nullable();
             $table->enum('status', [
                 'running',
-                'creating'
+                'creating',
+                'deploying',
             ])->default('deploying');
             $table->boolean('active')->default(true);
             $table->timestamps();
