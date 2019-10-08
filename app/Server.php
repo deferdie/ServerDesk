@@ -39,6 +39,7 @@ class Server extends Model
      * @var array
      */
     protected $with = [
+        'mySQLUsers',
         'mySQLDatabase',
         'serverProvider',
     ];
@@ -81,6 +82,16 @@ class Server extends Model
     public function mySQLDatabase()
     {
         return $this->hasMany(MySQLDatabase::class);
+    }
+    
+    /**
+     * This server has many MySQL users
+     *
+     * @return void
+     */
+    public function mySQLUsers()
+    {
+        return $this->hasMany(MySQLUser::class);
     }
 
     /**

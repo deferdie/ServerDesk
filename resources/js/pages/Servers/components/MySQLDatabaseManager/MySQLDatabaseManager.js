@@ -4,31 +4,28 @@ import SweetAlert from 'sweetalert-react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
 import {
-  Fab,
   Card,
+  Grid,
   Button,
   Divider,
   CardContent,
   CardActions,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow
+  Typography
 } from '@material-ui/core';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import _ from 'lodash';
-import moment from 'moment';
 import axios from 'axios';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 // Components
 import Modal from '../../../../components/Modal';
 import MySQLDatabaseForm from './MySQLDatabaseForm';
-import ListManager from '../../../../components/ListManager';
 import { destructServerErrors } from '../../../../helpers/error';
-import { MySQLDatabaseTable } from './components';
+import {
+  MySQLUserForm,
+  MySQLUsersTable,
+  MySQLDatabaseTable,
+  MySQLDatabaseUserForm
+} from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,16 +39,28 @@ const useStyles = makeStyles(theme => ({
 const MySQLDatabaseManager = (props) => {
   const { className, server, ...rest } = props;
 
+  const [users, setUsers] = useState([]);
   const [databases, setDatabases] = useState([]);
-  const [serverFormErrors, setServerFormErrors] = useState([]);
-  const [serverFormData, setServerFormData] = useState({ name: '' });
-  const [showDatabaseCreateForm, setShowDatabaseCreateForm] = useState(false);
+
+  // Sweet states
+  const [showUserDeleteConfirm, setShowUserDeleteConfirm] = useState(false);
   const [showDatabaseDeleteConfirm, setShowDatabaseDeleteConfirm] = useState(false);
+
+  // Form states
+  const [serverFormErrors, setServerFormErrors] = useState([]);
+  const [userFormData, setUserFormData] = useState({ name: '' });
+  const [serverFormData, setServerFormData] = useState({ name: '' });
+
+  // Modal states
+  const [showDatabaseUserForm, setShowDatabaseUserForm] = useState(false);
+  const [showDatabaseCreateForm, setShowDatabaseCreateForm] = useState(false);
+  const [showDatabaseUserCreateForm, setShowDatabaseUserCreateForm] = useState(false);
 
   const classes = useStyles();
 
   useEffect(() => {
     setDatabases(server.my_s_q_l_database);
+    setUsers(server.my_s_q_l_users);
   }, []);
 
   const createDatabase = () => {
@@ -61,6 +70,18 @@ const MySQLDatabaseManager = (props) => {
       let d = [...databases];
       d.push(data.data.data);
       setDatabases(d);
+      setServerFormErrors([]);
+    }).catch(error => setServerFormErrors(destructServerErrors(error)));
+  };
+
+  const createUser = () => {
+    axios.post(`/api/servers/${server.id}/mysql-user`, userFormData).then(data => {
+      setUserFormData({name: ''});
+      setShowDatabaseUserCreateForm(false);
+      let d = [...users];
+      d.push(data.data.data);
+      setUsers(d);
+      setServerFormErrors([]);
     }).catch(error => setServerFormErrors(destructServerErrors(error)));
   };
 
@@ -76,47 +97,94 @@ const MySQLDatabaseManager = (props) => {
 
   return (
     <React.Fragment>
-      <Card
-        {...rest}
-        className={clsx(classes.root, className)}
+      <Grid
+        container
+        spacing={3}
       >
-        <CardContent>
-          <React.Fragment>
-            <Typography
-              gutterBottom
-              variant="h4"
-            >
-              Database settings - MySQL
-            </Typography>
-            {/* Databases */}
-            <PerfectScrollbar>
-              <div className={classes.inner}>
-                <MySQLDatabaseTable
-                  databases={databases}
-                  setShowDatabaseDeleteConfirm={setShowDatabaseDeleteConfirm}
-                />
-              </div>
-            </PerfectScrollbar>
-          </React.Fragment>
-        </CardContent>
-        <Divider />
-        <CardActions>
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={() => setShowDatabaseCreateForm(true)}
+        <Grid
+          item
+          md={7}
+          xs={12}
+        >
+          <Card
+            {...rest}
+            className={clsx(classes.root, className)}
           >
-            Create database
-          </Button>
-          <Button
-            color="primary"
-            variant="contained"
+            <CardContent>
+              <React.Fragment>
+                <Typography
+                  gutterBottom
+                  variant="h4"
+                >
+                  Database settings - MySQL
+                </Typography>
+                {/* Databases */}
+                <PerfectScrollbar>
+                  <div className={classes.inner}>
+                    <MySQLDatabaseTable
+                      databases={databases}
+                      setShowDatabaseUserForm={setShowDatabaseUserForm}
+                      setShowDatabaseDeleteConfirm={setShowDatabaseDeleteConfirm}
+                    />
+                  </div>
+                </PerfectScrollbar>
+              </React.Fragment>
+            </CardContent>
+            <Divider />
+            <CardActions>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() => setShowDatabaseCreateForm(true)}
+              >
+                Create database
+              </Button>
+            </CardActions>
+          </Card>
+        </Grid>
+        <Grid
+          item
+          md={5}
+          xs={12}
+        >
+          <Card
+            {...rest}
+            className={clsx(classes.root, className)}
           >
-            Manage users
-          </Button>
-        </CardActions>
-      </Card>
+            <CardContent>
+              <React.Fragment>
+                <Typography
+                  gutterBottom
+                  variant="h4"
+                >
+                  Database users
+                </Typography>
+                {/* Databases */}
+                <PerfectScrollbar>
+                  <div className={classes.inner}>
+                    <MySQLUsersTable
+                      users={users}
+                      setShowUserDeleteConfirm={setShowUserDeleteConfirm}
+                    />
+                  </div>
+                </PerfectScrollbar>
+              </React.Fragment>
+            </CardContent>
+            <Divider />
+            <CardActions>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() => setShowDatabaseUserCreateForm(true)}
+              >
+                Create database users
+              </Button>
+            </CardActions>
+          </Card>
+        </Grid>
+      </Grid>
 
+      {/* Modal to create a new database */}
       <Modal
         title="Add a new database"
         open={showDatabaseCreateForm}
@@ -131,8 +199,38 @@ const MySQLDatabaseManager = (props) => {
         />
       </Modal>
 
+      {/* Modal to manage database users */}
+      <Modal
+        showActionButtons={false}
+        title="Manage database users"
+        open={Boolean(showDatabaseUserForm !== false)}
+        onClose={() => setShowDatabaseUserForm(false)}
+        onSave={createDatabase}
+      >
+        <MySQLDatabaseUserForm
+          users={users}
+          database={databases[showDatabaseUserForm]}
+        />
+      </Modal>
+
+      {/* Modal to create a new users */}
+      <Modal
+        title="Add a new database user"
+        open={showDatabaseUserCreateForm}
+        onClose={() => setShowDatabaseUserCreateForm(false)}
+        onSave={createUser}
+        saveButton="Create database user"
+      >
+        <MySQLUserForm
+          formData={userFormData}
+          formErrors={serverFormErrors}
+          setUserFormData={setUserFormData}
+        />
+      </Modal>
+
+      {/* Alert to delete a database */}
       <SweetAlert
-        show={Boolean(showDatabaseDeleteConfirm === false ? false : true)}
+        show={Boolean(showDatabaseDeleteConfirm !== false)}
         showCancelButton
         title="Delete database?"
         text={`You are about to delete database ${_.get(databases, [showDatabaseDeleteConfirm, 'name'])}`}
@@ -142,7 +240,19 @@ const MySQLDatabaseManager = (props) => {
         }}
       />
 
-      <ListManager selectedList={[]} avaliableList={databases} />
+      {/* Alert to delete a user */}
+      <SweetAlert
+        show={showUserDeleteConfirm}
+        showCancelButton
+        title="Delete user?"
+        text={`This will delete a the database user from the server`}
+        onConfirm={deleteDatabase}
+        onCancel={() => {
+          setShowUserDeleteConfirm(false);
+        }}
+      />
+
+      {/* <ListManager selectedList={[]} avaliableList={} /> */}
     </React.Fragment>
   );
 };

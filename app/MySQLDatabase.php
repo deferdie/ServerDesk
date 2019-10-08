@@ -15,6 +15,8 @@ class MySQLDatabase extends Model
 
     /**
      * The fillable attributes for this model
+     *
+     * @var array
      */
     protected $fillable = [
         'name',
@@ -29,5 +31,15 @@ class MySQLDatabase extends Model
     public function server()
     {
         return $this->belongsTo(Server::class);
+    }
+
+    /**
+     * A database has many users
+     *
+     * @return void
+     */
+    public function database()
+    {
+        return $this->hasMany(MySQLDatabaseUser::class, 'mysql_database_id', 'id');
     }
 }

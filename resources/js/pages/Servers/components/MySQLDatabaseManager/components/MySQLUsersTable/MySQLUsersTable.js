@@ -10,28 +10,22 @@ import {
   TableRow
 } from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import moment from 'moment';
 import _ from 'lodash';
 
-const MySQLDatabaseTable = (props) => {
-  const {
-    databases,
-    setShowDatabaseUserForm,
-    setShowDatabaseDeleteConfirm
-  } = props;
+const MySQLUsersTable = (props) => {
+  const { users, setShowDatabaseDeleteConfirm } = props;
 
   return (
     <Table>
       <TableHead>
         <TableRow>
           <TableCell>Name</TableCell>
-          <TableCell>Database created</TableCell>
           <TableCell>Actions</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
-        {databases.map((database, index) => {
+        {users.map((database, index) => {
           return (
             <TableRow
               hover
@@ -46,16 +40,8 @@ const MySQLDatabaseTable = (props) => {
               <TableCell>
                 <Fab
                   size="small"
-                  color="primary"
-                  aria-label="Users"
-                  onClick={() => setShowDatabaseUserForm(index)}
-                >
-                  <GroupAddIcon />
-                </Fab>
-                <Fab
-                  size="small"
                   color="secondary"
-                  aria-label="Delete"
+                  aria-label="edit"
                   onClick={() => setShowDatabaseDeleteConfirm(index)}
                 >
                   <DeleteForeverIcon />
@@ -69,10 +55,9 @@ const MySQLDatabaseTable = (props) => {
   );
 };
 
-MySQLDatabaseTable.propTypes = {
-  databases: PropTypes.array,
-  setShowDatabaseUserForm: PropTypes.object,
+MySQLUsersTable.propTypes = {
+  users: PropTypes.array,
   setShowDatabaseDeleteConfirm: PropTypes.object
 };
 
-export default MySQLDatabaseTable;
+export default MySQLUsersTable;
