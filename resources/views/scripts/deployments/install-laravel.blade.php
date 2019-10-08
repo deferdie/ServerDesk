@@ -1,10 +1,6 @@
 #!/bin/bash
 
-if [[ `composer --help` ]]; then
-
-else
-    {!! file_get_contents(resource_path("views/scripts/php/composer-install.blade.php")) !!}
-fi
+{!! file_get_contents(resource_path("views/scripts/php/composer-install.blade.php")) !!}
 
 @if($application->deployment_script)
     {!! $application->deployment_script !!}
