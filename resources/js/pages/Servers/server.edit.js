@@ -4,7 +4,11 @@ import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 
 // Components
-import { ServerProfile, MySQLDatabaseManager } from './components';
+import {
+  ServerProfile,
+  ServerSSHKeys,
+  MySQLDatabaseManager
+} from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,6 +36,7 @@ const ServerEdit = (props) => {
           {server.wants_mysql === 1 && (
             <MySQLDatabaseManager server={server} databases={server.my_s_q_l_database} />
           )}
+          <ServerSSHKeys />
         </div>
       )}
     </div>
