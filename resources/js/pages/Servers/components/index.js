@@ -4,3 +4,4 @@ export { default as ServerForm } from './ServerForm';
 export { default as ServerProfile } from './ServerProfile';
 export { default as MySQLDatabaseManager } from './MySQLDatabaseManager';
 export { default as ServerSSHKeys } from './ServerSSHKeys';
+export { default as ServerSSHKeyForm } from './ServerSSHKeyForm';

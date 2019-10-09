@@ -15,6 +15,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 
 // Components
 import Modal from '../../../../components/Modal';
+import { ServerSSHKeyForm } from '../../components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -90,7 +91,9 @@ const ServerSSHKeys = (props) => {
         onSave={createSSHKey}
         saveButton="Create SSH key"
       >
-        <p>Hey</p>
+        <ServerSSHKeyForm
+          server={server}
+        />
       </Modal>
     </Grid>
   );
