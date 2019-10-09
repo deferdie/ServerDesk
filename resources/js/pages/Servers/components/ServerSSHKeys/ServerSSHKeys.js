@@ -3,15 +3,24 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
 import {
+  Fab,
   Card,
   Grid,
   Button,
   Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   CardContent,
   CardActions,
   Typography
 } from '@material-ui/core';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import axios from 'axios';
+import _ from 'lodash';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 // Components
 import Modal from '../../../../components/Modal';
@@ -30,9 +39,15 @@ const ServerSSHKeys = (props) => {
   const { className, server, ...rest } = props;
   const classes = useStyles();
   const [showSSHKeyForm, setShowSSHKeyForm] = useState(false);
+  const [sshKeyFormData, setSshKeyFormData] = useState({
+    name: '',
+    key: ''
+  });
 
   const createSSHKey = () => {
-    console.log('creating key');
+    axios.post(`/api/servers/${server.id}/public-key`, sshKeyFormData).then((data) => {
+      console.log(data);
+    });
   };
 
   return (
@@ -42,7 +57,7 @@ const ServerSSHKeys = (props) => {
     >
       <Grid
         item
-        md={12}
+        md={7}
         xs={12}
       >
         <Card
@@ -61,12 +76,44 @@ const ServerSSHKeys = (props) => {
                 gutterBottom
                 variant="subtitle2"
               >
-                Add your SSH keys to this server.
+                Manage your SSH keys for this server
               </Typography>
               {/* Databases */}
               <PerfectScrollbar>
                 <div className={classes.inner}>
-
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Name</TableCell>
+                        <TableCell style={{ textAlign: 'right' }}>Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {server.public_keys.map((key, index) => (
+                        <TableRow
+                          className={classes.tableRow}
+                          hover
+                          key={key.id}
+                        >
+                          <TableCell>
+                            <Typography variant="body1">{_.get(key, 'name')}</Typography>
+                          </TableCell>
+                          <TableCell style={{textAlign: 'right'}}>
+                            <React.Fragment>
+                              {/* Delete Sever */}
+                              <Fab
+                                size="small"
+                                color="secondary"
+                                aria-label="edit"
+                              >
+                                <DeleteIcon />
+                              </Fab>
+                            </React.Fragment>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
                 </div>
               </PerfectScrollbar>
             </React.Fragment>
@@ -74,6 +121,7 @@ const ServerSSHKeys = (props) => {
           <Divider />
           <CardActions>
             <Button
+              fullWidth
               color="primary"
               variant="contained"
               onClick={() => setShowSSHKeyForm(true)}
@@ -93,6 +141,8 @@ const ServerSSHKeys = (props) => {
       >
         <ServerSSHKeyForm
           server={server}
+          formData={sshKeyFormData}
+          setFormData={setSshKeyFormData}
         />
       </Modal>
     </Grid>

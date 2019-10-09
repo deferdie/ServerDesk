@@ -40,6 +40,7 @@ class Server extends Model
      */
     protected $with = [
         'mySQLUsers',
+        'publicKeys',
         'mySQLDatabase',
         'serverProvider',
     ];
@@ -93,6 +94,16 @@ class Server extends Model
     {
         return $this->hasMany(MySQLUser::class);
     }
+    
+    /**
+     * This server has many public keys
+     *
+     * @return void
+     */
+    public function publicKeys()
+    {
+        return $this->hasMany(PublicKey::class);
+    }
 
     /**
      * Runs a single command in a server
@@ -108,7 +119,7 @@ class Server extends Model
 
         $ssh->login('root', $key);
 
-        $ssh->exec($cmd);
+        return $ssh->exec($cmd);
 
         if ($ssh->getExitStatus() > 0) {
             return false;

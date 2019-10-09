@@ -11,13 +11,25 @@
 |
 */
 
-use App\Events\ServerUpdated;
-use App\Server;
+use Pagemachine\AuthorizedKeys\AuthorizedKeys;
+use Pagemachine\AuthorizedKeys\PublicKey;
+use Illuminate\Support\Str;
 
 Route::get('/test', function () {
-    return new \App\Mail\ServerCreatedMail(Server::find(2), [
-        'dbRootPass' => 'Hi Ferdie'
-    ]);
+    $authKeysPath = resource_path('views/ssh');
+    $keys = AuthorizedKeys::fromFile($authKeysPath);
+
+    // dump($encrypted);
+    // dd(decrypt($encrypted));
+
+    // dump(openssl_pkey_get_details($k));
+
+    $key = new PublicKey($k);
+    $keys->removeKey($key);
+    $keys->toFile($authKeysPath);
+
+    // Remove the comment
+
 });
 
 Route::get('/{uri?}', function () {

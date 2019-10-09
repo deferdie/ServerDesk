@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "76adc2c4e2b733ca9a9daaa84df7a94b",
+    "content-hash": "cae0927a692c288d7f83091c29b5a390",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1572,6 +1572,56 @@
                 "serialize"
             ],
             "time": "2019-09-02T21:07:33+00:00"
+        },
+        {
+            "name": "pagemachine/authorized-keys",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pagemachine/authorized-keys.git",
+                "reference": "0c9cdbe7f5774bc3b80246bf6a51a7eca8264384"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pagemachine/authorized-keys/zipball/0c9cdbe7f5774bc3b80246bf6a51a7eca8264384",
+                "reference": "0c9cdbe7f5774bc3b80246bf6a51a7eca8264384",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "cakephp/cakephp-codesniffer": "^3.0",
+                "jakub-onderka/php-console-highlighter": "^0.3.2",
+                "jakub-onderka/php-parallel-lint": "^0.9.2",
+                "mikey179/vfsstream": "^1.6",
+                "phpunit/phpunit": "^5.7",
+                "slevomat/coding-standard": "^4.0",
+                "squizlabs/php_codesniffer": "^3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Pagemachine\\AuthorizedKeys\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Mathias Brodala",
+                    "email": "mbrodala@pagemachine.de"
+                }
+            ],
+            "description": "Read, edit and write the SSH authorized_keys file",
+            "keywords": [
+                "authorized_keys",
+                "public-key",
+                "ssh"
+            ],
+            "time": "2017-12-19T14:23:51+00:00"
         },
         {
             "name": "paragonie/random_compat",

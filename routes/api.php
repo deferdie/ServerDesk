@@ -48,6 +48,11 @@ Route::name('api.')->namespace('Api')->group(function () {
         Route::post('servers/{server}/mysql', 'MySQLDatabaseController@store')->name('server.mysql.store');
         Route::delete('servers/{server}/mysql/{database}', 'MySQLDatabaseController@destroy')->name('server.mysql.destroy');
 
+        // Public keys
+        Route::get('servers/{server}/public-keys', 'PublicKeyController@index')->name('server.public-key.index');
+        Route::post('servers/{server}/public-key', 'PublicKeyController@store')->name('server.public-key.store');
+        Route::delete('servers/{server}/public-key/{key}', 'PublicKeyController@destroy')->name('server.public-key.delete');
+
         // Servers
         Route::get('servers', 'ServerController@index')->name('server.index');
         Route::get('servers/{server}', 'ServerController@show')->name('server.show');

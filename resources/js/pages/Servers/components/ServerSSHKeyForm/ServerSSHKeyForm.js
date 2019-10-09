@@ -11,12 +11,15 @@ import _ from 'lodash';
 import { hasError, getError, destructServerErrors } from '../../../../helpers/error';
 
 const ServerSSHKeyForm = (props) => {
-  const { server } = props;
+  const { server, formData, setFormData } = props;
   const { addToast } = useToasts();
   const [formErrors, setFormErrors] = useState({});
 
   const handleChange = event => {
-    console.log('changin')
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value
+    });
   };
 
   return (
@@ -28,7 +31,7 @@ const ServerSSHKeyForm = (props) => {
         variant="outlined"
         onChange={handleChange}
         name="name"
-        defaultValue={_.get(server, 'name', '')}
+        defaultValue={_.get(formData, 'name', '')}
         error={hasError(formErrors, 'name')}
         helperText={hasError(formErrors, 'name') ? getError(formErrors, 'name') : 'Please provide a name for this private key'}
       />
@@ -42,7 +45,7 @@ const ServerSSHKeyForm = (props) => {
         onChange={handleChange}
         name="key"
         label="Public key"
-        defaultValue={_.get(server, 'key', '')}
+        defaultValue={_.get(formData, 'key', '')}
         error={hasError(formErrors, 'key')}
         helperText={hasError(formErrors, 'key') ? getError(formErrors, 'key') : 'Please enter your public key'}
       />
@@ -51,7 +54,9 @@ const ServerSSHKeyForm = (props) => {
 };
 
 ServerSSHKeyForm.propTypes = {
-  server: PropTypes.object
+  server: PropTypes.object,
+  formData: PropTypes.object,
+  setFormData: PropTypes.func
 };
 
 export default ServerSSHKeyForm;
