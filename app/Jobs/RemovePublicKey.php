@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\PublicKey;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -37,8 +38,16 @@ class RemovePublicKey implements ShouldQueue
     public function handle()
     {
         // Get the authorised_keys contents
-        $contents = $this->key->server->exec('cat ~/.ssh/authorized_keys');
+        $result = $this->key->server->exec('cat ~/.ssh/authorized_keys');
 
-        \Log::info($contents);
+        $contents = $result->output;
+
+        $contents = str_replace(decrypt($this->key->key), '', $contents);
+
+        $result = $this->key->server->exec('echo "'. $contents .'" > ~/.ssh/authorized_keys');
+
+        if ($result->exitStatus === 0) {
+            $this->key->delete();
+        }
     }
 }

@@ -51,7 +51,7 @@ Route::name('api.')->namespace('Api')->group(function () {
         // Public keys
         Route::get('servers/{server}/public-keys', 'PublicKeyController@index')->name('server.public-key.index');
         Route::post('servers/{server}/public-key', 'PublicKeyController@store')->name('server.public-key.store');
-        Route::delete('servers/{server}/public-key/{key}', 'PublicKeyController@destroy')->name('server.public-key.delete');
+        Route::delete('servers/{server}/public-key/{key}', 'PublicKeyController@destroy')->name('server.public-key.destroy');
 
         // Servers
         Route::get('servers', 'ServerController@index')->name('server.index');

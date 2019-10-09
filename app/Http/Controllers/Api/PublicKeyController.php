@@ -51,7 +51,7 @@ class PublicKeyController extends Controller
      */
     public function destroy(Server $server, PublicKey $key)
     {
-        $key = PublicKey::where('server_id', $server->id)->where('id', $key)->firstOrFail();
+        $key = PublicKey::where('server_id', $server->id)->whereId($key->id)->firstOrFail();
 
         RemovePublicKey::dispatch($key);
     }

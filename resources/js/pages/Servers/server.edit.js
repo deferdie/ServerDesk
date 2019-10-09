@@ -36,7 +36,7 @@ const ServerEdit = (props) => {
           {server.wants_mysql === 1 && (
             <MySQLDatabaseManager server={server} databases={server.my_s_q_l_database} />
           )}
-          <ServerSSHKeys server={server} />
+          <ServerSSHKeys server={server} setServer={setServer} />
         </div>
       )}
     </div>

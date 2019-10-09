@@ -21,6 +21,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import axios from 'axios';
 import _ from 'lodash';
 import DeleteIcon from '@material-ui/icons/Delete';
+import SweetAlert from 'sweetalert-react';
 
 // Components
 import Modal from '../../../../components/Modal';
@@ -36,9 +37,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ServerSSHKeys = (props) => {
-  const { className, server, ...rest } = props;
+  const { className, server, setServer, ...rest } = props;
   const classes = useStyles();
   const [showSSHKeyForm, setShowSSHKeyForm] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [sshKeyFormData, setSshKeyFormData] = useState({
     name: '',
     key: ''
@@ -46,8 +48,29 @@ const ServerSSHKeys = (props) => {
 
   const createSSHKey = () => {
     axios.post(`/api/servers/${server.id}/public-key`, sshKeyFormData).then((data) => {
-      console.log(data);
+      let s = {...server};
+      s.public_keys.push(data.data.data);
+      setServer(s);
+      closeForm();
     });
+  };
+
+  const deleteKey = () => {
+    let key = _.get(server.public_keys, [showDeleteModal, 'id']);
+    axios.delete(`/api/servers/${server.id}/public-key/${key}`).then((data) => {
+      let s = { ...server };
+      s.public_keys.splice(showDeleteModal, 1);
+      setServer(s);
+      setShowDeleteModal(false);
+    });
+  };
+
+  const closeForm = () => {
+    setSshKeyFormData({
+      name: '',
+      key: ''
+    });
+    setShowSSHKeyForm(false);
   };
 
   return (
@@ -105,6 +128,7 @@ const ServerSSHKeys = (props) => {
                                 size="small"
                                 color="secondary"
                                 aria-label="edit"
+                                onClick={() => setShowDeleteModal(index)}
                               >
                                 <DeleteIcon />
                               </Fab>
@@ -135,7 +159,7 @@ const ServerSSHKeys = (props) => {
       <Modal
         title="Add a new SSH key"
         open={showSSHKeyForm}
-        onClose={() => setShowSSHKeyForm(false)}
+        onClose={closeForm}
         onSave={createSSHKey}
         saveButton="Create SSH key"
       >
@@ -145,12 +169,25 @@ const ServerSSHKeys = (props) => {
           setFormData={setSshKeyFormData}
         />
       </Modal>
+
+      {/* Alert to delete a database */}
+      <SweetAlert
+        show={Boolean(showDeleteModal !== false)}
+        showCancelButton
+        title="Delete public key?"
+        text={`You are about to this public key ${_.get(server.public_keys, [showDeleteModal, 'name'])}`}
+        onConfirm={deleteKey}
+        onCancel={() => {
+          setShowDeleteModal(false);
+        }}
+      />
     </Grid>
   );
 };
 
 ServerSSHKeys.propTypes = {
   server: PropTypes.object,
+  setServer: PropTypes.func,
   className: PropTypes.object
 };
 

@@ -119,12 +119,11 @@ class Server extends Model
 
         $ssh->login('root', $key);
 
-        return $ssh->exec($cmd);
+        $result = [
+            'output' => $ssh->exec($cmd),
+            'exitStatus' => $ssh->getExitStatus()
+        ];
 
-        if ($ssh->getExitStatus() > 0) {
-            return false;
-        }
-
-        return true;
+        return (object) $result;
     }
 }

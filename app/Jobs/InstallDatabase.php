@@ -50,7 +50,7 @@ class InstallDatabase implements ShouldQueue
     {
         $result = $this->server->exec('mysql --execute="CREATE DATABASE ' . $this->db->name . '"');
 
-        if ($result === false) {
+        if ($result->exitStatus > 0) {
             broadcast(new DatabaseFailedToInstall($this->db));
         }
 
