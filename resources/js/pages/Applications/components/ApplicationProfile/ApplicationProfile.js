@@ -30,9 +30,6 @@ const useStyles = makeStyles(theme => ({
     width: 100,
     flexShrink: 0,
     flexGrow: 0
-  },
-  cardAction: {
-    background: '#e7e7e7'
   }
 }));
 
@@ -73,7 +70,7 @@ const ApplicationProfile = (props) => {
           <ApplicationAvatar className={classes.avatar} application={application} />
         </div>
       </CardContent>
-      <CardActions className={classes.cardAction}>
+      <CardActions>
         {/* Deploy application */}
         <DeployApplication application={application} />
 

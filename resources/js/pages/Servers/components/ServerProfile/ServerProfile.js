@@ -5,12 +5,14 @@ import moment from 'moment';
 import { makeStyles } from '@material-ui/styles';
 import {
   Card,
+  Typography,
   CardContent,
-  Typography
+  CardActions
 } from '@material-ui/core';
 
 // Components
 import { ServerProviderLogo } from '../../../ServerProviders/components';
+import Button from '../../../../components/Button';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,40 +36,41 @@ const ServerProfile = (props) => {
   const classes = useStyles();
 
   return (
-    <React.Fragment>
-      <Card
-        {...rest}
-        className={clsx(classes.root, className)}
-      >
-        <CardContent>
-          <div className={classes.details}>
-            <div>
-              <Typography
-                gutterBottom
-                variant="h2"
-              >
-                {server.name}
-              </Typography>
-              <Typography
-                className={classes.locationText}
-                color="textSecondary"
-                variant="body1"
-              >
-                {server.ip_address}
-              </Typography>
-              <Typography
-                className={classes.dateText}
-                color="textSecondary"
-                variant="body1"
-              >
-                {moment(server.created_at).format('DD/MM/YYYY')}
-              </Typography>
-            </div>
-            <ServerProviderLogo className={classes.avatar} serverProvider={server.server_provider} />
+    <Card
+      {...rest}
+      className={clsx(classes.root, className)}
+    >
+      <CardContent>
+        <div className={classes.details}>
+          <div>
+            <Typography
+              gutterBottom
+              variant="h2"
+            >
+              {server.name}
+            </Typography>
+            <Typography
+              className={classes.locationText}
+              color="textSecondary"
+              variant="body1"
+            >
+              {server.ip_address}
+            </Typography>
+            <Typography
+              className={classes.dateText}
+              color="textSecondary"
+              variant="body1"
+            >
+              {moment(server.created_at).format('DD/MM/YYYY')}
+            </Typography>
           </div>
-        </CardContent>
-      </Card>
-    </React.Fragment>
+          <ServerProviderLogo className={classes.avatar} serverProvider={server.server_provider} />
+        </div>
+      </CardContent>
+      <CardActions>
+        <Button>Testers</Button>
+      </CardActions>
+    </Card>
   );
 };
 

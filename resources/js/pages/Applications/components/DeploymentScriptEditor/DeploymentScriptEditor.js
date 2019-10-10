@@ -29,9 +29,6 @@ const useStyles = makeStyles(theme => ({
     width: 100,
     flexShrink: 0,
     flexGrow: 0
-  },
-  cardAction: {
-    background: '#e7e7e7'
   }
 }));
 
@@ -85,7 +82,7 @@ const DeploymentScriptEditor = (props) => {
           />
         </div>
       </CardContent>
-      <CardActions className={classes.cardAction}>
+      <CardActions>
         <Button
           color="primary"
           loading={loading}
