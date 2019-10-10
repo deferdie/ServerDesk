@@ -45,7 +45,7 @@ const ApplicationEnvironment = (props) => {
         saveButton="Update .env"
       >
         <ClipLoader
-          sizeUnit={"px"}
+          sizeUnit={'px'}
           size={20}
           color={'#123abc'}
           loading={loading}
