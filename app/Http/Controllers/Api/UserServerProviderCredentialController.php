@@ -54,13 +54,20 @@ class UserServerProviderCredentialController extends Controller
         ]);
 
         if ($credential->serverProvider->name === 'Digital Ocean') {
-            $do = new DigitalOcean($credential);
+            try {
+                $do = new DigitalOcean($credential);
 
-            $key = $do->key()->create('serverConfig', $keys['publickey']);
-            $credential->server_provider_key_id = $key->id;
-            $credential->save();
-            
-            return new UserServerProviderCredentialResource($credential);       
+                $key = $do->key()->create('serverConfig', $keys['publickey']);
+                $credential->server_provider_key_id = $key->id;
+                $credential->save();
+
+                return new UserServerProviderCredentialResource($credential);       
+            } catch(\Exception $e) {
+                $credential->delete();
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'key' => ['The provider could not authenticate the you you provided']
+                ]);
+            }
         }
     }
 }

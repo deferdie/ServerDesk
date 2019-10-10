@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
+import { useToasts } from 'react-toast-notifications';
 
 // Components
-import { ServerProviderToolbar, ServerProviderTable, ServerProviderForm } from './components';
 import Modal from '../../components/Modal';
 import { destructServerErrors } from '../../helpers/error';
+import { ServerProviderToolbar, ServerProviderTable, ServerProviderForm } from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,10 +19,11 @@ const useStyles = makeStyles(theme => ({
 
 const ServerProviderList = () => {
   const classes = useStyles();
-
+  const { addToast } = useToasts();
   const [providers, setProviders] = useState([]);
   const [showProviderForm, setShowProviderForm] = useState(false);
   const [providerFormErrors, setProviderFormErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const [providerFormData, setProviderFormData] = useState({
     key: null,
     name: null,
@@ -29,19 +31,25 @@ const ServerProviderList = () => {
   });
 
   useEffect(() => {
-    // Fetch all of the server providers for this user
     axios.get('/api/user/server-providers').then((data) => {
       setProviders(data.data.data);
     });
   }, []);
 
   const submitProviderCreateForm = () => {
+    setLoading(true);
     axios.post('/api/user/server-providers', providerFormData).then(data => {
       const p = [...providers];
-      p.push(data.data.data);
+      let provider = data.data.data;
+      p.push(provider);
       setProviders(p);
       setShowProviderForm(false);
-    }).catch(error => setProviderFormErrors(destructServerErrors(error)));
+      setLoading(false);
+      addToast(`We successfully linked your ${provider.name} to your account`, { appearance: 'success', autoDismiss: true });
+    }).catch((error) => {
+      setProviderFormErrors(destructServerErrors(error));
+      setLoading(false);
+    });
   };
 
   return (
@@ -51,6 +59,7 @@ const ServerProviderList = () => {
         <ServerProviderTable providers={providers} />
       </div>
       <Modal
+        loading={loading}
         title="Link your provider"
         saveButton="Create Provider"
         open={showProviderForm}

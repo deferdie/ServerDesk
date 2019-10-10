@@ -10,9 +10,8 @@ import axios from 'axios';
 import { hasError, getError } from '../.././../../helpers/error';
 
 const ServerProviderForm = (props) => {
-  const { providerFormData, setProviderFormData, formErrors } = props;
-
   const [serverProviders, setServerProviders] = useState([]);
+  const { providerFormData, setProviderFormData, formErrors } = props;
 
   useEffect(() => {
     axios.get('/api/server-providers').then(data => {
