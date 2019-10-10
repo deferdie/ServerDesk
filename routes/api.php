@@ -80,6 +80,7 @@ Route::name('api.')->namespace('Api')->group(function () {
 
         // Application environment
         Route::post('/applications/{application}/env', 'ApplicationEnvironmentController@show')->name('application.env.show');
+        Route::put('/applications/{application}/env', 'ApplicationEnvironmentController@update')->name('application.env.update');
 
         // Applications
         Route::get('/applications', 'ApplicationController@index')->name('application.index');

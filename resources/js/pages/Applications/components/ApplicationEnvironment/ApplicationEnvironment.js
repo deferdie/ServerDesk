@@ -20,12 +20,15 @@ const ApplicationEnvironment = (props) => {
     setLoading(true);
     axios.post(`/api/applications/${application.id}/env`).then((data) => {
       setLoading(false);
-      console.log(data);
+      setEnv(data.data);
     });
   }, []);
 
   const updateEnv = () => {
-    console.log('updaing env');
+    console.log(env)
+    axios.put(`/api/applications/${application.id}/env`, {
+      'env': env
+    });
   };
 
   return (
@@ -57,7 +60,7 @@ const ApplicationEnvironment = (props) => {
           rows="10"
           variant="outlined"
           name="env"
-          onChange={setEnv}
+          onChange={(e) => setEnv(e.target.value)}
           defaultValue={env}
           label="Update your .env settings here for your application"
           helperText={'Your .env settings will never be saved on your servers'}
