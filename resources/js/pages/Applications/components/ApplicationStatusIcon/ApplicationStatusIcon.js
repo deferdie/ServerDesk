@@ -7,7 +7,7 @@ const ApplicationStatusIcon = (props) => {
   const { application } = props;
 
   const renderIcon = () => {
-    if (application.status === 'ready') {
+    if (application.status === 'running') {
       return <CheckIcon color="primary" />;
     }
 

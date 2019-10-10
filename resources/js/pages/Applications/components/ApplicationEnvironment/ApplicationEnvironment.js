@@ -27,7 +27,7 @@ const ApplicationEnvironment = (props) => {
   const updateEnv = () => {
     axios.put(`/api/applications/${application.id}/env`, {
       'env': env
-    });
+    }).then(() => setShowEnvForm(false));
   };
 
   return (
