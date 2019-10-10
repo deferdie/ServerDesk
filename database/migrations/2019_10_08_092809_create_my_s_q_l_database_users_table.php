@@ -17,6 +17,11 @@ class CreateMySQLDatabaseUsersTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('mysql_user_id');
             $table->unsignedInteger('mysql_database_id');
+            $table->enum('status', [
+                'running',
+                'creating',
+                'deploying',
+            ])->default('deploying');
             $table->timestamps();
         });
     }

@@ -19,6 +19,7 @@ class MySQLDatabaseUser extends Model
      * @var array
      */
     protected $fillable = [
+        'status',
         'mysql_user_id',
         'mysql_database_id',
     ];

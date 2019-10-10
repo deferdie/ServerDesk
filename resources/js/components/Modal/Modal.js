@@ -14,6 +14,7 @@ import {
   CardContent,
   CardActions
 } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -36,6 +37,12 @@ const useStyles = makeStyles(theme => ({
   },
   modalContent: {
     padding: theme.spacing(2, 2, 2)
+  },
+  closeIcon: {
+    float: 'right',
+    cursor: 'pointer',
+    marginTop: '12px',
+    marginRight: '12px'
   }
 }));
 
@@ -75,6 +82,11 @@ const TransitionsModal = (props) => {
               {...rest}
               className={clsx(classes.root, className)}
             >
+              <CloseIcon
+                onClick={onClose}
+                className={clsx(classes.closeIcon, className)}
+              />
+
               <CardHeader
                 subheader={subTitle}
                 title={title}

@@ -17,6 +17,11 @@ class CreateMySQLDatabasesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('server_id');
             $table->string('name');
+            $table->enum('status', [
+                'running',
+                'creating',
+                'deploying',
+            ])->default('deploying');
             $table->timestamps();
         });
     }

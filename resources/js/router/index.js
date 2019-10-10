@@ -43,30 +43,28 @@ class App extends Component {
 
     return (
       <Router>
-        <div className="flex flex-col min-h-screen">
-          <Switch>
-            {/* Guest routes */}
-            <GuestRoute exact path="/" component={Welcome} />
-            <GuestRoute path="/register" component={Register} />
-            <GuestRoute path="/signin" component={SignIn} />
-            <GuestRoute path="/forgot-password" component={ForgotPassword} />
-            <GuestRoute path="/password/reset/:token" component={ResetPassword} />
+        <Switch>
+          {/* Guest routes */}
+          <GuestRoute exact path="/" component={Welcome} />
+          <GuestRoute path="/register" component={Register} />
+          <GuestRoute path="/signin" component={SignIn} />
+          <GuestRoute path="/forgot-password" component={ForgotPassword} />
+          <GuestRoute path="/password/reset/:token" component={ResetPassword} />
 
-            {/* Auth routes */}
-            <AuthRoute path="/dashboard" component={Dashboard} />
-            <AuthRoute path="/applications/:application" component={ApplicationEdit} />
-            <AuthRoute path="/applications" component={Applications} />
-            <AuthRoute path="/server-providers" component={ServerProviders} />
-            <AuthRoute path="/servers/:server" component={ServerEdit} {...this.props} />
-            <AuthRoute path="/servers" component={Servers} />
-            <AuthRoute path="/source-providers/:provider" component={SourceProviders} />
-            <AuthRoute path="/source-providers" component={SourceProviders} />
-            <AuthRoute path="/profile/:id" component={Profile} />
+          {/* Auth routes */}
+          <AuthRoute path="/dashboard" component={Dashboard} />
+          <AuthRoute path="/applications/:application" component={ApplicationEdit} />
+          <AuthRoute path="/applications" component={Applications} />
+          <AuthRoute path="/server-providers" component={ServerProviders} />
+          <AuthRoute path="/servers/:server" component={ServerEdit} {...this.props} />
+          <AuthRoute path="/servers" component={Servers} />
+          <AuthRoute path="/source-providers/:provider" component={SourceProviders} />
+          <AuthRoute path="/source-providers" component={SourceProviders} />
+          <AuthRoute path="/profile/:id" component={Profile} />
 
-            {/* Error routes */}
-            <Route component={NotFound} />
-          </Switch>
-        </div>
+          {/* Error routes */}
+          <Route component={NotFound} />
+        </Switch>
       </Router>
     );
   }

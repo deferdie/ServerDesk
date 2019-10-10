@@ -22,7 +22,7 @@ const Footer = props => {
     >
       <Typography variant="body1">
         &copy;{' '}
-        ServerDesk
+        {process.env.APP_NAME}
         . 2019
       </Typography>
       <Typography variant="caption">

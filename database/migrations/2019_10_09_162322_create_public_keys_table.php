@@ -18,6 +18,11 @@ class CreatePublicKeysTable extends Migration
             $table->unsignedInteger('server_id');
             $table->text('key');
             $table->string('name');
+            $table->enum('status', [
+                'running',
+                'creating',
+                'deploying',
+            ])->default('deploying');
             $table->timestamps();
         });
     }

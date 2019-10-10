@@ -20,6 +20,7 @@ class MySQLDatabase extends Model
      */
     protected $fillable = [
         'name',
+        'status',
         'server_id',
     ];
     
