@@ -6,6 +6,7 @@ use App\Application;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
+use App\Events\DeployingApplicationSuccess;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
@@ -36,15 +37,14 @@ class DeployLaravel implements ShouldQueue
      * @return void
      */
     public function handle()
-    {
-        $this->application->status = 'deploying';
-        $this->application->save();
-        
+    {   
         $this->application->server->exec(view('scripts.deployments.install-laravel', [
             'application' => $this->application
         ])->render());
 
         $this->application->status = 'running';
         $this->application->save();
+
+        broadcast(new DeployingApplicationSuccess($this->application->fresh()));
     }
 }

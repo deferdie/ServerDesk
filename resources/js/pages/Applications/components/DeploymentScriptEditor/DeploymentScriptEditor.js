@@ -88,9 +88,9 @@ const DeploymentScriptEditor = (props) => {
       <CardActions className={classes.cardAction}>
         <Button
           color="primary"
+          loading={loading}
           variant="contained"
           onClick={updateScript}
-          loading={loading}
         >
           Save script
         </Button>

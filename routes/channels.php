@@ -18,3 +18,7 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
 Broadcast::channel('server.{id}', function ($user, $id) {
     return (int) \App\Server::whereId($id)->where('user_id', $user->id)->exists();
 });
+
+Broadcast::channel('application.{id}', function ($user, $id) {
+    return (int) \App\Application::whereId($id)->where('user_id', $user->id)->exists();
+});

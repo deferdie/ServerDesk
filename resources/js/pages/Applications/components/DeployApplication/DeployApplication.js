@@ -26,7 +26,7 @@ const DeployApplication = (props) => {
       onClick={deploy}
       variant="contained"
       className={classes.deploy}
-      disabled={application.status === 'deploying'}
+      loading={application.status === 'deploying'}
     >
       {application.status === 'running' ? 'Deploy' : <ApplicationStatusIcon application={application} />}
     </Button>
