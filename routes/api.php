@@ -77,7 +77,9 @@ Route::name('api.')->namespace('Api')->group(function () {
 
         // Deploy application
         Route::post('/applications/{application}/deploy', 'ApplicationDeployController@deploy')->name('application.deploy');
-        
+
+        // Application environment
+        Route::post('/applications/{application}/env', 'ApplicationEnvironmentController@show')->name('application.env.show');
 
         // Applications
         Route::get('/applications', 'ApplicationController@index')->name('application.index');

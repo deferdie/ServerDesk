@@ -12,7 +12,11 @@ import {
 } from '@material-ui/core';
 
 // Components
-import { ApplicationAvatar, DeployApplication } from '../../components';
+import {
+  ApplicationAvatar,
+  DeployApplication,
+  ApplicationEnvironment
+} from '../../components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -71,13 +75,11 @@ const ApplicationProfile = (props) => {
         </div>
       </CardContent>
       <CardActions className={classes.cardAction}>
+        {/* Deploy application */}
         <DeployApplication application={application} />
-        <Button
-          className={classes.deploy}
-          variant="contained"
-        >
-          Run migrations
-        </Button>
+
+        {/* Application environment settings */}
+        <ApplicationEnvironment application={application} />
       </CardActions>
     </Card>
   );
