@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import {
-  Button
-} from '@material-ui/core';
 import axios from 'axios';
 
 // Components
 import ApplicationStatusIcon from '../ApplicationStatusIcon';
+import Button from '../../../../components/Button';
 
 const useStyles = makeStyles(theme => ({
   deploy: {
@@ -20,16 +18,14 @@ const DeployApplication = (props) => {
   const classes = useStyles();
 
   const deploy = () => {
-    axios.post(`/api/applications/${application.id}/deploy`).then((data) => {
-      console.log('deploying', data);
-    });
+    axios.post(`/api/applications/${application.id}/deploy`);
   };
 
   return (
     <Button
-      className={classes.deploy}
-      variant="contained"
       onClick={deploy}
+      variant="contained"
+      className={classes.deploy}
       disabled={application.status === 'deploying'}
     >
       {application.status === 'running' ? 'Deploy' : <ApplicationStatusIcon application={application} />}

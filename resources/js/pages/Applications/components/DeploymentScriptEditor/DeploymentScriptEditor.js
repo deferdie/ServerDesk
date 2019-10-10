@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import {
   Card,
-  Button,
   TextField,
   CardContent,
   CardActions
@@ -14,6 +13,7 @@ import { useToasts } from 'react-toast-notifications';
 import _ from 'lodash';
 
 // Components
+import Button from '../../../../components/Button';
 import { hasError, getError, destructServerErrors } from '../../../../helpers/error';
 
 const useStyles = makeStyles(theme => ({
@@ -44,12 +44,18 @@ const DeploymentScriptEditor = (props) => {
   const classes = useStyles();
   const { addToast } = useToasts();
   const [formErrors, setFormErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const updateScript = () => {
+    setLoading(true);
     axios.put(`/api/applications/${application.id}`, application).then((data) => {
       setApplication(data.data.data);
       addToast(`Script updated`, { appearance: 'success', autoDismiss: true });
-    }).catch(error => setFormErrors(destructServerErrors(error)));
+      setLoading(false);
+    }).catch((error) => {
+      setLoading(false);
+      setFormErrors(destructServerErrors(error));
+    });
   };
 
   const handleChange = event => {
@@ -82,8 +88,9 @@ const DeploymentScriptEditor = (props) => {
       <CardActions className={classes.cardAction}>
         <Button
           color="primary"
-          onClick={updateScript}
           variant="contained"
+          onClick={updateScript}
+          loading={loading}
         >
           Save script
         </Button>

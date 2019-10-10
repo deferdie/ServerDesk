@@ -6,15 +6,18 @@ import {
 } from '@material-ui/core';
 import axios from 'axios';
 import ClipLoader from 'react-spinners/ClipLoader';
+import { useToasts } from 'react-toast-notifications';
 
 // Components
 import Modal from '../../../../components/Modal';
 
 const ApplicationEnvironment = (props) => {
   const { application } = props;
-  const [showEnvForm, setShowEnvForm] = useState(false);
+  const { addToast } = useToasts();
   const [env, setEnv] = useState('');
   const [loading, setLoading] = useState(false);
+  const [modalLoading, setModalLoading] = useState(false);
+  const [showEnvForm, setShowEnvForm] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -25,9 +28,14 @@ const ApplicationEnvironment = (props) => {
   }, []);
 
   const updateEnv = () => {
+    setModalLoading(true);
     axios.put(`/api/applications/${application.id}/env`, {
       'env': env
-    }).then(() => setShowEnvForm(false));
+    }).then(() => {
+      setShowEnvForm(false);
+      setModalLoading(false);
+      addToast(`Environment file updated`, { appearance: 'success', autoDismiss: true });
+    });
   };
 
   return (
@@ -45,6 +53,7 @@ const ApplicationEnvironment = (props) => {
         onClose={() => setShowEnvForm(false)}
         onSave={updateEnv}
         saveButton="Update .env"
+        loading={modalLoading}
       >
         <ClipLoader
           sizeUnit={'px'}

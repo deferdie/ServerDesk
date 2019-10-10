@@ -5,13 +5,14 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import ClipLoader from 'react-spinners/ClipLoader';
 import {
   Card,
+  Button,
+  Divider,
   CardHeader,
   CardContent,
-  CardActions,
-  Divider,
-  Button
+  CardActions
 } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -42,9 +43,10 @@ const TransitionsModal = (props) => {
   const classes = useStyles();
   const {
     open,
-    onClose,
     title,
     onSave,
+    onClose,
+    loading,
     subTitle,
     children,
     className,
@@ -86,10 +88,16 @@ const TransitionsModal = (props) => {
                 <CardActions>
                   <Button
                     color="primary"
-                    variant="contained"
                     onClick={onSave}
+                    disabled={loading}
+                    variant="contained"
                   >
-                    {saveButton}
+                    {loading ? (<ClipLoader
+                      sizeUnit={'px'}
+                      size={20}
+                      color={'#123abc'}
+                      loading={loading}
+                    />) : saveButton }
                   </Button>
                 </CardActions>
               )}
@@ -102,12 +110,14 @@ const TransitionsModal = (props) => {
 };
 
 TransitionsModal.defaultProps = {
+  loading: false,
   showActionButtons: true
 };
 
 TransitionsModal.propTypes = {
   title: PropTypes.string,
   onSave: PropTypes.func,
+  loading: PropTypes.bool,
   onClose: PropTypes.func,
   children: PropTypes.any,
   subTitle: PropTypes.string,
