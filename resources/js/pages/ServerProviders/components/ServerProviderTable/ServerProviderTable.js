@@ -17,6 +17,8 @@ import {
 import _ from 'lodash';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SweetAlert from 'sweetalert-react';
+import axios from 'axios';
+import { useToasts } from 'react-toast-notifications';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -35,12 +37,19 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ServerProviderTable = props => {
-  const { className, providers, ...rest } = props;
+  const { className, providers, setProviders, ...rest } = props;
   const classes = useStyles();
   const [providerToDelete, setProviderToDelete] = useState(false);
+  const { addToast } = useToasts();
 
   const deleteProvider = () => {
-    console.log('removeing provider');
+    axios.delete(`/api/user/server-providers/${_.get(providers, [providerToDelete, 'id'])}`).then((data) => {
+      let p = [...providers];
+      p.splice(providerToDelete, 1);
+      setProviders(p);
+      setProviderToDelete(false);
+      addToast(`We successfully removed the provider from your account`, { appearance: 'success', autoDismiss: true });
+    });
   };
 
   return (
@@ -107,7 +116,8 @@ const ServerProviderTable = props => {
 
 ServerProviderTable.propTypes = {
   className: PropTypes.string,
-  providers: PropTypes.array.isRequired
+  providers: PropTypes.array.isRequired,
+  setProviders: PropTypes.func.isRequired,
 };
 
 export default ServerProviderTable;

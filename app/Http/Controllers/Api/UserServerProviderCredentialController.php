@@ -57,7 +57,7 @@ class UserServerProviderCredentialController extends Controller
             try {
                 $do = new DigitalOcean($credential);
 
-                $key = $do->key()->create('serverConfig', $keys['publickey']);
+                $key = $do->key()->create('ServerDesk', $keys['publickey']);
                 $credential->server_provider_key_id = $key->id;
                 $credential->save();
 
@@ -66,6 +66,27 @@ class UserServerProviderCredentialController extends Controller
                 $credential->delete();
                 throw \Illuminate\Validation\ValidationException::withMessages([
                     'key' => ['The provider could not authenticate the you you provided']
+                ]);
+            }
+        }
+    }
+
+    /**
+     * Delete a user server credential
+     *
+     * @param UserServerProviderCredential $credential
+     * @return void
+     */
+    public function destroy(UserServerProviderCredential $credential)
+    {
+        if ($credential->serverProvider->name === 'Digital Ocean') {
+            try {
+                $do = new DigitalOcean($credential);
+                $do->key()->delete($credential->server_provider_key_id);
+                $credential->delete();
+            } catch (\Exception $e) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'key' => ['The key could not be deleted']
                 ]);
             }
         }

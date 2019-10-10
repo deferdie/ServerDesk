@@ -69,6 +69,7 @@ Route::name('api.')->namespace('Api')->group(function () {
         // User server providers
         Route::get('/user/server-providers', 'UserServerProviderCredentialController@index')->name('user.server-providers.index');
         Route::post('/user/server-providers', 'UserServerProviderCredentialController@store')->name('user.server-providers.store');
+        Route::delete('/user/server-providers/{credential}', 'UserServerProviderCredentialController@destroy')->name('user.server-providers.destroy');
         
         // User source providers
         Route::get('/user/source-providers', 'UserSourceProviderController@index')->name('user.source-providers.index');

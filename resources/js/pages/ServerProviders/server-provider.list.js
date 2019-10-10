@@ -56,7 +56,10 @@ const ServerProviderList = () => {
     <div className={classes.root}>
       <ServerProviderToolbar onAddProvider={() => setShowProviderForm(true)} />
       <div className={classes.content}>
-        <ServerProviderTable providers={providers} />
+        <ServerProviderTable
+          providers={providers}
+          setProviders={setProviders}
+        />
       </div>
       <Modal
         loading={loading}
