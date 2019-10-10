@@ -17,8 +17,6 @@ import {
   Typography
 } from '@material-ui/core';
 import _ from 'lodash';
-import DeleteIcon from '@material-ui/icons/Delete';
-import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 
 // Components
@@ -44,7 +42,6 @@ const ServerTable = props => {
   const {
     className,
     servers,
-    deleteServer,
     ...rest
   } = props;
   const classes = useStyles();
@@ -69,6 +66,7 @@ const ServerTable = props => {
                   <TableCell>IP</TableCell>
                   <TableCell>RAM / CPU</TableCell>
                   <TableCell>Server created</TableCell>
+                  <TableCell>Status</TableCell>
                   <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -93,19 +91,11 @@ const ServerTable = props => {
                       {moment(server.created_at).format('DD/MM/YYYY')}
                     </TableCell>
                     <TableCell>
+                      <ServerStatusIcon server={server} />
+                    </TableCell>
+                    <TableCell>
                       <React.Fragment>
-                        <ServerStatusIcon server={server} />
-
-                        {/* Delete Sever */}
-                        <IconButton
-                          onClick={() => deleteServer(server, index)}
-                          color="error"
-                          aria-label="delete"
-                          className={classes.button}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-
+                        
                         <Fab
                           to={`/servers/${server.id}`}
                           size="small"
@@ -130,8 +120,7 @@ const ServerTable = props => {
 
 ServerTable.propTypes = {
   className: PropTypes.string,
-  servers: PropTypes.array.isRequired,
-  deleteServer: PropTypes.func.isRequired
+  servers: PropTypes.array.isRequired
 };
 
 export default ServerTable;

@@ -97,7 +97,7 @@ const ApplicationTable = props => {
                       <Fab
                         to={`/applications/${app.id}`}
                         size="small"
-                        color="secondary"
+                        color="primary"
                         aria-label="edit"
                         component={CustomRouterLink}
                       >

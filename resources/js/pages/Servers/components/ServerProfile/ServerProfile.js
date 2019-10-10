@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import moment from 'moment';
@@ -9,10 +9,14 @@ import {
   CardContent,
   CardActions
 } from '@material-ui/core';
+import _ from 'lodash';
+import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 
 // Components
-import { ServerProviderLogo } from '../../../ServerProviders/components';
+import SweetAlert from 'sweetalert-react';
 import Button from '../../../../components/Button';
+import { ServerProviderLogo } from '../../../ServerProviders/components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,9 +35,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ServerProfile = (props) => {
-  const { className, server, ...rest } = props;
-
+  const { className, server, history, ...rest } = props;
   const classes = useStyles();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const deleteServer = () => {
+    setShowDeleteModal(false);
+    axios.delete(`/api/servers/${server.id}`).then((data) => {
+      history.push('/servers');
+    });
+  };
 
   return (
     <Card
@@ -68,8 +79,26 @@ const ServerProfile = (props) => {
         </div>
       </CardContent>
       <CardActions>
-        <Button>Testers</Button>
+        <Button
+          onClick={() => setShowDeleteModal(true)}
+          color="secondary"
+        >
+          Delete Server
+        </Button>
       </CardActions>
+
+      {/* Alert to delete a server */}
+      <SweetAlert
+        type="error"
+        show={showDeleteModal}
+        showCancelButton
+        title="You are about to delete this server!!"
+        text={`Are you sure you want to delete server : ${_.get(server, 'name')}`}
+        onConfirm={deleteServer}
+        onCancel={() => {
+          setShowDeleteModal(false);
+        }}
+      />
     </Card>
   );
 };
@@ -79,4 +108,4 @@ ServerProfile.propTypes = {
   className: PropTypes.object
 };
 
-export default ServerProfile;
+export default withRouter(ServerProfile);

@@ -83,21 +83,12 @@ const ServerList = () => {
     });
   };
 
-  const deleteServer = (server, index) => {
-    axios.delete(`/api/server/${server.id}`).then(() => {
-      const s = [...servers];
-      s.splice(index, 1);
-      setServers(s);
-    });
-  };
-
   return (
     <div className={classes.root}>
       <ServersToolbar onAddServer={() => setShowServerForm(true)}/>
       <div className={classes.content}>
         <ServerTable
           servers={servers}
-          deleteServer={deleteServer}
         />
       </div>
       <Modal

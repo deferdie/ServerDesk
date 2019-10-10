@@ -104,6 +104,16 @@ class Server extends Model
     {
         return $this->hasMany(PublicKey::class);
     }
+    
+    /**
+     * This server has many applications
+     *
+     * @return void
+     */
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
 
     /**
      * Runs a single command in a server

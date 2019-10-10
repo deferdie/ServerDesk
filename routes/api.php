@@ -57,6 +57,7 @@ Route::name('api.')->namespace('Api')->group(function () {
         Route::get('servers', 'ServerController@index')->name('server.index');
         Route::get('servers/{server}', 'ServerController@show')->name('server.show');
         Route::post('servers', 'ServerController@store')->name('server.store');
+        Route::delete('servers/{server}', 'ServerController@destroy')->name('server.destroy');
 
         // Server Provider plans
         Route::get('server-providers/{provider}/{creds}', 'ServerProviderPlanController@index')->name('server-provider.plans.index');

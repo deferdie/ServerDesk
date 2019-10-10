@@ -20,7 +20,7 @@ const Topbar = props => {
     <AppBar
       {...rest}
       className={clsx(classes.root, className)}
-      color="primary"
+      color="default"
       position="fixed"
     >
       <Toolbar>

@@ -77,4 +77,43 @@ class ServerController extends Controller
             return new ServerResource($server->fresh());
         }
     }
+
+    /**
+     * Delete a server
+     *
+     * @return void
+     */
+    public function destroy(Server $server)
+    {
+        if ($server->serverProvider->name === 'Digital Ocean') {
+            $do = new DigitalOcean($server->credential);
+            try {
+                $do->droplet()->delete($server->provider_server_id);
+            } catch (\Exception $e) {
+                \Log::info($e);
+            }
+
+            // Delete all of the applications of the server
+            foreach ($server->applications as $app) {
+                $app->delete();
+            }
+            
+            // Delete all of the keys
+            foreach ($server->publicKeys as $key) {
+                $key->delete();
+            }
+
+            // Delete all of the users
+            foreach ($server->mySQLUsers as $user) {
+                $user->delete();
+            }
+            
+            // Delete all of the databases
+            foreach ($server->mySQLDatabase as $db) {
+                $db->delete();
+            }
+
+            $server->delete();
+        }
+    }
 }

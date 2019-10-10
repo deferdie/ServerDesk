@@ -8,6 +8,7 @@ const Button = (props) => {
   return (
     <MuiButton
       {...rest}
+      variant="contained"
       disabled={loading}
     >
       {loading ? (<ClipLoader

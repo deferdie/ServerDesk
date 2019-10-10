@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import moment from 'moment';
 import { makeStyles } from '@material-ui/styles';
+import _ from 'lodash';
 import {
   Card,
   Typography,
@@ -57,7 +58,7 @@ const ApplicationProfile = (props) => {
               color="textSecondary"
               variant="body1"
             >
-              Deployed on : {application.server.name}
+              Deployed on : {_.get(application, 'server.name', 'Could not get server')}
             </Typography>
             <Typography
               className={classes.dateText}
