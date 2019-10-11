@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Application;
-use App\Events\DeployingApplication;
 use App\Jobs\DeployLaravel;
+use App\Jobs\DeployStaticHTML;
+use App\Events\DeployingApplication;
 use App\Http\Controllers\Controller;
 
 class ApplicationDeployController extends Controller
@@ -24,6 +25,10 @@ class ApplicationDeployController extends Controller
 
         if ($application->type === 'Laravel') {
             DeployLaravel::dispatch($application);
+        }
+        
+        if ($application->type === 'Static HTML') {
+            DeployStaticHTML::dispatch($application);
         }
     }
 }

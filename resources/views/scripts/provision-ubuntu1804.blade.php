@@ -52,3 +52,18 @@ sudo systemctl reload nginx
 
 ## Reset the password for root
 echo -e "{{$rootPassword}}\n{{$rootPassword}}" | passwd root
+
+## Create the ssh folder if one does not exist
+mkdir -p ~/.ssh
+
+## Create known hosts
+touch ~/.ssh/known_hosts
+ssh-keyscan github.com > ~/.ssh/known_hosts
+
+## Copy the private key if one does not exist
+touch ~/.ssh/id_rsa
+touch ~/.ssh/id_rsa.pub
+echo "{{$server->credential->private_key}}" >  ~/.ssh/id_rsa
+echo "{{$server->credential->public_key}}" >  ~/.ssh/id_rsa.pub
+chmod 400 ~/.ssh/id_rsa
+chmod 400 ~/.ssh/id_rsa.pub

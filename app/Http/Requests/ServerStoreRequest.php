@@ -28,7 +28,7 @@ class ServerStoreRequest extends FormRequest
             'wants_php' => 'required|bool',
             'php_version' => 'string|nullable',
             'server_provider_id' => 'required|integer',
-            'user_server_provider_credential_id' => 'required|boolean',
+            'user_server_provider_credential_id' => 'required',
         ];
     }
 }

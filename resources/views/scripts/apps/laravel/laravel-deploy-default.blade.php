@@ -1,4 +1,7 @@
 cd /var/www/html/serverdesk/{{$application->domain}}
+
+git pull -u origin master
+
 composer install --no-interaction --prefer-dist --optimize-autoloader
 
 echo "" | sudo -S service php7.2-fpm reload

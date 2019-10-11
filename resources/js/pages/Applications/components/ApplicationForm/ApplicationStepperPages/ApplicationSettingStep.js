@@ -46,6 +46,7 @@ const ApplicationSettingStep = (props) => {
         >
           <option selected>Please select</option>
           {[
+            'Static HTML',
             'Laravel'
           ].map(option => (
             <option

@@ -80,7 +80,7 @@ class DeployApplication implements ShouldQueue
                         ])->render()
                     );
                     
-                    // Get the application type and install it
+                    // Deploy Laravel
                     if ($this->application->type === 'Laravel') {
                         $ssh->exec(
                             view('scripts.deployments.install-laravel', [
@@ -99,6 +99,29 @@ class DeployApplication implements ShouldQueue
                         );
 
                         $this->application->deployment_script = view('scripts.apps.laravel.laravel-deploy-default', [
+                            'application' => $this->application
+                        ])->render();
+                    }
+
+                    // Deploy Static HTML
+                    if ($this->application->type === 'Static HTML') {
+                        $ssh->exec(
+                            view('scripts.deployments.install-static-html', [
+                                'request' => $this->request,
+                                'application' => $this->application,
+                                'repositoryDirectory' => $this->application->domain,
+                            ])->render()
+                        );
+
+                        // Setup the Nginx config for this site
+                        $ssh->exec(
+                            view('scripts.deployments.setup-nginx', [
+                                'application' => $this->application,
+                                'repositoryDirectory' => $this->application->domain,
+                            ])->render()
+                        );
+
+                        $this->application->deployment_script = view('scripts.apps.static-html.static-html-deploy-default', [
                             'application' => $this->application
                         ])->render();
                     }

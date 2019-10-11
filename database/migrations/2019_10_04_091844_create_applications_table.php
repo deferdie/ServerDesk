@@ -19,11 +19,13 @@ class CreateApplicationsTable extends Migration
             $table->unsignedInteger('server_id');
             $table->unsignedInteger('user_source_provider_id')->nullable();
             $table->string('domain');
-            $table->string('directory');
+            $table->string('directory')->nullable();
             $table->string('respository');
+            $table->string('git_branch')->default('master');
             $table->boolean('deploy_form_git')->default(true);
             $table->enum('type', [
                 'PHP',
+                'Static HTML',
                 'Laravel'
             ]);
             $table->text('deployment_script')->nullable();

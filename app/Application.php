@@ -16,6 +16,7 @@ class Application extends Model
         'domain',
         'user_id',
         'server_id',
+        'git_branch',
         'directory',
         'respository',
         'deploy_form_git',

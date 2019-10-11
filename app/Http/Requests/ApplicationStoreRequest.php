@@ -27,7 +27,7 @@ class ApplicationStoreRequest extends FormRequest
             'type' => 'required',
             'domain' => 'required',
             'respository' => 'required',
-            'directory' => 'required|string',
+            'directory' => 'string|nullable',
             'server_id' => 'required|alpha_num',
             'user_source_provider_id' => 'required|alpha_num',
         ];
