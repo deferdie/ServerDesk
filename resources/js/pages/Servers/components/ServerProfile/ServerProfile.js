@@ -105,6 +105,7 @@ const ServerProfile = (props) => {
 
 ServerProfile.propTypes = {
   server: PropTypes.object,
+  history: PropTypes.object,
   className: PropTypes.object
 };
 

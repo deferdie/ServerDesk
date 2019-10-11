@@ -6,3 +6,5 @@ export { default as ApplicationAvatar } from './ApplicationAvatar';
 export { default as DeployApplication } from './DeployApplication';
 export { default as DeploymentScriptEditor } from './DeploymentScriptEditor';
 export { default as ApplicationEnvironment } from './ApplicationEnvironment';
+export { default as ApplicationEncryptionManager } from './ApplicationEncryptionManager';
+export { default as ApplicationDeleteButton } from './ApplicationDeleteButton';

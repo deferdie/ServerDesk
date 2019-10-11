@@ -77,6 +77,9 @@ Route::name('api.')->namespace('Api')->group(function () {
         // Source provider connectors
         Route::post('/source-providers/connect/github', 'GitHubConnectorController@connect');
 
+        // Install SSL certificate
+        Route::post('/applications/{application}/encrypt', 'ApplicationEncryptController@encrypt')->name('application.encrypt');
+        
         // Deploy application
         Route::post('/applications/{application}/deploy', 'ApplicationDeployController@deploy')->name('application.deploy');
 
@@ -89,6 +92,10 @@ Route::name('api.')->namespace('Api')->group(function () {
         Route::get('/applications/{application}', 'ApplicationController@show')->name('application.show');
         Route::post('/applications', 'ApplicationController@store')->name('application.store');
         Route::put('/applications/{application}', 'ApplicationController@update')->name('application.update');
+        Route::delete('/applications/{application}', 'ApplicationController@destroy')->name('application.destroy');
+
+        // SSL providers
+        Route::get('/ssl-providers', 'SSLProviderController@index')->name('ssl-provider.index');
     });
 
     Broadcast::routes();

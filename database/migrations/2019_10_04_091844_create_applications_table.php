@@ -18,6 +18,7 @@ class CreateApplicationsTable extends Migration
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('server_id');
             $table->unsignedInteger('user_source_provider_id')->nullable();
+            $table->unsignedInteger('ssl_provider_id')->nullable();
             $table->string('domain');
             $table->string('directory')->nullable();
             $table->string('respository');
@@ -34,6 +35,7 @@ class CreateApplicationsTable extends Migration
                 'creating',
                 'deploying',
             ])->default('deploying');
+            $table->boolean('ssl_enabled')->default(false);
             $table->boolean('active')->default(true);
             $table->timestamps();
         });

@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ApplicationResource;
 use App\Http\Requests\ApplicationStoreRequest;
 use App\Http\Requests\ApplicationUpdateRequest;
+use App\Jobs\DeleteApplication;
 
 class ApplicationController extends Controller
 {
@@ -80,5 +81,16 @@ class ApplicationController extends Controller
         DeployApplication::dispatch($application->fresh(), json_decode(json_encode($request->all())));
 
         return new ApplicationResource($application);
+    }
+
+    /**
+     * Deletes an application from the server
+     *
+     * @param Application $application
+     * @return void
+     */
+    public function destroy(Application $application)
+    {
+        DeleteApplication::dispatch($application);
     }
 }

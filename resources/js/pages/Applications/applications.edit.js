@@ -5,7 +5,11 @@ import axios from 'axios';
 import { useToasts } from 'react-toast-notifications';
 
 // Components
-import { ApplicationProfile, DeploymentScriptEditor } from './components';
+import {
+  ApplicationProfile,
+  DeploymentScriptEditor,
+  ApplicationEncryptionManager
+} from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -48,6 +52,9 @@ const ApplicationEdit = (props) => {
             application={application}
             setApplication={setApplication}
           />
+
+          {/* Application SSL */}
+          <ApplicationEncryptionManager application={application} />
         </div>
       )}
     </div>

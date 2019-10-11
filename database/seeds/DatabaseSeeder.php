@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(SSLProviderSeeder::class);
         $this->call(ServerProviderSeeder::class);
         $this->call(SourceProviderSeeder::class);
     }

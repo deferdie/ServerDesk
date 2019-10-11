@@ -50,6 +50,9 @@ sudo nginx -t
 sudo systemctl start nginx
 sudo systemctl reload nginx
 
+## Set the config for Nginx
+mkdir -p /etc/nginx/serverdesk/
+
 ## Reset the password for root
 echo -e "{{$rootPassword}}\n{{$rootPassword}}" | passwd root
 

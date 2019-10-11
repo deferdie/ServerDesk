@@ -17,8 +17,10 @@ class Application extends Model
         'user_id',
         'server_id',
         'git_branch',
+        'ssl_enabled',
         'directory',
         'respository',
+        'ssl_provider_id',
         'deploy_form_git',
         'deployment_script',
         'user_source_provider_id',
@@ -61,5 +63,15 @@ class Application extends Model
     public function sourceProvider()
     {
         return $this->hasOne(UserSourceProvider::class, 'id', 'user_source_provider_id');
+    }
+    
+    /**
+     * An application has an SSLProvider
+     *
+     * @return void
+     */
+    public function sslProvider()
+    {
+        return $this->hasOne(SSLProvider::class, 'id', 'ssl_provider_id');
     }
 }

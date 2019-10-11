@@ -15,7 +15,8 @@ import {
 import {
   ApplicationAvatar,
   DeployApplication,
-  ApplicationEnvironment
+  ApplicationEnvironment,
+  ApplicationDeleteButton
 } from '../../components';
 
 const useStyles = makeStyles(theme => ({
@@ -77,6 +78,9 @@ const ApplicationProfile = (props) => {
 
         {/* Application environment settings */}
         <ApplicationEnvironment application={application} />
+
+        {/* Delete an application */}
+        <ApplicationDeleteButton application={application} />
       </CardActions>
     </Card>
   );

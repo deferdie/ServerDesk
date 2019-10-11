@@ -1,8 +1,12 @@
 server {
+    include /etc/nginx/serverdesk/{{$application->domain}}.head;
+    
     listen 80;
     listen [::]:80;
     server_name {{$application->domain}};
     root /var/www/html/serverdesk/{{$application->domain}}/{{$application->directory}};
+
+    include /etc/nginx/serverdesk/{{$application->domain}}.main;
 
     add_header X-Frame-Options "SAMEORIGIN";
     add_header X-XSS-Protection "1; mode=block";

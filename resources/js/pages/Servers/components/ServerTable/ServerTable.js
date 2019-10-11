@@ -95,7 +95,6 @@ const ServerTable = props => {
                     </TableCell>
                     <TableCell>
                       <React.Fragment>
-                        
                         <Fab
                           to={`/servers/${server.id}`}
                           size="small"
