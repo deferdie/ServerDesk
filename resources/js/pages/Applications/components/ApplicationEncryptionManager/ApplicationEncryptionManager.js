@@ -31,6 +31,9 @@ const ApplicationEncryptionManager = (props) => {
   const [showInstallModal, setShowInstallModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [encryptionTypes, setEncryptionTypes] = useState([]);
+  const [formData, setFormData] = useState({
+    ssl_provider_id: null
+  });
 
   useEffect(() => {
     // Get all of the encryption types
@@ -40,15 +43,17 @@ const ApplicationEncryptionManager = (props) => {
   }, []);
 
   const deploy = () => {
-    axios.post(`/api/applications/${application.id}/encrypt`, {
-      ssl_provider_id: 1
-    }).then((data) => {
+    axios.post(`/api/applications/${application.id}/encrypt`, formData).then((data) => {
       setApplication(data.data.data);
+      setShowInstallModal(false);
     });
   };
 
   const handleChange = (event) => {
-    console.log(event);
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value
+    });
   };
 
   const deleteSSL = () => {
@@ -115,7 +120,28 @@ const ApplicationEncryptionManager = (props) => {
         onSave={deploy}
         saveButton="Install"
       >
-        
+        <TextField
+          fullWidth
+          label="Select your provider"
+          margin="dense"
+          name="ssl_provider_id"
+          onChange={handleChange}
+          required
+          select
+          SelectProps={{ native: true }}
+          value={formData.ssl_provider_id}
+          variant="outlined"
+        >
+          <option selected>Please select</option>
+          {encryptionTypes.map(option => (
+            <option
+              key={option.id}
+              value={option.id}
+            >
+              {option.label}
+            </option>
+          ))}
+        </TextField>
       </Modal>
     </Card>
   );
