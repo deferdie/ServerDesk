@@ -7,16 +7,17 @@ import {
   TextField,
   Typography,
   CardContent,
-  CardActions,
+  CardActions
 } from '@material-ui/core';
 import _ from 'lodash';
+import clsx from 'clsx';
+import SweetAlert from 'sweetalert-react';
 
 // Components
 import EncryptionProfile from './EncryptionProfile';
 import ApplicationStatusIcon from '../ApplicationStatusIcon';
 import Button from '../../../../components/Button';
-import clsx from 'clsx';
-import SweetAlert from 'sweetalert-react';
+import Modal from '../../../../components/Modal';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,6 +28,7 @@ const useStyles = makeStyles(theme => ({
 const ApplicationEncryptionManager = (props) => {
   const { application, setApplication, className } = props;
   const classes = useStyles();
+  const [showInstallModal, setShowInstallModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [encryptionTypes, setEncryptionTypes] = useState([]);
 
@@ -70,13 +72,16 @@ const ApplicationEncryptionManager = (props) => {
         <EncryptionProfile />
       </CardContent>
       <CardActions>
-        <Button
-          variant="contained"
-          className={classes.deploy}
-          loading={application.status === 'deploying'}
-        >
-          {application.status === 'running' ? 'Deploy' : <ApplicationStatusIcon application={application} />}
-        </Button>
+        {application.ssl_provider_id === null && (
+          <Button
+            variant="contained"
+            className={classes.deploy}
+            onClick={() => setShowInstallModal(true)}
+            loading={application.status === 'deploying'}
+          >
+            {application.status === 'running' ? 'Install certificate' : <ApplicationStatusIcon application={application} />}
+          </Button>
+        )}
         {application.ssl_provider_id && (
           <Button
             variant="contained"
@@ -102,13 +107,24 @@ const ApplicationEncryptionManager = (props) => {
           setShowDeleteModal(false);
         }}
       />
+
+      <Modal
+        title="Add an SSL to your site"
+        open={showInstallModal}
+        onClose={() => setShowInstallModal(false)}
+        onSave={deploy}
+        saveButton="Install"
+      >
+        
+      </Modal>
     </Card>
   );
 };
 
 ApplicationEncryptionManager.propTypes = {
   className: PropTypes.object.isRequired,
-  application: PropTypes.object.isRequired
+  application: PropTypes.object.isRequired,
+  setApplication: PropTypes.func.isRequired
 };
 
 export default ApplicationEncryptionManager;
