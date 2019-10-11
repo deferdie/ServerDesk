@@ -124,6 +124,8 @@ class DeployApplication implements ShouldQueue
                         $this->application->deployment_script = view('scripts.apps.static-html.static-html-deploy-default', [
                             'application' => $this->application
                         ])->render();
+
+                        $ssh->exec("sudo systemctl restart nginx");
                     }
                 }
 

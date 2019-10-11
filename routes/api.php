@@ -79,6 +79,7 @@ Route::name('api.')->namespace('Api')->group(function () {
 
         // Install SSL certificate
         Route::post('/applications/{application}/encrypt', 'ApplicationEncryptController@encrypt')->name('application.encrypt');
+        Route::delete('/applications/{application}/decrypt', 'ApplicationEncryptController@decrypt')->name('application.decrypt');
         
         // Deploy application
         Route::post('/applications/{application}/deploy', 'ApplicationDeployController@deploy')->name('application.deploy');

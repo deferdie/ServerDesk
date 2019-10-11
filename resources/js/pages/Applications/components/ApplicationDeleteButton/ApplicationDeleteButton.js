@@ -28,7 +28,7 @@ const ApplicationDeleteButton = (props) => {
         Delete Application
       </Button>
 
-      {/* Alert to delete a server */}
+      {/* Alert to delete an application */}
       <SweetAlert
         type="error"
         show={showDeleteModal}

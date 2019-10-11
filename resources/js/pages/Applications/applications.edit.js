@@ -54,7 +54,10 @@ const ApplicationEdit = (props) => {
           />
 
           {/* Application SSL */}
-          <ApplicationEncryptionManager application={application} />
+          <ApplicationEncryptionManager
+            application={application}
+            setApplication={setApplication}
+          />
         </div>
       )}
     </div>
