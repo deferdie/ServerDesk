@@ -131,7 +131,8 @@ class Server extends Model
 
         $result = [
             'output' => $ssh->exec($cmd),
-            'exitStatus' => $ssh->getExitStatus()
+            'exitStatus' => $ssh->getExitStatus(),
+            'errorMessage' => $ssh->getStdError()
         ];
 
         return (object) $result;

@@ -43,6 +43,11 @@ class InstallSSLCert implements ShouldQueue
             ])->render()
         );
 
+        $result = $this->application->server->exec(
+            "cd /etc/letsencrypt/live/" . $this->application->domain
+        );
+        
+
         if ($result->exitStatus > 0) {
             throw new \Exception("Failed to deploy cert");
         }
