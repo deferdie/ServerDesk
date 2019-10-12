@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
+import { useToasts } from 'react-toast-notifications';
 
 // Components
 import { ApplicationToolbar, ApplicationTable, ApplicationForm } from './components';
@@ -18,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 
 const ApplicationList = () => {
   const classes = useStyles();
-
+  const { addToast } = useToasts();
   const [applications, setApplications] = useState([]);
   const [showApplicationForm, setShowApplicationForm] = useState(false);
   const [applicationFormErrors, setApplicationFormErrors] = useState({});
@@ -41,7 +42,12 @@ const ApplicationList = () => {
 
   const submitApplicationCreateForm = () => {
     axios.post('/api/applications', applicationFormData).then(data => {
+      let a = [...applications];
+      a.push(data.data.data);
+      setApplications(a);
+      setShowApplicationForm(false);
       setApplicationFormErrors({});
+      addToast(`Crafting your application, please wait`, { appearance: 'success', autoDismiss: true });
     }).catch(error => setApplicationFormErrors(destructServerErrors(error)));
   };
 
