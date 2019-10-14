@@ -20,9 +20,6 @@ import axios from 'axios';
 const useStyles = makeStyles(theme => ({
   root: {
     marginBottom: '15px'
-  },
-  details: {
-    display: 'flex'
   }
 }));
 
@@ -54,7 +51,7 @@ const ServerServiceManager = (props) => {
             gutterBottom
             variant="subtitle2"
           >
-            Manage your SSH keys for this server
+            You can restart some of your server processes here
           </Typography>
           {/* Databases */}
           <div className={classes.inner}>
