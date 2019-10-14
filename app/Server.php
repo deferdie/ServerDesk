@@ -39,6 +39,7 @@ class Server extends Model
      */
     protected $with = [
         'services',
+        'processes',
         'mySQLUsers',
         'publicKeys',
         'mySQLDatabase',
@@ -113,6 +114,16 @@ class Server extends Model
     public function applications()
     {
         return $this->hasMany(Application::class);
+    }
+    
+    /**
+     * This server has many processes
+     *
+     * @return void
+     */
+    public function processes()
+    {
+        return $this->hasMany(Process::class);
     }
     
     /**

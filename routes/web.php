@@ -11,25 +11,13 @@
 |
 */
 
-use Pagemachine\AuthorizedKeys\AuthorizedKeys;
-use Pagemachine\AuthorizedKeys\PublicKey;
-use Illuminate\Support\Str;
+use App\Jobs\InstallProcess;
+use App\Process;
+use App\Server;
 
 Route::get('/test', function () {
-    $authKeysPath = resource_path('views/ssh');
-    $keys = AuthorizedKeys::fromFile($authKeysPath);
-
-    // dump($encrypted);
-    // dd(decrypt($encrypted));
-
-    // dump(openssl_pkey_get_details($k));
-
-    $key = new PublicKey($k);
-    $keys->removeKey($key);
-    $keys->toFile($authKeysPath);
-
-    // Remove the comment
-
+    InstallProcess::dispatch(Server::find(2), Process::find(1));
+    InstallProcess::dispatch(Server::find(2), Process::find(2));
 });
 
 Route::get('/{uri?}', function () {
