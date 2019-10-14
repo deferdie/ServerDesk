@@ -32,13 +32,13 @@ class Server extends Model
         'user_server_provider_credential_id',
     ];
 
-
     /**
      * The provider the credientials belongs to
      *
      * @var array
      */
     protected $with = [
+        'services',
         'mySQLUsers',
         'publicKeys',
         'mySQLDatabase',
@@ -113,6 +113,16 @@ class Server extends Model
     public function applications()
     {
         return $this->hasMany(Application::class);
+    }
+    
+    /**
+     * This server has many services
+     *
+     * @return void
+     */
+    public function services()
+    {
+        return $this->hasMany(ServerService::class, 'server_id', 'id');
     }
 
     /**

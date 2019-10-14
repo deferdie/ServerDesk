@@ -3,10 +3,8 @@
 namespace App\Events;
 
 use App\Server;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -21,15 +19,23 @@ class ServerUpdated implements ShouldBroadcast
      * @var \App\Server $server
      */
     public $server;
+    
+    /**
+     * A message for the frontend
+     *
+     * @var string $message
+     */
+    public $message;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Server $server)
+    public function __construct(Server $server, string $message = null)
     {
         $this->server = $server;
+        $this->message = $message;
     }
 
     /**

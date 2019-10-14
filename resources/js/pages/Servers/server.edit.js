@@ -5,6 +5,7 @@ import axios from 'axios';
 import {
   Grid
 } from '@material-ui/core';
+import { useToasts } from 'react-toast-notifications';
 
 // Components
 import {
@@ -27,9 +28,18 @@ const ServerEdit = (props) => {
   const { match } = props;
   const classes = useStyles();
   const [server, setServer] = useState(null);
+  const { Echo } = window;
+  const { addToast } = useToasts();
 
   useEffect(() => {
-    axios.get(`/api/servers/${match.params.server}`).then(data => setServer(data.data.data));
+    axios.get(`/api/servers/${match.params.server}`).then((data) => {
+      setServer(data.data.data);
+      Echo.private(`server.${match.params.server}`)
+        .listen('ServerUpdated', data => {
+          addToast(data.message, { appearance: 'success', autoDismiss: true });
+          setServer(data.server);
+        });
+    });
   }, []);
 
   return (
@@ -53,6 +63,7 @@ const ServerEdit = (props) => {
             >
               <ServerServiceManager
                 server={server}
+                setServer={setServer}
               />
             </Grid>
             <Grid

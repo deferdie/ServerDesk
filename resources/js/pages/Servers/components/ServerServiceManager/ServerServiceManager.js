@@ -16,6 +16,8 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
 import SettingsBackupRestoreIcon from '@material-ui/icons/SettingsBackupRestore';
 import axios from 'axios';
+import _ from 'lodash';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,14 +26,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ServerServiceManager = (props) => {
-  const { server, className } = props;
+  const { server, setServer, className } = props;
   const classes = useStyles();
 
   const restartService = (service) => {
     axios.post(`/api/servers/${server.id}/restart-service`, {
-      service: service
+      server_service_id: service.id
     }).then(data => {
-      console.log(data);
+      setServer(data.data.data);
     });
   };
 
@@ -58,34 +60,48 @@ const ServerServiceManager = (props) => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Name</TableCell>
+                  <TableCell>Service</TableCell>
                   <TableCell style={{ textAlign: 'right' }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                <TableRow
-                  className={classes.tableRow}
-                  hover
-                >
-                  <TableCell>
-                    <Typography variant="body1">
-                      Nginx
-                    </Typography>
-                  </TableCell>
-                  <TableCell style={{ textAlign: 'right' }}>
-                    <React.Fragment>
-                      {/* Delete Sever */}
-                      <Fab
-                        size="small"
-                        color="secondary"
-                        aria-label="edit"
-                        onClick={() => restartService('nginx')}
-                      >
-                        <SettingsBackupRestoreIcon />
-                      </Fab>
-                    </React.Fragment>
-                  </TableCell>
-                </TableRow>
+                {_.get(server, 'services', []).map((service) => {
+                  return (
+                    <TableRow
+                      key={service.id}
+                      className={classes.tableRow}
+                      hover
+                    >
+                      <TableCell>
+                        <Typography variant="body1">
+                          {_.get(service, 'service.name', '')}
+                        </Typography>
+                      </TableCell>
+                      <TableCell style={{ textAlign: 'right' }}>
+                        <React.Fragment>
+                          {/* Button to restart the service */}
+                          {service.status !== 'restarting' && (
+                            <Fab
+                              size="small"
+                              color="secondary"
+                              aria-label="edit"
+                              onClick={() => restartService(service)}
+                            >
+                              <SettingsBackupRestoreIcon />
+                            </Fab>
+                          )}
+
+                          <ClipLoader
+                            sizeUnit={'px'}
+                            size={20}
+                            color={'#123abc'}
+                            loading={service.status === 'restarting'}
+                          />
+                        </React.Fragment>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </div>
@@ -98,7 +114,8 @@ const ServerServiceManager = (props) => {
 
 ServerServiceManager.propTypes = {
   className: PropTypes.object,
-  server: PropTypes.object.isRequired
+  server: PropTypes.object.isRequired,
+  setServer: PropTypes.func.isRequired
 };
 
 export default ServerServiceManager;

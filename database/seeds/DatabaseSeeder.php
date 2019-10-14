@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SSLProviderSeeder::class);
         $this->call(ServerProviderSeeder::class);
         $this->call(SourceProviderSeeder::class);
+        $this->call(ServiceSeeder::class);
     }
 }

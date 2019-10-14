@@ -24,7 +24,7 @@ class ServerServiceRestartRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'server_service_id' => 'required'
         ];
     }
 }
