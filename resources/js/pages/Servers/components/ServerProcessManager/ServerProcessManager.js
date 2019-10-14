@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import DeleteIcon from '@material-ui/icons/Delete';
+import _ from 'lodash';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,13 +37,13 @@ const ServerProcessManager = (props) => {
             gutterBottom
             variant="h4"
           >
-            SSH keys
+            Background Processes
           </Typography>
           <Typography
             gutterBottom
             variant="subtitle2"
           >
-            Manage your SSH keys for this server
+            Manage your servers background processes
           </Typography>
           {/* Databases */}
           <PerfectScrollbar>
@@ -51,22 +52,34 @@ const ServerProcessManager = (props) => {
                 <TableHead>
                   <TableRow>
                     <TableCell>Name</TableCell>
+                    <TableCell>Command</TableCell>
+                    <TableCell>User</TableCell>
+                    <TableCell>Instances</TableCell>
                     <TableCell style={{ textAlign: 'right' }}>Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {server.public_keys.map((key, index) => (
+                  {server.processes.map((item) => (
                     <TableRow
                       className={classes.tableRow}
                       hover
-                      key={key.id}
+                      key={item.id}
                     >
                       <TableCell>
-                        <Typography variant="body1">{_.get(key, 'name')}</Typography>
+                        <Typography variant="body1">{_.get(item, 'name')}</Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body1">{_.get(item, 'command')}</Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body1">{_.get(item, 'user')}</Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body1">{_.get(item, 'process_count')}</Typography>
                       </TableCell>
                       <TableCell style={{ textAlign: 'right' }}>
                         <React.Fragment>
-                          {/* Delete Sever */}
+                          {/* Delete process */}
                           <Fab
                             size="small"
                             color="secondary"
@@ -91,7 +104,7 @@ const ServerProcessManager = (props) => {
           color="primary"
           variant="contained"
         >
-          Add key
+          Create process
         </Button>
       </CardActions>
     </Card>

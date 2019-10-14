@@ -10,19 +10,19 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class InstallProcess implements ShouldQueue
+class DeleteProcess implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * The server where the process will be installed
+     * The server where the process will be deleted
      *
      * @var \App\Server
      */
     public $server;
-    
+
     /**
-     * The process to be installed
+     * The process to be deleted
      *
      * @var \App\Process
      */
@@ -47,28 +47,21 @@ class InstallProcess implements ShouldQueue
     public function handle()
     {
         $this->server->exec(
-            view("scripts.supervisor.install")->render()
+            "supervisorctl stop process-" . $this->process->id . ":*"
         );
         
         $this->server->exec(
-            "mkdir -p /root/.serverdesk/process/"
+            "supervisorctl remove process-" . $this->process->id
         );
         
         $this->server->exec(
-            "touch /home/root/.serverdesk/process/process-" . $this->process->id . '.log'
-        );
-        
-        $this->server->exec(
-            'echo "' . view("scripts.supervisor.default", [
-                'process' => $this->process
-            ])->render() . '" > /etc/supervisor/conf.d/process-' . $this->process->id . '.conf' 
+            'rm /etc/supervisor/conf.d/process-' . $this->process->id . '.conf' 
         );
 
         $this->server->exec(
             "supervisorctl reread && supervisorctl update"
         );
 
-        $this->process->status = 'running';
-        $this->process->save();
+        $this->process->delete();
     }
 }
