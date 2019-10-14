@@ -4,7 +4,11 @@ import axios from 'axios';
 import _ from 'lodash';
 
 // Components
-import { ServersToolbar, ServerTable, ServerForm } from './components';
+import {
+  ServerForm,
+  ServerTable,
+  ServersToolbar
+} from './components';
 import Modal from '../../components/Modal';
 import { useToasts } from 'react-toast-notifications';
 import { destructServerErrors } from '../../helpers/error';

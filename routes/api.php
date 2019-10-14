@@ -35,6 +35,9 @@ Route::name('api.')->namespace('Api')->group(function () {
             Route::post('logout', 'LogoutController@logout')->name('logout');
         });
 
+        // Server services
+        Route::post('servers/{server}/restart-service', 'ServerServiceRestartController@restart');
+
         // Mysql users
         Route::get('servers/{server}/mysql-users', 'MySQLUserController@index')->name('server.mysql-user.index');
         Route::post('servers/{server}/mysql-user', 'MySQLUserController@store')->name('server.mysql-user.store');

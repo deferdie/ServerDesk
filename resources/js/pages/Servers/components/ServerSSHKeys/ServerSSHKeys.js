@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/styles';
 import {
   Fab,
   Card,
-  Grid,
   Button,
   Divider,
   Table,
@@ -74,87 +73,76 @@ const ServerSSHKeys = (props) => {
   };
 
   return (
-    <Grid
-      container
-      spacing={3}
+    <Card
+      {...rest}
+      className={clsx(classes.root, className)}
     >
-      <Grid
-        item
-        md={7}
-        xs={12}
-      >
-        <Card
-          {...rest}
-          className={clsx(classes.root, className)}
-        >
-          <CardContent>
-            <React.Fragment>
-              <Typography
-                gutterBottom
-                variant="h4"
-              >
+      <CardContent>
+        <React.Fragment>
+          <Typography
+            gutterBottom
+            variant="h4"
+          >
                 SSH keys
-              </Typography>
-              <Typography
-                gutterBottom
-                variant="subtitle2"
-              >
+          </Typography>
+          <Typography
+            gutterBottom
+            variant="subtitle2"
+          >
                 Manage your SSH keys for this server
-              </Typography>
-              {/* Databases */}
-              <PerfectScrollbar>
-                <div className={classes.inner}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell style={{ textAlign: 'right' }}>Actions</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {server.public_keys.map((key, index) => (
-                        <TableRow
-                          className={classes.tableRow}
-                          hover
-                          key={key.id}
-                        >
-                          <TableCell>
-                            <Typography variant="body1">{_.get(key, 'name')}</Typography>
-                          </TableCell>
-                          <TableCell style={{textAlign: 'right'}}>
-                            <React.Fragment>
-                              {/* Delete Sever */}
-                              <Fab
-                                size="small"
-                                color="secondary"
-                                aria-label="edit"
-                                onClick={() => setShowDeleteModal(index)}
-                              >
-                                <DeleteIcon />
-                              </Fab>
-                            </React.Fragment>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </PerfectScrollbar>
-            </React.Fragment>
-          </CardContent>
-          <Divider />
-          <CardActions>
-            <Button
-              fullWidth
-              color="primary"
-              variant="contained"
-              onClick={() => setShowSSHKeyForm(true)}
-            >
+          </Typography>
+          {/* Databases */}
+          <PerfectScrollbar>
+            <div className={classes.inner}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell style={{ textAlign: 'right' }}>Actions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {server.public_keys.map((key, index) => (
+                    <TableRow
+                      className={classes.tableRow}
+                      hover
+                      key={key.id}
+                    >
+                      <TableCell>
+                        <Typography variant="body1">{_.get(key, 'name')}</Typography>
+                      </TableCell>
+                      <TableCell style={{textAlign: 'right'}}>
+                        <React.Fragment>
+                          {/* Delete Sever */}
+                          <Fab
+                            size="small"
+                            color="secondary"
+                            aria-label="edit"
+                            onClick={() => setShowDeleteModal(index)}
+                          >
+                            <DeleteIcon />
+                          </Fab>
+                        </React.Fragment>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </PerfectScrollbar>
+        </React.Fragment>
+      </CardContent>
+      <Divider />
+      <CardActions>
+        <Button
+          fullWidth
+          color="primary"
+          variant="contained"
+          onClick={() => setShowSSHKeyForm(true)}
+        >
               Add key
-            </Button>
-          </CardActions>
-        </Card>
-      </Grid>
+        </Button>
+      </CardActions>
       {/* Modal to create a new users */}
       <Modal
         title="Add a new SSH key"
@@ -181,7 +169,7 @@ const ServerSSHKeys = (props) => {
           setShowDeleteModal(false);
         }}
       />
-    </Grid>
+    </Card>
   );
 };
 

@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
+import {
+  Grid
+} from '@material-ui/core';
 
 // Components
 import {
   ServerProfile,
   ServerSSHKeys,
-  MySQLDatabaseManager
+  MySQLDatabaseManager,
+  ServerServiceManager
 } from './components';
 
 const useStyles = makeStyles(theme => ({
@@ -36,7 +40,29 @@ const ServerEdit = (props) => {
           {server.wants_mysql === 1 && (
             <MySQLDatabaseManager server={server} databases={server.my_s_q_l_database} />
           )}
-          <ServerSSHKeys server={server} setServer={setServer} />
+
+          <Grid
+            container
+            spacing={3}
+          >
+            {/* Services */}
+            <Grid
+              item
+              md={7}
+              xs={12}
+            >
+              <ServerServiceManager
+                server={server}
+              />
+            </Grid>
+            <Grid
+              item
+              md={5}
+              xs={12}
+            >
+              <ServerSSHKeys server={server} setServer={setServer} />
+            </Grid>
+          </Grid>
         </div>
       )}
     </div>
