@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Server;
 use App\ServerService;
+use App\Jobs\RestartPHP;
 use App\Jobs\RestartNginx;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ServerServiceRestartRequest;
 use App\Http\Resources\ServerResource;
+use App\Http\Requests\ServerServiceRestartRequest;
 
 class ServerServiceRestartController extends Controller
 {
@@ -27,6 +28,10 @@ class ServerServiceRestartController extends Controller
 
         if ($serverService->service->name === 'Nginx') {
             RestartNginx::dispatch($server, $serverService);
+        }
+        
+        if ($serverService->service->name === 'PHP-FPM') {
+            RestartPHP::dispatch($server, $serverService);
         }
 
         return new ServerResource($server->fresh());
