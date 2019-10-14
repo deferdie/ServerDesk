@@ -33,8 +33,9 @@ class CreateApplicationsTable extends Migration
             $table->enum('status', [
                 'running',
                 'creating',
+                'deleting',
                 'deploying',
-            ])->default('deploying');
+            ])->default('creating');
             $table->boolean('ssl_enabled')->default(false);
             $table->boolean('active')->default(true);
             $table->timestamps();

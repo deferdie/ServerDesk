@@ -91,6 +91,8 @@ class ApplicationController extends Controller
      */
     public function destroy(Application $application)
     {
+        $application->status = 'deleting';
+        $application->save();
         DeleteApplication::dispatch($application);
     }
 }

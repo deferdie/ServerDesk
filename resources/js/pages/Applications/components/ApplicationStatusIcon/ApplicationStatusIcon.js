@@ -15,6 +15,10 @@ const ApplicationStatusIcon = (props) => {
       return <LoopIcon className="icon-spin" color="action" />;
     }
 
+    if (application.status === 'deleting') {
+      return <LoopIcon className="icon-spin" color="error" />;
+    }
+
     return <LoopIcon className="icon-spin" color="action" />;
   };
 

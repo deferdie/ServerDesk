@@ -94,15 +94,19 @@ const ApplicationTable = props => {
                       {moment(app.created_at).format('DD/MM/YYYY')}
                     </TableCell>
                     <TableCell>
-                      <Fab
-                        to={`/applications/${app.id}`}
-                        size="small"
-                        color="primary"
-                        aria-label="edit"
-                        component={CustomRouterLink}
-                      >
-                        <EditIcon />
-                      </Fab>
+                      {app.status !== 'deleting' && (
+                        <React.Fragment>
+                          <Fab
+                            to={`/applications/${app.id}`}
+                            size="small"
+                            color="primary"
+                            aria-label="edit"
+                            component={CustomRouterLink}
+                          >
+                            <EditIcon />
+                          </Fab>
+                        </React.Fragment>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

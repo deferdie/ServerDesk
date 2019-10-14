@@ -74,7 +74,9 @@ const ApplicationEncryptionManager = (props) => {
         >
           Application SSL settings
         </Typography>
-        <EncryptionProfile />
+        {application.ssl_enabled === 1 && (
+          <EncryptionProfile application={application} />
+        )}
       </CardContent>
       <CardActions>
         {application.ssl_provider_id === null && (

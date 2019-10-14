@@ -20,6 +20,7 @@ class ApplicationEncryptController extends Controller
     public function encrypt(Application $application, ApplicationEncryptionRequest $request)
     {
         $application->ssl_provider_id = $request->ssl_provider_id;
+        $application->status = 'deploying';
         $application->save();
 
         $application = $application->fresh();

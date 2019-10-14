@@ -3,8 +3,8 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import HttpsIcon from '@material-ui/icons/Https';
+import _ from 'lodash';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -60,17 +60,10 @@ const EncryptionProfile = props => {
           justify="space-between"
         >
           <Grid item>
-            <Typography
-              className={classes.title}
-              color="textSecondary"
-              gutterBottom
-              variant="body2"
-            >
-              
-            </Typography>
             <Typography variant="h3">
-              1600 <Typography variant="subtitle2">
-                days left till renewal
+              {_.get(application, 'certificate_details.days_left')}
+              <Typography variant="subtitle2">
+                 days left till renewal
               </Typography>
             </Typography>
           </Grid>
@@ -86,7 +79,8 @@ const EncryptionProfile = props => {
 };
 
 EncryptionProfile.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  application: PropTypes.object
 };
 
 export default EncryptionProfile;

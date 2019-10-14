@@ -38,6 +38,10 @@ const ApplicationEdit = (props) => {
         .listen('DeployingApplicationSuccess', data => {
           addToast(data.message, { appearance: 'success', autoDismiss: true });
           setApplication(data.application);
+        })
+        .listen('ApplicationUpdated', data => {
+          addToast(data.message, { appearance: 'success', autoDismiss: true });
+          setApplication(data.application);
         });
     });
   }, []);

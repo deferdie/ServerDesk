@@ -37,7 +37,14 @@ class CreateServersTable extends Migration
             $table->boolean('wants_mysql')->default(false);
 
             $table->boolean('active')->default(true);
-            $table->enum('status', ['creating', 'created', 'running', 'stopped', 'stopping'])->default('stopped');
+            $table->enum('status', [
+                'creating',
+                'created',
+                'deleting',
+                'running',
+                'stopped',
+                'stopping'
+            ])->default('stopped');
             $table->timestamps();
         });
     }

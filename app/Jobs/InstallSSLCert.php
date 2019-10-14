@@ -37,21 +37,37 @@ class InstallSSLCert implements ShouldQueue
      */
     public function handle()
     {
-        $result = $this->application->server->exec(
+        $this->application->server->exec(
             view('scripts.deployments.install-letsencrypt', [
                 'application' => $this->application
             ])->render()
+        );
+        
+        $this->application->server->exec(
+            "sudo -H /usr/local/bin/certbot-auto certonly --agree-tos --non-interactive -m ".$this->application->user->email." -d ".$this->application->domain." --nginx"
         );
 
         $result = $this->application->server->exec(
             "cd /etc/letsencrypt/live/" . $this->application->domain
         );
-        
 
         if ($result->exitStatus > 0) {
             throw new \Exception("Failed to deploy cert");
         }
 
-        EnableSSL::dispatch($this->application);
+        $this->application->status = 'running';
+        $this->application->save();
+
+        EnableSSL::dispatch($this->application->fresh());
+    }
+
+    /**
+     * When the job fails
+     *
+     * @return void
+     */
+    public function failed()
+    {
+        RemoveSSLCertSSL::dispatch($this->application);
     }
 }

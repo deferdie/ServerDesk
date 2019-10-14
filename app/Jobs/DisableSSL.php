@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Application;
+use App\Events\ApplicationUpdated;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -59,5 +60,7 @@ class DisableSSL implements ShouldQueue
         );
 
         $this->application->server->exec("sudo systemctl restart nginx");
+
+        broadcast(new ApplicationUpdated($this->application, 'SSL disabled'));
     }
 }

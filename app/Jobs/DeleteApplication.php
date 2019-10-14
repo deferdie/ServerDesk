@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Application;
 use Illuminate\Bus\Queueable;
+use App\Events\ApplicationDeleted;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -53,6 +54,10 @@ class DeleteApplication implements ShouldQueue
         // Reload Nginx
         $this->application->server->exec('sudo systemctl reload nginx');
 
+        $applicationId = $this->application->id;
+
         $this->application->delete();
+
+        broadcast(new ApplicationDeleted($applicationId));
     }
 }
