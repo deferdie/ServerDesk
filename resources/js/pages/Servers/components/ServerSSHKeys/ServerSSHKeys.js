@@ -29,9 +29,6 @@ import { ServerSSHKeyForm } from '../../components';
 const useStyles = makeStyles(theme => ({
   root: {
     marginBottom: '15px'
-  },
-  details: {
-    display: 'flex'
   }
 }));
 

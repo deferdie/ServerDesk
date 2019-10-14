@@ -12,7 +12,8 @@ import {
   ServerProfile,
   ServerSSHKeys,
   MySQLDatabaseManager,
-  ServerServiceManager
+  ServerServiceManager,
+  ServerProcessManager
 } from './components';
 
 const useStyles = makeStyles(theme => ({
@@ -72,6 +73,14 @@ const ServerEdit = (props) => {
               xs={12}
             >
               <ServerSSHKeys server={server} setServer={setServer} />
+            </Grid>
+
+            <Grid
+              item
+              md={12}
+              xs={12}
+            >
+              <ServerProcessManager server={server} setServer={setServer} />
             </Grid>
           </Grid>
         </div>

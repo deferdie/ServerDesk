@@ -6,3 +6,4 @@ export { default as MySQLDatabaseManager } from './MySQLDatabaseManager';
 export { default as ServerSSHKeys } from './ServerSSHKeys';
 export { default as ServerSSHKeyForm } from './ServerSSHKeyForm';
 export { default as ServerServiceManager } from './ServerServiceManager';
+export { default as ServerProcessManager } from './ServerProcessManager';
