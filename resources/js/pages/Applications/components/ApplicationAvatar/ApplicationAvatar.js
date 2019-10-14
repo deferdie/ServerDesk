@@ -6,7 +6,8 @@ const ApplicationAvatar = (props) => {
   const { application, className } = props;
 
   const types = {
-    'Laravel': '/images/applications/laravel.png'
+    'Laravel': '/images/applications/laravel.png',
+    'Static HTML': '/images/applications/html.png'
   };
 
   return (
