@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 
-use App\Http\Requests\ProcessStoreRequest;
-use App\Http\Resources\ProcessResource;
-use App\Jobs\DeleteProcess;
-use App\Jobs\InstallProcess;
-use App\Process;
 use App\Server;
+use App\Process;
+use App\Jobs\DeleteProcess;
+use App\Jobs\RestartProcess;
+use App\Jobs\InstallProcess;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ProcessResource;
+use App\Http\Requests\ProcessStoreRequest;
 
 class ServerProcessController extends Controller
 {
@@ -30,6 +32,21 @@ class ServerProcessController extends Controller
     public function show(Server $server, Process $process)
     {
         return new ProcessResource($process);
+    }
+    
+    /**
+     * Restart a server process
+     *
+     * @return void
+     */
+    public function update(Server $server, Process $process)
+    {
+        $process->status = 'restarting';
+        $process->save();
+
+        RestartProcess::dispatch($server, $process);
+
+        return new ProcessResource($process->fresh());
     }
     
     /**

@@ -35,6 +35,11 @@ Route::name('api.')->namespace('Api')->group(function () {
             Route::post('logout', 'LogoutController@logout')->name('logout');
         });
 
+        // Server processes
+        Route::put('servers/{server}/process/{process}', 'ServerProcessController@update');
+        Route::post('servers/{server}/process', 'ServerProcessController@store');
+        Route::delete('servers/{server}/process/{process}', 'ServerProcessController@destroy');
+        
         // Server services
         Route::post('servers/{server}/restart-service', 'ServerServiceRestartController@restart');
 

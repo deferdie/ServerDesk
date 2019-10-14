@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Server;
+use App\Process;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -45,7 +47,10 @@ class RestartProcess implements ShouldQueue
     public function handle()
     {
         $this->server->exec(
-            "supervisorctl start process-".$this->process->id.":*"
+            "supervisorctl restart process-".$this->process->id.":*"
         );
+
+        $this->process->status = 'running';
+        $this->process->save();
     }
 }

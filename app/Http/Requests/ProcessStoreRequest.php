@@ -13,7 +13,7 @@ class ProcessStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,10 @@ class ProcessStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'required',
+            'user' => 'required',
+            'command' => 'required',
+            'process_count' => 'required|int',
         ];
     }
 }

@@ -1,19 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  TextField,
+  TextField
 } from '@material-ui/core';
-import axios from 'axios';
-import { useToasts } from 'react-toast-notifications';
 import _ from 'lodash';
 
 // Components
-import { hasError, getError, destructServerErrors } from '../../../../helpers/error';
+import { hasError, getError } from '../../../../helpers/error';
 
 const ServerSSHKeyForm = (props) => {
-  const { server, formData, setFormData } = props;
-  const { addToast } = useToasts();
-  const [formErrors, setFormErrors] = useState({});
+  const { formData, setFormData, formErrors } = props;
 
   const handleChange = event => {
     setFormData({
