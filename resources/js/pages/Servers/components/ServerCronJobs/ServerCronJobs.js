@@ -51,12 +51,12 @@ const ServerCronJobs = (props) => {
   });
 
   const deleteJob = () => {
-    let jobId = _.get(server.cron_jobs, [showDeleteModal, 'id']);
+    let jobId = _.get(server.cronjobs, [showDeleteModal, 'id']);
     axios.delete(`/api/servers/${server.id}/cron-job/${jobId}`).then(() => {
       let s = { ...server };
-      s.cron_jobs.splice(showDeleteModal, 1);
-      setServer(s);
+      s.cronjobs.splice(showDeleteModal, 1);
       setShowDeleteModal(false);
+      setServer(s);
       addToast(`Job deleted`, { appearance: 'success', autoDismiss: true });
     });
   };
@@ -64,7 +64,7 @@ const ServerCronJobs = (props) => {
   const createJob = () => {
     axios.post(`/api/servers/${server.id}/cron-job`, jobFormData).then((data) => {
       let s = { ...server };
-      s.cron_jobs.push(data.data.data);
+      s.cronjobs.push(data.data.data);
       setServer(s);
       closeForm();
       addToast(`Installing job`, { appearance: 'success', autoDismiss: true });
@@ -72,10 +72,10 @@ const ServerCronJobs = (props) => {
   };
 
   const restartJob = () => {
-    let jobId = _.get(server.cron_jobs, [showRestartModal, 'id']);
+    let jobId = _.get(server.cronjobs, [showRestartModal, 'id']);
     axios.put(`/api/servers/${server.id}/cron-job/${jobId}`).then((data) => {
       let s = { ...server };
-      s.cron_jobs[showRestartModal] = data.data.data;
+      s.cronjobs[showRestartModal] = data.data.data;
       setServer(s);
       setShowRestartModal(false);
       addToast(`Job restarting`, { appearance: 'success', autoDismiss: true });
@@ -124,11 +124,11 @@ const ServerCronJobs = (props) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {_.get(server, 'processes', []).map((item, index) => (
+                  {_.get(server, 'cronjobs', []).map((item, index) => (
                     <TableRow
                       className={classes.tableRow}
                       hover
-                      key={item.id}
+                      key={item.id + index}
                     >
                       <TableCell>
                         <Typography variant="body1">{_.get(item, 'name')}</Typography>
@@ -193,7 +193,7 @@ const ServerCronJobs = (props) => {
         show={Boolean(showDeleteModal !== false)}
         showCancelButton
         title="Delete job?"
-        text={`You are about to delete this job: ${_.get(server.processes, [showDeleteModal, 'name'])}`}
+        text={`You are about to delete this job: ${_.get(server.cronjobs, [showDeleteModal, 'name'])}`}
         onConfirm={deleteJob}
         onCancel={() => {
           setShowDeleteModal(false);
@@ -205,7 +205,7 @@ const ServerCronJobs = (props) => {
         show={Boolean(showRestartModal !== false)}
         showCancelButton
         title="Restart job?"
-        text={`You are about to this restart this job: ${_.get(server.processes, [showRestartModal, 'name'])}`}
+        text={`You are about to this restart this job: ${_.get(server.cronjobs, [showRestartModal, 'name'])}`}
         onConfirm={restartJob}
         onCancel={() => {
           setShowRestartModal(false);

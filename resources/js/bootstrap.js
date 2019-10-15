@@ -3,6 +3,7 @@ import _ from 'lodash';
 import loadProgressBar from './helpers/progress-bar';
 import Echo from 'laravel-echo';
 import localforage from 'localforage';
+import jwtDecode from 'jwt-decode';
 
 window._ = _;
 window.axios = axios;
@@ -39,4 +40,14 @@ localforage.getItem('authtoken').then((jwt) => {
       }
     }
   });
+
+  // // Setup an interceptor for axios to check if the jwt has expired
+  // window.axios.interceptors.request.use(function (config) {
+  //   return config;
+  // }, () => {
+  //   if ((new Date().getTime() / 1000) > jwtDecode(jwt).exp) {
+  //     // Redirect the user back to the login
+  //     window.location.href = '/login';
+  //   }
+  // });
 });

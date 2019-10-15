@@ -21,7 +21,6 @@ class CreateCronJobsTable extends Migration
             $table->string('user');
             $table->string('cron');
             $table->string('recurrence');
-            $table->unsignedInteger('server_id');
             $table->enum('status', [
                 'running',
                 'stopped',

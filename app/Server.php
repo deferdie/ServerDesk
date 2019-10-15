@@ -38,6 +38,7 @@ class Server extends Model
      * @var array
      */
     protected $with = [
+        'cronjobs',
         'services',
         'processes',
         'mySQLUsers',
@@ -124,6 +125,16 @@ class Server extends Model
     public function processes()
     {
         return $this->hasMany(Process::class);
+    }
+    
+    /**
+     * This server has many cronjobs
+     *
+     * @return void
+     */
+    public function cronjobs()
+    {
+        return $this->hasMany(CronJob::class);
     }
     
     /**
