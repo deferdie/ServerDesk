@@ -18,6 +18,6 @@ class CronJobController extends Controller
      */
     public function store(Server $server, CronJobStoreRequest $request)
     {
-        \Log::info($request-all());
+        \Log::info($request->all());
     }
 }

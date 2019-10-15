@@ -45,6 +45,7 @@ const ServerCronJobs = (props) => {
   const [jobFormData, setJobFormData] = useState({
     name: '',
     user: 'root',
+    cron: '* * * * *',
     command: '',
     recurrence: ''
   });

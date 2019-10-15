@@ -89,7 +89,13 @@ const CronJobForm = (props) => {
       />
 
       <TextField
-        onChange={handleChange}
+        onChange={(e) => {
+          setFormData({
+            ...formData,
+            cron: crons[e.target.value].cron,
+            recurrence: crons[e.target.value].name
+          });
+        }}
         fullWidth
         label="Job occurrence"
         margin="dense"
@@ -97,23 +103,24 @@ const CronJobForm = (props) => {
         required
         select
         SelectProps={{ native: true }}
-        value={formData.recurrence}
         variant="outlined"
         helperText={hasError(formErrors, 'recurrence') ? getError(formErrors, 'recurrence') : 'How often should this job run'}
         error={hasError(formErrors, 'recurrence')}
       >
         <option selected>Please select</option>
-        {crons.map(option => (
-          <option
-            key={option.name}
-            value={option.cron}
-          >
-            {option.name}
-          </option>
-        ))}
+        {crons.map((option, index) => {
+          return (
+            <option
+              key={option.name}
+              value={index}
+            >
+              {option.name}
+            </option>
+          );
+        })}
       </TextField>
 
-      {formData.recurrence === 'custom' && (
+      {formData.recurrence === 'Custom' && (
         <TextField
           fullWidth
           margin="dense"
@@ -134,7 +141,7 @@ const CronJobForm = (props) => {
         <p>
           {
             CronParser.parseExpression(
-              formData.recurrence !== 'custom' ? formData.recurrence : formData.cron
+              _.get('formData', 'recurrence', '') !== 'Custom' ? _.get('formData', 'recurrence', '') : _.get('formData', 'cron', '')
             ).next().toString()
           }
         </p>
