@@ -11,6 +11,37 @@ import { hasError, getError } from '../../../../helpers/error';
 const CronJobForm = (props) => {
   const { formData, setFormData, formErrors } = props;
 
+  const crons = [
+    {
+      'name': 'Every minute',
+      'cron': '* * * * *'
+    },
+    {
+      'name': 'Every half hour',
+      'cron': '30 * * * *'
+    },
+    {
+      'name': 'Every hour',
+      'cron': '0 * * * *'
+    },
+    {
+      'name': 'Every night',
+      'cron': '0 0 * * *'
+    },
+    {
+      'name': 'Every week',
+      'cron': '0 0 * * 0'
+    },
+    {
+      'name': 'Every month',
+      'cron': '0 0 1 * *'
+    },
+    {
+      'name': 'Custom',
+      'cron': 'custom'
+    }
+  ];
+
   const handleChange = event => {
     setFormData({
       ...formData,
@@ -55,6 +86,45 @@ const CronJobForm = (props) => {
         error={hasError(formErrors, 'user')}
         helperText={hasError(formErrors, 'user') ? getError(formErrors, 'user') : 'The user the command should run under'}
       />
+
+      <TextField
+        onChange={handleChange}
+        fullWidth
+        label="Select your login"
+        margin="dense"
+        name="recurrence"
+        required
+        select
+        SelectProps={{ native: true }}
+        value={formData.recurrence}
+        variant="outlined"
+        helperText={hasError(formErrors, 'cron_label') ? getError(formErrors, 'recurrence') : 'How often should this job run'}
+        error={hasError(formErrors, 'recurrence')}
+      >
+        <option selected>Please select</option>
+        {crons.map(option => (
+          <option
+            key={option.name}
+            value={option.cron}
+          >
+            {option.name}
+          </option>
+        ))}
+      </TextField>
+
+      {formData.recurrence === 'custom' && (
+        <TextField
+          fullWidth
+          margin="dense"
+          label="Your custom cron expression"
+          variant="outlined"
+          onChange={handleChange}
+          name="cron"
+          defaultValue={_.get(formData, 'cron', '')}
+          error={hasError(formErrors, 'cron')}
+          helperText={hasError(formErrors, 'cron') ? getError(formErrors, 'cron') : 'The expression for the crontab'}
+        />
+      )}
     </React.Fragment>
   );
 };

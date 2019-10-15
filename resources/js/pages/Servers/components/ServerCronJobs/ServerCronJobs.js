@@ -46,7 +46,7 @@ const ServerCronJobs = (props) => {
     name: '',
     user: 'root',
     command: '',
-    process_count: 1
+    recurrence: ''
   });
 
   const deleteJob = () => {
@@ -116,7 +116,7 @@ const ServerCronJobs = (props) => {
                   <TableRow>
                     <TableCell>Name</TableCell>
                     <TableCell>Command</TableCell>
-                    <TableCell>Recurrence</TableCell>
+                    <TableCell>recurrence</TableCell>
                     <TableCell>User</TableCell>
                     <TableCell>Cron</TableCell>
                     <TableCell style={{ textAlign: 'right' }}>Actions</TableCell>
