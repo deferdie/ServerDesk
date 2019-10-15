@@ -50,34 +50,34 @@ const ServerCronJobs = (props) => {
   });
 
   const deleteJob = () => {
-    let processId = _.get(server.processes, [showDeleteModal, 'id']);
-    axios.delete(`/api/servers/${server.id}/process/${processId}`).then((data) => {
+    let jobId = _.get(server.cron_jobs, [showDeleteModal, 'id']);
+    axios.delete(`/api/servers/${server.id}/cron-job/${jobId}`).then(() => {
       let s = { ...server };
-      s.processes.splice(showDeleteModal, 1);
+      s.cron_jobs.splice(showDeleteModal, 1);
       setServer(s);
       setShowDeleteModal(false);
-      addToast(`Process deleted`, { appearance: 'success', autoDismiss: true });
+      addToast(`Job deleted`, { appearance: 'success', autoDismiss: true });
     });
   };
 
   const createJob = () => {
-    axios.post(`/api/servers/${server.id}/process`, jobFormData).then((data) => {
+    axios.post(`/api/servers/${server.id}/cron-job`, jobFormData).then((data) => {
       let s = { ...server };
-      s.processes.push(data.data.data);
+      s.cron_jobs.push(data.data.data);
       setServer(s);
       closeForm();
-      addToast(`Installing process`, { appearance: 'success', autoDismiss: true });
+      addToast(`Installing job`, { appearance: 'success', autoDismiss: true });
     }).catch(error => setFormErrors(destructServerErrors(error)));
   };
 
   const restartJob = () => {
-    let processId = _.get(server.processes, [showRestartModal, 'id']);
-    axios.put(`/api/servers/${server.id}/process/${processId}`).then((data) => {
+    let jobId = _.get(server.cron_jobs, [showRestartModal, 'id']);
+    axios.put(`/api/servers/${server.id}/cron-job/${jobId}`).then((data) => {
       let s = { ...server };
-      s.processes[showRestartModal] = data.data.data;
+      s.cron_jobs[showRestartModal] = data.data.data;
       setServer(s);
       setShowRestartModal(false);
-      addToast(`Process restarting`, { appearance: 'success', autoDismiss: true });
+      addToast(`Job restarting`, { appearance: 'success', autoDismiss: true });
     });
   };
 

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  TextField
+  TextField, Divider
 } from '@material-ui/core';
 import _ from 'lodash';
+import CronParser from 'cron-parser';
 
 // Components
 import { hasError, getError } from '../../../../helpers/error';
@@ -90,7 +91,7 @@ const CronJobForm = (props) => {
       <TextField
         onChange={handleChange}
         fullWidth
-        label="Select your login"
+        label="Job occurrence"
         margin="dense"
         name="recurrence"
         required
@@ -98,7 +99,7 @@ const CronJobForm = (props) => {
         SelectProps={{ native: true }}
         value={formData.recurrence}
         variant="outlined"
-        helperText={hasError(formErrors, 'cron_label') ? getError(formErrors, 'recurrence') : 'How often should this job run'}
+        helperText={hasError(formErrors, 'recurrence') ? getError(formErrors, 'recurrence') : 'How often should this job run'}
         error={hasError(formErrors, 'recurrence')}
       >
         <option selected>Please select</option>
@@ -125,6 +126,19 @@ const CronJobForm = (props) => {
           helperText={hasError(formErrors, 'cron') ? getError(formErrors, 'cron') : 'The expression for the crontab'}
         />
       )}
+
+      <br />
+      <Divider />
+      <div>
+        <p>The next time this job will run</p>
+        <p>
+          {
+            CronParser.parseExpression(
+              formData.recurrence !== 'custom' ? formData.recurrence : formData.cron
+            ).next().toString()
+          }
+        </p>
+      </div>
     </React.Fragment>
   );
 };

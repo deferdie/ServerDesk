@@ -31,6 +31,7 @@
         "@material-ui/icons": "^4.4.3",
         "chart.js": "^2.8.0",
         "components": "^0.1.0",
+        "cron-parser": "^2.13.0",
         "laravel-echo": "^1.6.1",
         "laravel-mix-tailwind": "^0.1.0",
         "localforage": "^1.7.2",

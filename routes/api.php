@@ -40,6 +40,11 @@ Route::name('api.')->namespace('Api')->group(function () {
         Route::post('servers/{server}/process', 'ServerProcessController@store');
         Route::delete('servers/{server}/process/{process}', 'ServerProcessController@destroy');
         
+        // Server cron jobs
+        Route::put('servers/{server}/cron-job/{job}', 'CronJobController@update');
+        Route::post('servers/{server}/cron-job', 'CronJobController@store');
+        Route::delete('servers/{server}/cron-job/{job}', 'CronJobController@destroy');
+        
         // Server services
         Route::post('servers/{server}/restart-service', 'ServerServiceRestartController@restart');
 
