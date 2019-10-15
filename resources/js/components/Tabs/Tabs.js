@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import uuid from 'uuid';
 
 // Components
 import TabPanel from './Tab.pannel';
@@ -15,18 +16,19 @@ const useStyles = makeStyles(theme => ({
     height: 224
   },
   tabs: {
-    borderRight: `1px solid ${theme.palette.divider}`,
+    borderRight: `1px solid ${theme.palette.divider}`
   }
 }));
 
 const VerticalTabs = (props) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const { tabs } = props;
 
   const a11yProps = (index) => {
     return {
       id: `vertical-tab-${index}`,
-      'aria-controls': `vertical-tabpanel-${index}`,
+      'aria-controls': `vertical-tabpanel-${index}`
     };
   };
 
@@ -44,37 +46,33 @@ const VerticalTabs = (props) => {
         aria-label="Vertical tabs example"
         className={classes.tabs}
       >
-        <Tab label="Item One" {...a11yProps(0)} />
-        <Tab label="Item Two" {...a11yProps(1)} />
-        <Tab label="Item Three" {...a11yProps(2)} />
-        <Tab label="Item Four" {...a11yProps(3)} />
-        <Tab label="Item Five" {...a11yProps(4)} />
-        <Tab label="Item Six" {...a11yProps(5)} />
-        <Tab label="Item Seven" {...a11yProps(6)} />
+        {tabs.map((tab, index) => {
+          return (
+            <Tab
+              key={uuid()}
+              label={tab.label}
+              {...a11yProps(index)}
+            />
+          );
+        })}
       </Tabs>
-      <TabPanel value={value} index={0}>
-        Item One
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        Item Two
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Item Three
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        Item Four
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        Item Five
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        Item Six
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        Item Seven
-      </TabPanel>
+      {tabs.map((tab, index) => {
+        return (
+          <TabPanel
+            key={uuid()}
+            value={value}
+            index={index}
+          >
+            {tab.content}
+          </TabPanel>
+        );
+      })}
     </div>
   );
+};
+
+VerticalTabs.propTypes = {
+  tabs: PropTypes.array.isRequired
 };
 
 export default VerticalTabs;

@@ -30,7 +30,7 @@ import { destructServerErrors } from '../../../../helpers/error';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    marginBottom: '15px'
+    width: '100%'
   }
 }));
 
@@ -93,7 +93,7 @@ const ServerProcessManager = (props) => {
   };
 
   return (
-    <Card>
+    <Card className={classes.root}>
       <CardContent>
         <React.Fragment>
           <Typography

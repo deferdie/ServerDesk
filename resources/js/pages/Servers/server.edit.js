@@ -2,10 +2,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
-import {
-  Grid
-} from '@material-ui/core';
 import { useToasts } from 'react-toast-notifications';
+import _ from 'lodash';
 
 // Components
 import {
@@ -49,45 +47,39 @@ const ServerEdit = (props) => {
       {server && (
         <div className={classes.content}>
           <ServerProfile server={server} />
-          {server.wants_mysql === 1 && (
-            <MySQLDatabaseManager server={server} databases={server.my_s_q_l_database} />
-          )}
-
-          <Grid
-            container
-            spacing={3}
-          >
-            {/* Services */}
-            <Grid
-              item
-              md={7}
-              xs={12}
-            >
-              <ServerServiceManager
-                server={server}
-                setServer={setServer}
-              />
-            </Grid>
-            <Grid
-              item
-              md={5}
-              xs={12}
-            >
-              <ServerSSHKeys server={server} setServer={setServer} />
-            </Grid>
-
-            <Grid
-              item
-              md={12}
-              xs={12}
-            >
-              <ServerProcessManager server={server} setServer={setServer} />
-            </Grid>
-          </Grid>
+          <Tabs
+            tabs={[
+              {
+                label: 'Database settings',
+                content: (
+                  <MySQLDatabaseManager server={server} databases={_.get(server, 'my_s_q_l_database', [])} />
+                )
+              },
+              {
+                label: 'Background Processes',
+                content: (
+                  <ServerProcessManager server={server} setServer={setServer} />
+                )
+              },
+              {
+                label: 'SSK keys',
+                content: (
+                  <ServerSSHKeys server={server} setServer={setServer} />
+                )
+              },
+              {
+                label: 'Services',
+                content: (
+                  <ServerServiceManager
+                    server={server}
+                    setServer={setServer}
+                  />
+                )
+              }
+            ]}
+          />
         </div>
       )}
-
-      <Tabs />
     </div>
   );
 };
