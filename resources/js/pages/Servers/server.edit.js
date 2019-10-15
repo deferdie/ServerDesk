@@ -9,6 +9,7 @@ import _ from 'lodash';
 import {
   ServerProfile,
   ServerSSHKeys,
+  ServerCronJobs,
   MySQLDatabaseManager,
   ServerServiceManager,
   ServerProcessManager
@@ -50,7 +51,7 @@ const ServerEdit = (props) => {
           <Tabs
             tabs={[
               {
-                label: 'Database settings',
+                label: 'Database',
                 content: (
                   <MySQLDatabaseManager server={server} databases={_.get(server, 'my_s_q_l_database', [])} />
                 )
@@ -71,6 +72,15 @@ const ServerEdit = (props) => {
                 label: 'Services',
                 content: (
                   <ServerServiceManager
+                    server={server}
+                    setServer={setServer}
+                  />
+                )
+              },
+              {
+                label: 'CRON jobs',
+                content: (
+                  <ServerCronJobs
                     server={server}
                     setServer={setServer}
                   />

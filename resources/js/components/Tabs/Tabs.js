@@ -12,11 +12,17 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
-    display: 'flex',
-    height: 224
+    display: 'flex'
   },
   tabs: {
-    borderRight: `1px solid ${theme.palette.divider}`
+    borderRight: `1px solid ${theme.palette.divider}`,
+    '& span': {
+      textAlign: 'left',
+      alignItems: 'baseline !important'
+    }
+  },
+  pannel: {
+    width: '100%'
   }
 }));
 
@@ -24,13 +30,6 @@ const VerticalTabs = (props) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const { tabs } = props;
-
-  const a11yProps = (index) => {
-    return {
-      id: `vertical-tab-${index}`,
-      'aria-controls': `vertical-tabpanel-${index}`
-    };
-  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -51,7 +50,8 @@ const VerticalTabs = (props) => {
             <Tab
               key={uuid()}
               label={tab.label}
-              {...a11yProps(index)}
+              id={`vertical-tab-${index}`}
+              area-controls={`vertical-tabpanel-${index}`}
             />
           );
         })}
@@ -59,6 +59,7 @@ const VerticalTabs = (props) => {
       {tabs.map((tab, index) => {
         return (
           <TabPanel
+            className={classes.pannel}
             key={uuid()}
             value={value}
             index={index}
