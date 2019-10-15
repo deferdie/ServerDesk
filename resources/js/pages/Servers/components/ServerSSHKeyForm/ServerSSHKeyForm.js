@@ -52,7 +52,8 @@ const ServerSSHKeyForm = (props) => {
 ServerSSHKeyForm.propTypes = {
   server: PropTypes.object,
   formData: PropTypes.object,
-  setFormData: PropTypes.func
+  setFormData: PropTypes.func,
+  formErrors: PropTypes.object
 };
 
 export default ServerSSHKeyForm;

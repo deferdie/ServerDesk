@@ -15,6 +15,7 @@ import {
   ServerServiceManager,
   ServerProcessManager
 } from './components';
+import Tabs from '../../components/Tabs';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -85,6 +86,8 @@ const ServerEdit = (props) => {
           </Grid>
         </div>
       )}
+
+      <Tabs />
     </div>
   );
 };
