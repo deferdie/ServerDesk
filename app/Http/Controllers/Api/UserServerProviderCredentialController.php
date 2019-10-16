@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\ServerProvider;
 use phpseclib\Crypt\RSA;
-use App\UserServerProviderCredential;
+use App\ServerProviders\Vultr\Vultr;
 use App\Http\Controllers\Controller;
+use App\UserServerProviderCredential;
 use App\ServerProviders\DigitalOcean\DigitalOcean;
 use App\Http\Resources\UserServerProviderCredentialResource;
 use App\Http\Requests\UserServerProviderCredentialStoreRequest;
@@ -54,21 +55,14 @@ class UserServerProviderCredentialController extends Controller
         ]);
 
         if ($credential->serverProvider->name === 'Digital Ocean') {
-            try {
-                $do = new DigitalOcean($credential);
-
-                $key = $do->key()->create('ServerDesk', $keys['publickey']);
-                $credential->server_provider_key_id = $key->id;
-                $credential->save();
-
-                return new UserServerProviderCredentialResource($credential);       
-            } catch(\Exception $e) {
-                $credential->delete();
-                throw \Illuminate\Validation\ValidationException::withMessages([
-                    'key' => ['The provider could not authenticate the you you provided']
-                ]);
-            }
+            $credential = (new DigitalOcean($credential))->attachPublicKey($credential);
         }
+        
+        if ($credential->serverProvider->name === 'Vultr') {
+            $credential = (new Vultr($credential))->attachPublicKey($credential);
+        }
+        
+        return new UserServerProviderCredentialResource($credential);
     }
 
     /**
@@ -83,6 +77,18 @@ class UserServerProviderCredentialController extends Controller
             try {
                 $do = new DigitalOcean($credential);
                 $do->key()->delete($credential->server_provider_key_id);
+                $credential->delete();
+            } catch (\Exception $e) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'key' => ['The key could not be deleted']
+                ]);
+            }
+        }
+        
+        if ($credential->serverProvider->name === 'Vultr') {
+            try {
+                (new Vultr($credential))->deletePublicKey($credential);
+
                 $credential->delete();
             } catch (\Exception $e) {
                 throw \Illuminate\Validation\ValidationException::withMessages([
