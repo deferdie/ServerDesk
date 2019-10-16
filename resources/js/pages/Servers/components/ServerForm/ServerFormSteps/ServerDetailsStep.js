@@ -130,7 +130,7 @@ const ServerDetailsStep = (props) => {
               key={option.name}
               value={option.name}
             >
-              {option.name}
+              {option.label}
             </option>
           ))}
         </TextField>

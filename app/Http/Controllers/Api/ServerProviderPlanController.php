@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\ServerProvider;
+use App\ServerProviders\Vultr\Vultr;
 use App\Http\Controllers\Controller;
 use App\UserServerProviderCredential;
 use App\ServerProviders\DigitalOcean\DigitalOcean;
@@ -32,6 +33,27 @@ class ServerProviderPlanController extends Controller
                     'disk' => $plan->disk,
                     'priceMonthly' => $plan->priceMonthly,
                     'regions' => $plan->regions,
+                ]);
+            }
+
+            return $plans;
+        }
+        
+        if ($provider->name == 'Vultr') {
+            $vultr = new Vultr($creds);
+
+            $plans = [];
+
+            foreach (json_decode($vultr->getPlans()) as $plan) {
+                array_push($plans, [
+                    'name' => $plan->VPSPLANID,
+                    'label' => $plan->name,
+                    'active' => count($plan->available_locations) > 0,
+                    'memory' => $plan->ram,
+                    'cpus' => $plan->vcpu_count,
+                    'disk' => $plan->disk,
+                    'priceMonthly' => $plan->price_per_month,
+                    'regions' => $plan->available_locations,
                 ]);
             }
 

@@ -2,6 +2,8 @@
 
 namespace App\ServerProviders\Vultr;
 
+use App\Http\Requests\ServerStoreRequest;
+use App\Server;
 use GuzzleHttp\Client;
 use App\UserServerProviderCredential;
 
@@ -42,7 +44,42 @@ class Vultr
             $response = $this->client->get('plans/list?type=vc2');
             return $response->getBody()->getContents();
         } catch (\Exception $e) {
-            \Log::info($e);
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'plans' => ['Could not get plans']
+            ]);
+        }
+    }
+    
+    /**
+     * Creates a server
+     *
+     * @return void
+     */
+    public function createServer(int $plan, int $region, int $osId, int $scriptId, int $sshKeyId, string $label)
+    {
+        try {
+            $response = $this->client->post('server/create', [
+                'form_params' => [
+                    // The region
+                    'DCID' => $region,
+                    // The plan to use to create the server
+                    'VPSPLANID' => $plan,
+                    // The operation system id for the server
+                    'OSID' => $osId,
+                    // The script id, this script will run on startup
+                    'SCRIPTID' => $scriptId,
+                    // The label for the server
+                    'label' => $label,
+                    // The SSH keyid for the server
+                    'SSHKEYID' => $sshKeyId
+                ]
+            ]);
+
+            return $response->getBody()->getContents();
+        } catch (\Exception $e) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'plans' => ['Could not create server']
+            ]);
         }
     }
 
@@ -68,6 +105,7 @@ class Vultr
             return $credential;
         } catch (\Exception $e) {
             $credential->delete();
+
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'key' => ['The provider could not authenticate the key you provided']
             ]);
@@ -94,8 +132,8 @@ class Vultr
 
             return $credential;
         } catch (\Exception $e) {
-            \Log::info($e);
             $credential->delete();
+
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'key' => ['The provider could not authenticate the key you provided']
             ]);
