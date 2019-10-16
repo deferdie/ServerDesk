@@ -50,10 +50,7 @@ class DeleteCronJob implements ShouldQueue
 
         $contents = $result->output;
 
-        $stringToFind = "* * * * * root sh /root/.serverdesk/cron/$this->cron->id > /root/.serverdesk/cron/$this->cron->id.log 2>&1";
-        $contents = str_replace($stringToFind, '', $contents);
-
-        $this->cron->server->exec('echo ' . $contents . ' > /etc/crontab');
+        $this->cron->server->exec("sed -i '/# serverdesk-".$this->cron->id."/,+1d' /etc/crontab");
 
         $this->cron->server->exec("rm /root/.serverdesk/cron/" . $this->cron->id);
         $this->cron->server->exec("rm /root/.serverdesk/cron/". $this->cron->id . ".log");
