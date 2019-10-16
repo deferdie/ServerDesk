@@ -34,6 +34,49 @@ class Vultr
     }
 
     /**
+     * Returns a the region for the given region id
+     *
+     * @param integer $regionID
+     * @return void
+     */
+    public function getRegion(int $regionID)
+    {
+        try {
+            $response = $this->client->get('regions/list');
+            
+            foreach (json_decode($response->getBody()->getContents()) as $region) {
+                \Log::info(json_encode($region));
+                if ($region->DCID === $regionID) {
+                    return $region;
+                }
+            }
+
+        } catch (\Exception $e) {
+            \Log::info($e);
+        }
+    }
+    
+    /**
+     * Gets the os id for Ubuntu 18
+     *
+     * @param integer $regionID
+     * @return void
+     */
+    public function getOsId()
+    {
+        try {
+            $response = $this->client->get('os/list');
+            
+            foreach (json_decode($response->getBody()->getContents()) as $os) {
+                \Log::info(json_encode($os));
+            }
+
+        } catch (\Exception $e) {
+            \Log::info($e);
+        }
+    }
+    
+    /**
      * Gets the avaliable plans for this provider
      *
      * @return void
@@ -42,6 +85,31 @@ class Vultr
     {
         try {
             $response = $this->client->get('plans/list?type=vc2');
+            return $response->getBody()->getContents();
+        } catch (\Exception $e) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'plans' => ['Could not get plans']
+            ]);
+        }
+    }
+
+    /**
+     * Gets a plan
+     *
+     * @param integer $plan
+     * @return void
+     */
+    public function getPlan(int $plan)
+    {
+        try {
+            $response = $this->client->get('plans/list?type=vc2');
+
+            foreach (json_decode($response->getBody()->getContents()) as $plan) {
+                if ($plan->VPSPLANID === $plan) {
+                    return $plan;
+                }
+            }
+
             return $response->getBody()->getContents();
         } catch (\Exception $e) {
             throw \Illuminate\Validation\ValidationException::withMessages([

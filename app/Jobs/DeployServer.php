@@ -16,6 +16,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\ServerProviders\DigitalOcean\DigitalOcean;
+use App\ServerProviders\Vultr\Vultr;
 use Illuminate\Support\Facades\Mail;
 
 class DeployServer implements ShouldQueue
@@ -32,7 +33,7 @@ class DeployServer implements ShouldQueue
     /**
      * The plan
      *
-     * @var object
+     * @var int
      */
     protected $plan;
 
@@ -138,6 +139,86 @@ class DeployServer implements ShouldQueue
             // Lets send an email to the user to provide them their credentials
             Mail::to(User::find($this->server->user_id))
                 ->send(new ServerCreatedMail($this->server, $data));
+        }
+        
+        if ($this->provider->name === 'Vultr') {
+            $vultr = new Vultr($this->server->credential);
+
+            $data = [
+                'server' => $this->server,
+                'dbRootPass' => Str::random(26),
+                'rootPassword' => Str::random(26),
+            ];
+
+            $vultr->getOsId();
+
+            // $server = $vultr->createServer(
+            //     $this->plan,
+            //     $this->server->provider_server_region,
+            //     $this->plan->slug,
+            //     $vultr->getOsId(),
+            //     false, // Enable backups
+            //     false, // Enable IPV6
+            //     false, // Option for private netowrking
+            //     [$this->server->credential->server_provider_key_id],
+            //     view('scripts.provision-ubuntu1804', $data)->render()
+            // );
+
+            // $this->server->provider_server_id = $server->id;
+
+            // $server = $do->droplet()->waitForActive($do->droplet()->getById($server->id), 300);
+
+            // foreach ($server->networks as $network) {
+            //     if ($network->type == 'public' && $network->version == 4) {
+            //         $this->server->ip_address = $network->ipAddress;
+            //     }
+            //     break;
+            // }
+
+            // // Check if the server is ready
+            // $client = new Client();
+            // $siteReady = false;
+            
+            // while($siteReady === false) {
+            //     try {
+            //         $httpStatus = $client->request('GET', $this->server->ip_address)->getStatusCode();
+            //         if ($httpStatus === 200) {
+            //             $siteReady = true;
+            //         }
+    
+            //         sleep(3);
+            //     } catch (\Exception $e) {
+            //         sleep(3);
+            //     }
+            // }
+
+            // if ($this->server->wants_php) {
+            //     // Check if the PHP site is ready
+            //     $siteReady = false;
+            //     while ($siteReady === false) {
+            //         try {
+            //             $httpStatus = $client->request('GET', $this->server->ip_address . '/info.php')->getStatusCode();
+            //             if ($httpStatus === 200) {
+            //                 $siteReady = true;
+            //             }
+
+            //             sleep(3);
+            //         } catch (\Exception $e) {
+            //             sleep(3);
+            //         }
+            //     }
+            // }
+
+            // $this->server->status = 'running';
+            // $this->server->save();
+            // $this->server = $this->server->fresh();
+
+            // broadcast(new ServerUpdated($this->server));
+            // broadcast(new ServerCreated($this->server));
+
+            // // Lets send an email to the user to provide them their credentials
+            // Mail::to(User::find($this->server->user_id))
+            //     ->send(new ServerCreatedMail($this->server, $data));
         }
     }
 

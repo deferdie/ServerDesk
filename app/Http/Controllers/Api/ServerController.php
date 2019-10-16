@@ -10,6 +10,7 @@ use App\UserServerProviderCredential;
 use App\Http\Resources\ServerResource;
 use App\Http\Requests\ServerStoreRequest;
 use App\ServerProviders\DigitalOcean\DigitalOcean;
+use App\ServerProviders\Vultr\Vultr;
 
 class ServerController extends Controller
 {
@@ -58,6 +59,34 @@ class ServerController extends Controller
                 'disk' => $plan->disk,
                 'status' => 'creating',
                 'cpus' => $plan->vcpus,
+                'region' => $plan->vcpus,
+                'name' => $request->name,
+                'memory' => $plan->memory,
+                'user_id' => auth()->user()->id,
+                'wants_php' => $request->wants_php,
+                'server_provider_id' => $provider->id,
+                'wants_mysql' => $request->wants_mysql,
+                'php_version' => $request->php_version,
+                'mysql_version' => $request->mysql_version,
+                'provider_server_region' => $request->provider_server_region,
+                'provider_credential_id' => $request->provider_credential_id,
+                'user_server_provider_credential_id' => $request->user_server_provider_credential_id,
+            ]);
+
+            DeployServer::dispatch($server, $plan, $provider);
+
+            return new ServerResource($server->fresh());
+        }
+        
+        if ($provider->name == 'Vultr') {
+            $vultr = new Vultr(UserServerProviderCredential::whereId($request->user_server_provider_credential_id)->first());
+
+            $plan = $vultr->getPlan($request->plan);
+
+            $server = Server::create([
+                'disk' => $plan->disk,
+                'status' => 'creating',
+                'cpus' => $plan->vcpu_count,
                 'region' => $plan->vcpus,
                 'name' => $request->name,
                 'memory' => $plan->memory,
