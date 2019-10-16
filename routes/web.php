@@ -11,13 +11,8 @@
 |
 */
 
-use App\Jobs\InstallProcess;
-use App\Process;
-use App\Server;
-
 Route::get('/test', function () {
-    InstallProcess::dispatch(Server::find(2), Process::find(1));
-    InstallProcess::dispatch(Server::find(2), Process::find(2));
+
 });
 
 Route::get('/{uri?}', function () {

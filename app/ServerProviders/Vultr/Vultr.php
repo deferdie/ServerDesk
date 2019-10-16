@@ -32,6 +32,21 @@ class Vultr
     }
 
     /**
+     * Gets the avaliable plans for this provider
+     *
+     * @return void
+     */
+    public function getPlans()
+    {
+        try {
+            $response = $this->client->get('plans/list?type=vc2');
+            return $response->getBody()->getContents();
+        } catch (\Exception $e) {
+            \Log::info($e);
+        }
+    }
+
+    /**
      * Attaches a public key to the provider
      *
      * @param UserServerProviderCredential $credential
@@ -52,7 +67,6 @@ class Vultr
 
             return $credential;
         } catch (\Exception $e) {
-            \Log::info($e);
             $credential->delete();
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'key' => ['The provider could not authenticate the key you provided']
