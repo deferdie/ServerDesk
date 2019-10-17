@@ -24,7 +24,7 @@ class UserSourceProvider extends Model
      * @var array
      */
     protected $with = [
-        'sourceProvider'
+        // 'sourceProvider'
     ];
 
     /**

@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const BitBucketConnector = (props) => {
-  const { location, match, userProviders, setUserProviders } = props;
+  const { location, match, userProviders, setUserProviders, sourceProvider } = props;
   const classes = useStyles();
   const [connectingTo, setConnectingTo] = useState(null);
 
@@ -78,26 +78,14 @@ const BitBucketConnector = (props) => {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        {userProviders.length === 0 && (
+        {sourceProvider.user_credential == null && (
           renderBitBucketConnectButton()
         )}
 
-        {userProviders.length > 0 && (
-          userProviders.map(provider => {
-            if (provider.source_provider.name === 'BitBucket') {
-              if (provider.access_token == null) {
-                return (
-                  renderBitBucketConnectButton()
-                );
-              }
-            } else {
-              return (
-                <Button variant="contained" size="small" color="secondary" fullWidth>
-                  Connected to BitBucket
-                </Button>
-              );
-            }
-          })
+        {sourceProvider.user_credential != null && (
+          <Button variant="contained" size="small" color="secondary" fullWidth>
+            Connected to BitBucket
+          </Button>
         )}
       </CardActions>
     </Card>
@@ -108,6 +96,7 @@ BitBucketConnector.propTypes = {
   match: PropTypes.object,
   location: PropTypes.object,
   userProviders: PropTypes.array,
+  sourceProvider: PropTypes.array,
   setUserProviders: PropTypes.func
 };
 

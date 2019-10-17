@@ -2,13 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 import _ from 'lodash';
-import Button from '@material-ui/core/Button';
-import uuid from 'uuid';
-import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
-import LoopIcon from '@material-ui/icons/Loop';
 import Grid from '@material-ui/core/Grid';
+import uuid from 'uuid';
 
 // Components
 import {
@@ -60,28 +57,29 @@ const SourceProviders = (props) => {
 
   return (
     <Grid container className={classes.root} spacing={2}>
-      <Grid
-        item
-        md={4}
-        xs={12}
-      >
-        <GitHubConnector
-          providers={providers}
-          userProviders={userProviders}
-          setUserProviders={setUserProviders}
-        />
-      </Grid>
-      <Grid
-        item
-        md={4}
-        xs={12}
-      >
-        <BitBucketConnector
-          providers={providers}
-          userProviders={userProviders}
-          setUserProviders={setUserProviders}
-        />
-      </Grid>
+      {providers.map((provider) => {
+        return <Grid
+          key={uuid()}
+          item
+          md={4}
+          xs={12}
+        >
+          {provider.name === 'BitBucket' && (
+            <BitBucketConnector
+              sourceProvider={provider}
+              userProviders={userProviders}
+              setUserProviders={setUserProviders}
+            />
+          )}
+          {provider.name === 'GitHub' && (
+            <GitHubConnector
+              sourceProvider={provider}
+              userProviders={userProviders}
+              setUserProviders={setUserProviders}
+            />
+          )}
+        </Grid>;
+      })}
     </Grid>
   );
 };
@@ -91,4 +89,4 @@ SourceProviders.propTypes = {
   match: PropTypes.object
 };
 
-export default withRouter(SourceProviders);
+export default SourceProviders;

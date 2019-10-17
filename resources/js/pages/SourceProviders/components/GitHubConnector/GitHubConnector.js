@@ -23,15 +23,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const GitHubConnector = (props) => {
-  const { location, match, userProviders, setUserProviders } = props;
+  const { location, match, userProviders, setUserProviders, sourceProvider } = props;
   const classes = useStyles();
   const [connectingTo, setConnectingTo] = useState(null);
 
   useEffect(() => {
-    axios.get('/api/user/source-providers').then(data => {
-      setUserProviders(data.data.data);
-    });
-
     const provider = _.get(match.params, 'provider', false);
     if (provider === 'github') {
       const queryParams = queryString.parse(location.search);
@@ -88,16 +84,16 @@ const GitHubConnector = (props) => {
 
         {userProviders.length > 0 && (
           userProviders.map(provider => {
-            if (provider.source_provider.name === 'GitHub') {
-              if (provider.access_token == null) {
-                return (
-                  renderGitHubConnectButton()
-                );
-              } else {
-                return <Button variant="contained" size="small" color="secondary" fullWidth>
+            if (provider.access_token == null) {
+              return (
+                renderGitHubConnectButton()
+              );
+            } else {
+              return (
+                <Button variant="contained" size="small" color="secondary" fullWidth>
                   Connected to GitHub
-                </Button>;
-              }
+                </Button>
+              );
             }
           })
         )}
