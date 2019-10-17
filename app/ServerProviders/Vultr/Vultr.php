@@ -295,7 +295,6 @@ class Vultr
             
             $server = json_decode($response->getBody()->getContents());
 
-            \Log::info(json_encode($server));
             return $server;
         } catch (\Exception $e) {
             throw \Illuminate\Validation\ValidationException::withMessages([

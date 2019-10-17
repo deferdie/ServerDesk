@@ -6,7 +6,8 @@ const ServerProviderLogo = (props) => {
   const { className, serverProvider } = props;
 
   const serverLogos = {
-    'Digital Ocean': '/images/providers/do.png'
+    'Digital Ocean': '/images/providers/do.png',
+    'Vultr': '/images/providers/vultr.png'
   };
 
   return (
