@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use GuzzleHttp\Client;
 use App\SourceProvider;
 use App\UserSourceProvider;
-use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SourceProviderResource;
 use App\Http\Requests\BitBucketConnectorRequest;
-use App\Http\Resources\UserSourceProviderResource;
 
 class BitBucketConnectorController extends Controller
 {
@@ -22,8 +20,8 @@ class BitBucketConnectorController extends Controller
     public function init()
     {
         return response()->json([
-            'key' => Str::random(),
             'name' => "ServerDesk",
+            'key' => env('BITBUCKET_KEY'),
             'baseUrl' => env('BITBUCKET_BASE_URI'),
             'description' => "ServerDesk connector for BitBucket"
         ]);
@@ -38,42 +36,12 @@ class BitBucketConnectorController extends Controller
     {
         $sourceProvider = SourceProvider::whereName('BitBucket')->first();
 
-        $userSourceProvider = UserSourceProvider::firstOrCreate([
+        UserSourceProvider::firstOrCreate([
             'user_id' => auth()->user()->id,
-            'source_provider_id' => $sourceProvider->id
+            'source_provider_id' => $sourceProvider->id,
+            'access_token' => $request->clientKey
         ]);
 
-        if ($userSourceProvider->access_token === null) {
-            // Create a source provider credential for the user
-            $client = new Client();
-
-            $resp = $client->request('POST', 'https://bitbucket.org/site/oauth2/access_token', [
-                'query' => [
-                    'code' => $request->code,
-                    'state' => $request->state,
-                    'redirect_uri' => env('GITHUB_REDIRECT_URI'),
-                    'client_id' => env('GITHUB_CLIENT_ID'),
-                    'client_secret' => env('GITHUB_CLIENT_SECRET'),
-                ]
-            ]);
-
-            $accesToken = null;
-
-            // Find the access token
-            foreach (explode('&', $resp->getBody()->getContents()) as $responseTokens) {
-                $params = explode('=', $responseTokens);
-                foreach ($params as $key => $value) {
-                    if ($value === 'access_token') {
-                        $accesToken = $params[$key + 1];
-                        break;
-                    }
-                }
-            }
-
-            $userSourceProvider->access_token = $accesToken;
-            $userSourceProvider->save();
-
-            return new UserSourceProviderResource($userSourceProvider->fresh());
-        }
+        return SourceProviderResource::collection(SourceProvider::all());
     }
 }

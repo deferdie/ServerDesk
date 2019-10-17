@@ -19,15 +19,6 @@ class UserSourceProvider extends Model
     ];
 
     /**
-     * The eager loadable values
-     *
-     * @var array
-     */
-    protected $with = [
-        // 'sourceProvider'
-    ];
-
-    /**
      * A user source provider has one source provider
      *
      * @return void

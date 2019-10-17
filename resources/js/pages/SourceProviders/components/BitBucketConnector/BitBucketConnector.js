@@ -9,7 +9,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import uuid from 'uuid';
 import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
@@ -23,38 +22,34 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const BitBucketConnector = (props) => {
-  const { location, match, userProviders, setUserProviders, sourceProvider } = props;
+  const { location, match, sourceProvider, setProviders } = props;
   const classes = useStyles();
-  const [connectingTo, setConnectingTo] = useState(null);
+  const [connecting, setConnecting] = useState(false);
 
   useEffect(() => {
     const provider = _.get(match.params, 'provider', false);
     if (provider === 'bitbucket') {
       const queryParams = queryString.parse(location.search);
-      setConnectingTo('bitbucket');
+      setConnecting(true);
       axios.post('/api/source-providers/connect/bitbucket', {
-        code: _.get(queryParams, 'code', null),
-        state: _.get(queryParams, 'state', null)
+        clientKey: _.get(queryParams, 'clientKey', null)
       }).then(data => {
-        if (userProviders.length === 0) {
-          const u = [...userProviders];
-          u.push(data.data.data);
-          setUserProviders(u);
-        }
+        setConnecting(false);
+        setProviders(data.data.data);
       });
     }
   }, []);
 
   const connectToBitBucket = () => {
-    const { MIX_BITBUCKET_CLIENT_ID } = process.env;
-    let uri = `https://bitbucket.org/site/oauth2/authorize?client_id=${MIX_BITBUCKET_CLIENT_ID}&response_type=code`;
+    const { MIX_BITBUCKET_DESCRIPTOR, MIX_BITBUCKET_BASE_URI } = process.env;
+    let uri = `https://bitbucket.org/site/addons/authorize?descriptor_uri=${MIX_BITBUCKET_DESCRIPTOR}&redirect_uri=${MIX_BITBUCKET_BASE_URI}`;
     window.open(uri, '_blank');
   };
 
   const renderBitBucketConnectButton = () => {
     return (
-      <Button variant="contained" size="small" color="primary" onClick={connectToBitBucket} fullWidth disabled={connectingTo === 'bitbucket'}>
-        {connectingTo === 'bitbucket' ? (
+      <Button variant="contained" size="small" color="primary" onClick={connectToBitBucket} fullWidth disabled={connecting}>
+        {connecting === true ? (
           <React.Fragment>
             <LoopIcon className="icon-spin" color="action" /> Connecting to BitBucket... Please wait
           </React.Fragment>
@@ -95,9 +90,8 @@ const BitBucketConnector = (props) => {
 BitBucketConnector.propTypes = {
   match: PropTypes.object,
   location: PropTypes.object,
-  userProviders: PropTypes.array,
-  sourceProvider: PropTypes.array,
-  setUserProviders: PropTypes.func
+  setProviders: PropTypes.func,
+  sourceProvider: PropTypes.array
 };
 
 export default withRouter(BitBucketConnector);

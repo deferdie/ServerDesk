@@ -23,24 +23,21 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const GitHubConnector = (props) => {
-  const { location, match, userProviders, setUserProviders, sourceProvider } = props;
+  const { location, match, sourceProvider, setProviders } = props;
   const classes = useStyles();
-  const [connectingTo, setConnectingTo] = useState(null);
+  const [connecting, setConnecting] = useState(false);
 
   useEffect(() => {
     const provider = _.get(match.params, 'provider', false);
     if (provider === 'github') {
       const queryParams = queryString.parse(location.search);
-      setConnectingTo('github');
+      setConnecting('github');
       axios.post('/api/source-providers/connect/github', {
         code: _.get(queryParams, 'code', null),
         state: _.get(queryParams, 'state', null)
       }).then(data => {
-        if (userProviders.length === 0) {
-          const u = [...userProviders];
-          u.push(data.data.data);
-          setUserProviders(u);
-        }
+        setConnecting(false);
+        setProviders(data.data.data);
       });
     }
   }, []);
@@ -53,8 +50,8 @@ const GitHubConnector = (props) => {
 
   const renderGitHubConnectButton = () => {
     return (
-      <Button variant="contained" size="small" color="primary" onClick={connectToGitHub} fullWidth disabled={connectingTo === 'github'}>
-        {connectingTo === 'github' ? (
+      <Button variant="contained" size="small" color="primary" onClick={connectToGitHub} fullWidth disabled={connecting}>
+        {connecting === true ? (
           <React.Fragment>
             <LoopIcon className="icon-spin" color="action" /> Connecting to GitHub... Please wait
           </React.Fragment>
@@ -78,24 +75,14 @@ const GitHubConnector = (props) => {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        {userProviders.length === 0 && (
+        {sourceProvider.user_credential == null && (
           renderGitHubConnectButton()
         )}
 
-        {userProviders.length > 0 && (
-          userProviders.map(provider => {
-            if (provider.access_token == null) {
-              return (
-                renderGitHubConnectButton()
-              );
-            } else {
-              return (
-                <Button variant="contained" size="small" color="secondary" fullWidth>
-                  Connected to GitHub
-                </Button>
-              );
-            }
-          })
+        {sourceProvider.user_credential != null && (
+          <Button variant="contained" size="small" color="secondary" fullWidth>
+            Connected to GitHub
+          </Button>
         )}
       </CardActions>
     </Card>
@@ -105,8 +92,8 @@ const GitHubConnector = (props) => {
 GitHubConnector.propTypes = {
   match: PropTypes.object,
   location: PropTypes.object,
-  userProviders: PropTypes.array,
-  setUserProviders: PropTypes.func
+  setProviders: PropTypes.func,
+  sourceProvider: PropTypes.object
 };
 
 export default withRouter(GitHubConnector);

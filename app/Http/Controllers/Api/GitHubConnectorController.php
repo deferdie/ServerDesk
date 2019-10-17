@@ -7,7 +7,7 @@ use App\SourceProvider;
 use App\UserSourceProvider;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GitHubConnectorRequest;
-use App\Http\Resources\UserSourceProviderResource;
+use App\Http\Resources\SourceProviderResource;
 
 class GitHubConnectorController extends Controller
 {
@@ -54,8 +54,7 @@ class GitHubConnectorController extends Controller
 
             $userSourceProvider->access_token = $accesToken;
             $userSourceProvider->save();
-
-            return new UserSourceProviderResource($userSourceProvider->fresh());
         }
+        return SourceProviderResource::collection(SourceProvider::all());
     }
 }
