@@ -150,32 +150,22 @@ class DeployServer implements ShouldQueue
                 'rootPassword' => Str::random(26),
             ];
 
-            $vultr->getOsId();
+            $script = $vultr->createScript("ServerDesk provision", view('scripts.provision-ubuntu1804', $data)->render());
 
-            // $server = $vultr->createServer(
-            //     $this->plan,
-            //     $this->server->provider_server_region,
-            //     $this->plan->slug,
-            //     $vultr->getOsId(),
-            //     false, // Enable backups
-            //     false, // Enable IPV6
-            //     false, // Option for private netowrking
-            //     [$this->server->credential->server_provider_key_id],
-            //     view('scripts.provision-ubuntu1804', $data)->render()
-            // );
+            $server = $vultr->createServer(
+                $this->plan->VPSPLANID,
+                $this->server->provider_server_region,
+                $vultr->getOsId(),
+                $script->SCRIPTID,
+                $this->server->credential->server_provider_key_id,
+                $this->server->name
+            );
 
-            // $this->server->provider_server_id = $server->id;
+            $this->server->provider_server_id = $server->SUBID;
 
-            // $server = $do->droplet()->waitForActive($do->droplet()->getById($server->id), 300);
+            // Check if the server is ready
+            
 
-            // foreach ($server->networks as $network) {
-            //     if ($network->type == 'public' && $network->version == 4) {
-            //         $this->server->ip_address = $network->ipAddress;
-            //     }
-            //     break;
-            // }
-
-            // // Check if the server is ready
             // $client = new Client();
             // $siteReady = false;
             
@@ -208,6 +198,8 @@ class DeployServer implements ShouldQueue
             //         }
             //     }
             // }
+
+            $vultr->deleteScript($script->SCRIPTID);
 
             // $this->server->status = 'running';
             // $this->server->save();

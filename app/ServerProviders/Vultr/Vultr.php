@@ -60,7 +60,7 @@ class Vultr
      * Gets the os id for Ubuntu 18
      *
      * @param integer $regionID
-     * @return void
+     * @return int
      */
     public function getOsId()
     {
@@ -68,8 +68,12 @@ class Vultr
             $response = $this->client->get('os/list');
             
             foreach (json_decode($response->getBody()->getContents()) as $os) {
-                \Log::info(json_encode($os));
+                if ($os->name == 'Ubuntu 18.04 x64') {
+                    return $os->OSID;
+                }
             }
+            
+            return 270;
 
         } catch (\Exception $e) {
             \Log::info($e);
@@ -96,21 +100,19 @@ class Vultr
     /**
      * Gets a plan
      *
-     * @param integer $plan
+     * @param integer $planId
      * @return void
      */
-    public function getPlan(int $plan)
+    public function getPlan(int $planId)
     {
         try {
             $response = $this->client->get('plans/list?type=vc2');
 
             foreach (json_decode($response->getBody()->getContents()) as $plan) {
-                if ($plan->VPSPLANID === $plan) {
+                if ($plan->VPSPLANID == $planId) {
                     return $plan;
                 }
             }
-
-            return $response->getBody()->getContents();
         } catch (\Exception $e) {
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'plans' => ['Could not get plans']
@@ -121,9 +123,15 @@ class Vultr
     /**
      * Creates a server
      *
+     * @param integer $plan
+     * @param integer $region
+     * @param integer $osId
+     * @param integer $scriptId
+     * @param integer $sshKeyId
+     * @param string $label
      * @return void
      */
-    public function createServer(int $plan, int $region, int $osId, int $scriptId, int $sshKeyId, string $label)
+    public function createServer($plan, $region, $osId, $scriptId, $sshKeyId, $label)
     {
         try {
             $response = $this->client->post('server/create', [
@@ -143,10 +151,76 @@ class Vultr
                 ]
             ]);
 
-            return $response->getBody()->getContents();
+            return json_decode($response->getBody()->getContents());
         } catch (\Exception $e) {
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'plans' => ['Could not create server']
+            ]);
+        }
+    }
+    
+    /**
+     * Creates a script
+     *
+     * @param string $name
+     * @param string $script
+     * @return void
+     */
+    public function createScript(string $name, string $script)
+    {
+        try {
+            $response = $this->client->post('startupscript/create', [
+                'form_params' => [
+                    'name' => $name,
+                    'script' => $script
+                ]
+            ]);
+
+            return json_decode($response->getBody()->getContents());
+        } catch (\Exception $e) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'plans' => ['Could not create server']
+            ]);
+        }
+    }
+    
+    /**
+     * Deletes a server
+     *
+     * @param integer $serverId
+     * @return void
+     */
+    public function deleteServer(int $serverId)
+    {
+        try {
+            $this->client->post('server/destroy', [
+                'form_params' => [
+                    'SUBID' => $serverId,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'plans' => ['Could not delete server']
+            ]);
+        }
+    }
+    
+    /**
+     * Deletes a script
+     *
+     * @return void
+     */
+    public function deleteScript(int $scriptId)
+    {
+        try {
+            $this->client->post('startupscript/destroy', [
+                'form_params' => [
+                    'SCRIPTID' => $scriptId,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'plans' => ['Could not delete script']
             ]);
         }
     }

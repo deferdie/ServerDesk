@@ -87,9 +87,8 @@ class ServerController extends Controller
                 'disk' => $plan->disk,
                 'status' => 'creating',
                 'cpus' => $plan->vcpu_count,
-                'region' => $plan->vcpus,
                 'name' => $request->name,
-                'memory' => $plan->memory,
+                'memory' => $plan->ram,
                 'user_id' => auth()->user()->id,
                 'wants_php' => $request->wants_php,
                 'server_provider_id' => $provider->id,
@@ -121,28 +120,34 @@ class ServerController extends Controller
             } catch (\Exception $e) {
                 \Log::info($e);
             }
-
-            // Delete all of the applications of the server
-            foreach ($server->applications as $app) {
-                $app->delete();
-            }
-            
-            // Delete all of the keys
-            foreach ($server->publicKeys as $key) {
-                $key->delete();
-            }
-
-            // Delete all of the users
-            foreach ($server->mySQLUsers as $user) {
-                $user->delete();
-            }
-            
-            // Delete all of the databases
-            foreach ($server->mySQLDatabase as $db) {
-                $db->delete();
-            }
-
-            $server->delete();
         }
+        
+        if ($server->serverProvider->name === 'Vultr') {
+            $vultr = new Vultr($server->credential);
+            
+            $vultr->deleteServer($server->provider_server_id);
+        }
+
+        // Delete all of the applications of the server
+        foreach ($server->applications as $app) {
+            $app->delete();
+        }
+        
+        // Delete all of the keys
+        foreach ($server->publicKeys as $key) {
+            $key->delete();
+        }
+
+        // Delete all of the users
+        foreach ($server->mySQLUsers as $user) {
+            $user->delete();
+        }
+        
+        // Delete all of the databases
+        foreach ($server->mySQLDatabase as $db) {
+            $db->delete();
+        }
+
+        $server->delete();
     }
 }
