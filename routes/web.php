@@ -15,9 +15,8 @@ Route::get('/test', function () {
     $client = new \GuzzleHttp\Client();
 
     $resp = $client->request('POST', 'https://bitbucket.org/site/oauth2/access_token', [
-        'auth' => [
-            env('BITBUCKET_CLIENT_ID'),
-            env('BITBUCKET_SECRET')
+        'headers' => [
+            'Authorization' => 'Bearer ' . env('BITBUCKET_CLIENT_ID') . ':' . env('BITBUCKET_SECRET')
         ],
         'form_params' => [
             'grant_type' => 'authorization_code',

@@ -13,6 +13,7 @@ class UserSourceProvider extends Model
      */
     protected $fillable = [
         'user_id',
+        'expires_in',
         'access_token',
         'source_provider_id',
         'source_provider_ssh_key_id',

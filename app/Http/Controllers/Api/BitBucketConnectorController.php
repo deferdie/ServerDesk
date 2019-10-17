@@ -37,22 +37,10 @@ class BitBucketConnectorController extends Controller
     {
         $sourceProvider = SourceProvider::whereName('BitBucket')->first();
 
-        $client = new Client();
-
-        $resp = $client->request('POST', 'https://bitbucket.org/site/oauth2/access_token', [
-            'query' => [
-                'redirect_uri' => env('GITHUB_REDIRECT_URI'),
-                'client_id' => env('GITHUB_CLIENT_ID'),
-                'client_secret' => env('GITHUB_CLIENT_SECRET'),
-            ]
-        ]);
-
-        \Log::info($resp->getBody()->getContents());
-
         UserSourceProvider::firstOrCreate([
             'user_id' => auth()->user()->id,
             'source_provider_id' => $sourceProvider->id,
-            'access_token' => $request->clientKey
+            'access_token' => $request->access_token
         ]);
 
         return SourceProviderResource::collection(SourceProvider::all());
