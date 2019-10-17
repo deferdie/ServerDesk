@@ -25,6 +25,7 @@ import SweetAlert from 'sweetalert-react';
 // Components
 import Modal from '../../../../components/Modal';
 import { ServerSSHKeyForm } from '../../components';
+import { destructServerErrors } from '../../../../helpers/error';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,6 +38,7 @@ const ServerSSHKeys = (props) => {
   const classes = useStyles();
   const [showSSHKeyForm, setShowSSHKeyForm] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
   const [sshKeyFormData, setSshKeyFormData] = useState({
     name: '',
     key: ''
@@ -48,7 +50,7 @@ const ServerSSHKeys = (props) => {
       s.public_keys.push(data.data.data);
       setServer(s);
       closeForm();
-    });
+    }).catch(error => setFormErrors(destructServerErrors(error)));
   };
 
   const deleteKey = () => {
@@ -152,6 +154,7 @@ const ServerSSHKeys = (props) => {
           server={server}
           formData={sshKeyFormData}
           setFormData={setSshKeyFormData}
+          formErrors={formErrors}
         />
       </Modal>
 

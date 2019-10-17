@@ -281,4 +281,26 @@ class Vultr
             ]);
         }
     }
+
+    /**
+     * Gets the server from Vultr
+     *
+     * @param int $serverId
+     * @return void
+     */
+    public function getServer($serverId)
+    {
+        try {
+            $response = $this->client->get('server/list?SUBID='.$serverId);
+            
+            $server = json_decode($response->getBody()->getContents());
+
+            \Log::info(json_encode($server));
+            return $server;
+        } catch (\Exception $e) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'plans' => ['Could not get plans']
+            ]);
+        }
+    }
 }

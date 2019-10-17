@@ -164,53 +164,62 @@ class DeployServer implements ShouldQueue
             $this->server->provider_server_id = $server->SUBID;
 
             // Check if the server is ready
-            
+            $server = $vultr->getServer($server->SUBID);
 
-            // $client = new Client();
-            // $siteReady = false;
+            while($server->status == 'pending') {
+                $server = $vultr->getServer($server->SUBID);
+                sleep(4);
+            }
+
+            $this->server->ip_address = $server->main_ip;
+            $this->server->save();
+            $this->server = $this->server->fresh();
+
+            $client = new Client();
+            $siteReady = false;
             
-            // while($siteReady === false) {
-            //     try {
-            //         $httpStatus = $client->request('GET', $this->server->ip_address)->getStatusCode();
-            //         if ($httpStatus === 200) {
-            //             $siteReady = true;
-            //         }
+            while($siteReady === false) {
+                try {
+                    $httpStatus = $client->request('GET', $this->server->ip_address)->getStatusCode();
+                    if ($httpStatus === 200) {
+                        $siteReady = true;
+                    }
     
-            //         sleep(3);
-            //     } catch (\Exception $e) {
-            //         sleep(3);
-            //     }
-            // }
+                    sleep(3);
+                } catch (\Exception $e) {
+                    sleep(3);
+                }
+            }
 
-            // if ($this->server->wants_php) {
-            //     // Check if the PHP site is ready
-            //     $siteReady = false;
-            //     while ($siteReady === false) {
-            //         try {
-            //             $httpStatus = $client->request('GET', $this->server->ip_address . '/info.php')->getStatusCode();
-            //             if ($httpStatus === 200) {
-            //                 $siteReady = true;
-            //             }
+            if ($this->server->wants_php) {
+                // Check if the PHP site is ready
+                $siteReady = false;
+                while ($siteReady === false) {
+                    try {
+                        $httpStatus = $client->request('GET', $this->server->ip_address . '/info.php')->getStatusCode();
+                        if ($httpStatus === 200) {
+                            $siteReady = true;
+                        }
 
-            //             sleep(3);
-            //         } catch (\Exception $e) {
-            //             sleep(3);
-            //         }
-            //     }
-            // }
+                        sleep(3);
+                    } catch (\Exception $e) {
+                        sleep(3);
+                    }
+                }
+            }
 
             $vultr->deleteScript($script->SCRIPTID);
 
-            // $this->server->status = 'running';
-            // $this->server->save();
-            // $this->server = $this->server->fresh();
+            $this->server->status = 'running';
+            $this->server->save();
+            $this->server = $this->server->fresh();
 
-            // broadcast(new ServerUpdated($this->server));
-            // broadcast(new ServerCreated($this->server));
+            broadcast(new ServerUpdated($this->server));
+            broadcast(new ServerCreated($this->server));
 
-            // // Lets send an email to the user to provide them their credentials
-            // Mail::to(User::find($this->server->user_id))
-            //     ->send(new ServerCreatedMail($this->server, $data));
+            // Lets send an email to the user to provide them their credentials
+            Mail::to(User::find($this->server->user_id))
+                ->send(new ServerCreatedMail($this->server, $data));
         }
     }
 
