@@ -85,10 +85,14 @@ Route::name('api.')->namespace('Api')->group(function () {
         Route::delete('/user/server-providers/{credential}', 'UserServerProviderCredentialController@destroy')->name('user.server-providers.destroy');
         
         // User source providers
+        Route::get('/source-providers', 'SourceProviderController@index')->name('source-providers.index');
+        
+        // User source providers
         Route::get('/user/source-providers', 'UserSourceProviderController@index')->name('user.source-providers.index');
 
         // Source provider connectors
         Route::post('/source-providers/connect/github', 'GitHubConnectorController@connect');
+        Route::post('/source-providers/connect/bitbucket', 'BitBucketConnectorController@connect');
 
         // Install SSL certificate
         Route::post('/applications/{application}/encrypt', 'ApplicationEncryptController@encrypt')->name('application.encrypt');
@@ -113,4 +117,6 @@ Route::name('api.')->namespace('Api')->group(function () {
     });
 
     Broadcast::routes();
+
+    Route::get('/source-providers/connect/bitbucket/init', 'BitBucketConnectorController@init');
 });

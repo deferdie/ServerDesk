@@ -2,31 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 import _ from 'lodash';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import uuid from 'uuid';
 import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
 import LoopIcon from '@material-ui/icons/Loop';
+import Grid from '@material-ui/core/Grid';
+
+// Components
+import {
+  GitHubConnector,
+  BitBucketConnector
+} from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: theme.spacing(3)
-  },
-  content: {
-    marginTop: theme.spacing(2)
-  },
-  card: {
-    maxWidth: 345
-  },
-  media: {
-    height: 140
+    padding: theme.spacing(3),
+    root: {
+      flexGrow: 1
+    }
   }
 }));
 
@@ -34,9 +29,14 @@ const SourceProviders = (props) => {
   const { location, match } = props;
   const classes = useStyles();
   const [connectingTo, setConnectingTo] = useState(null);
+  const [providers, setProviders] = useState([]);
   const [userProviders, setUserProviders] = useState([]);
 
   useEffect(() => {
+    axios.get('/api/source-providers').then(data => {
+      setProviders(data.data.data);
+    });
+
     axios.get('/api/user/source-providers').then(data => {
       setUserProviders(data.data.data);
     });
@@ -58,60 +58,31 @@ const SourceProviders = (props) => {
     }
   }, []);
 
-  const connectToGitHub = () => {
-    const { MIX_GITHUB_CLIENT_ID, MIX_GITHUB_REDIRECT_URI } = process.env;
-    let uri = `https://github.com/login/oauth/authorize?client_id=${MIX_GITHUB_CLIENT_ID}&redirect_uri=${MIX_GITHUB_REDIRECT_URI}&state=${uuid()}`;
-    window.open(uri, '_blank');
-  };
-
-  const renderGitHubConnectButton = () => {
-    return (
-      <Button variant="contained" size="small" color="primary" onClick={connectToGitHub} fullWidth disabled={connectingTo === 'github'}>
-        {connectingTo === 'github' ? (
-          <React.Fragment>
-            <LoopIcon className="icon-spin" color="action" /> Connecting to GitHub... Please wait
-          </React.Fragment>
-        ) : 'Connect'}
-      </Button>
-    );
-  };
-
   return (
-    <div className={classes.root}>
-      <Card className={classes.card}>
-        <CardActionArea>
-          <CardMedia
-            className={classes.media}
-            image="/images/github.jpg"
-            title="Contemplative Reptile"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              GitHub
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-        <CardActions>
-          {userProviders.length === 0 && (
-            renderGitHubConnectButton()
-          )}
-
-          {userProviders.length > 0 && (
-            userProviders.map(provider => {
-              if (provider.source_provider.name === 'GitHub' && provider.access_token == null) {
-                return (
-                  renderGitHubConnectButton()
-                );
-              } else {
-                return <Button variant="contained" size="small" color="secondary" fullWidth>
-                  Connected to GitHub
-                </Button>;
-              }
-            })
-          )}
-        </CardActions>
-      </Card>
-    </div>
+    <Grid container className={classes.root} spacing={2}>
+      <Grid
+        item
+        md={4}
+        xs={12}
+      >
+        <GitHubConnector
+          providers={providers}
+          userProviders={userProviders}
+          setUserProviders={setUserProviders}
+        />
+      </Grid>
+      <Grid
+        item
+        md={4}
+        xs={12}
+      >
+        <BitBucketConnector
+          providers={providers}
+          userProviders={userProviders}
+          setUserProviders={setUserProviders}
+        />
+      </Grid>
+    </Grid>
   );
 };
 
