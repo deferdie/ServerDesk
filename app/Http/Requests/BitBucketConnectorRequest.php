@@ -24,7 +24,7 @@ class BitBucketConnectorRequest extends FormRequest
     public function rules()
     {
         return [
-            'access_token' => 'required'
+            'code' => 'required'
         ];
     }
 }

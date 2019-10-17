@@ -15,6 +15,7 @@ class UserSourceProvider extends Model
         'user_id',
         'expires_in',
         'access_token',
+        'refresh_token',
         'source_provider_id',
         'source_provider_ssh_key_id',
     ];

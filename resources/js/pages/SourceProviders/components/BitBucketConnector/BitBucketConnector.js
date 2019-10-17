@@ -29,12 +29,10 @@ const BitBucketConnector = (props) => {
   useEffect(() => {
     const provider = _.get(match.params, 'provider', false);
     if (provider === 'bitbucket') {
-      const queryParams = queryString.parse(location.hash);
+      const queryParams = queryString.parse(location.search);
       setConnecting(true);
       axios.post('/api/source-providers/connect/bitbucket', {
-        access_token: _.get(queryParams, 'access_token', null),
-        scopes: _.get(queryParams, 'scopes', null),
-        expires_in: _.get(queryParams, 'expires_in', null)
+        code: _.get(queryParams, 'code', null)
       }).then(data => {
         setConnecting(false);
         setProviders(data.data.data);
@@ -44,7 +42,7 @@ const BitBucketConnector = (props) => {
 
   const connectToBitBucket = () => {
     const { MIX_BITBUCKET_KEY } = process.env;
-    let uri = `https://bitbucket.org/site/oauth2/authorize?client_id=${MIX_BITBUCKET_KEY}&response_type=token`;
+    let uri = `https://bitbucket.org/site/oauth2/authorize?client_id=${MIX_BITBUCKET_KEY}&response_type=code`;
     window.open(uri, '_blank');
   };
 

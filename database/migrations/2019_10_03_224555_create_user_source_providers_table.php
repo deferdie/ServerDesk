@@ -20,6 +20,7 @@ class CreateUserSourceProvidersTable extends Migration
             $table->string('source_provider_ssh_key_id')->nullable();
             $table->text('access_token')->nullable();
             $table->string('expires_in')->nullable();
+            $table->string('refresh_token')->nullable();
             $table->timestamps();
         });
     }
