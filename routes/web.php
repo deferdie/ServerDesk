@@ -11,8 +11,11 @@
 |
 */
 
+use App\SourceProviders\BitBucket\BitBucket;
+use App\UserSourceProvider;
+
 Route::get('/test', function () {
-    
+    return (new BitBucket(UserSourceProvider::find(22)))->getRepositories();
 });
 
 Route::get('/{uri?}', function () {
