@@ -100,10 +100,7 @@ class BitBucket
                     'application' => $application,
                     'access_token' => $this->sourceProvider->access_token
                 ])->render()
-            );
-
-            \Log::info($result->output);
-            
+            );            
         } catch (ClientException $e) {
             if ($e->getResponse()->getStatusCode() === 401) {
                 if ($this->retries <= $this->maxRetries) {
