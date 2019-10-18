@@ -89,13 +89,28 @@ class BitBucket
      *
      * @return void
      */
-    public function getRepositories()
+    public function cloneRepository(Server $server, string $repository)
     {
-        $response = $this->request(function() {
+        try{
+            $output = $server->exec(
+                'git clone https://x-token-auth:' . $this->sourceProvider->access_token . '@bitbucket.org/deferdie/triple.git'
+            );
+            
+        } catch (\Exception $e) {
+            dd($e);
+        }
+    }
+    
+    /**
+     * Gets the user
+     *
+     * @return void
+     */
+    public function getUser()
+    {
+        return $this->request(function() {
             return $this->client->get('user/');
         });
-
-        dd($response);
     }
 
     /**
