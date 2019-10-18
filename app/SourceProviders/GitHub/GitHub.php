@@ -2,6 +2,7 @@
 
 namespace App\SourceProviders\GitHub;
 
+use App\Application;
 use App\Server;
 use GuzzleHttp\Client;
 use App\UserSourceProvider;
@@ -113,5 +114,19 @@ class GitHub
                 }
             }
         }
+    }
+
+    /**
+     * Clonse a repository to a given server
+     *
+     * @return void
+     */
+    public function cloneRepository(Server $server, Application $application)
+    {
+        $server->exec(
+            view('scripts.deployments.github-deployment', [
+                'application' => $application
+            ])->render()
+        );
     }
 }

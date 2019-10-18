@@ -55,13 +55,9 @@ class DeployApplication implements ShouldQueue
 
             if ($this->application->sourceProvider->sourceProvider->name === 'GitHub') {
                 // Check if the provider is GitHub if so, add the public SSH key of not exists
-                (new GitHub($this->application->sourceProvider))->createSSHKey($server);
-
-                $server->exec(
-                    view('scripts.deployments.github-deployment', [
-                        'application' => $this->application
-                    ])->render()
-                );
+                $gitHub = new GitHub($this->application->sourceProvider);
+                $gitHub->createSSHKey($server);
+                $gitHub->cloneRepository($server, $this->application);
             }
             
             if ($this->application->sourceProvider->sourceProvider->name === 'BitBucket') {
