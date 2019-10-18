@@ -14,28 +14,31 @@ class Laravel implements ApplicationInterface
      */
     public static function deploy(Application $application, $request)
     {
-        $application->server->exec(
-            view('scripts.deployments.install-laravel', [
-                'request' => $request,
-                'application' => $application,
-            ])->render()
-        );
+        try {
+            $application->server->exec(
+                view('scripts.deployments.install-laravel', [
+                    'request' => $request,
+                    'application' => $application,
+                ])->render()
+            );
 
-        $application->server->exec(
-            view('scripts.deployments.setup-nginx', [
-                'application' => $application,
-            ])->render()
-        );
+            $application->server->exec(
+                view('scripts.deployments.setup-nginx', [
+                    'application' => $application,
+                ])->render()
+            );
 
-        $application->server->exec("sudo systemctl restart nginx");
+            $application->server->exec("sudo systemctl restart nginx");
 
-        $application->deployment_script = view('scripts.apps.laravel.laravel-deploy-default', [
-            'application' => $application
-        ])->render();
-        
+            $application->deployment_script = view('scripts.apps.laravel.laravel-deploy-default', [
+                'application' => $application
+            ])->render();
 
-        $application->save();
+            $application->save();
 
-        return $application->fresh();
+            return $application->fresh();
+        } catch (\Exception $e) {
+            \Log::info($e);
+        }
     }
 }
