@@ -95,7 +95,7 @@ class BitBucket
         try {
             $this->getUser();
 
-            $result = $server->exec(
+            $server->exec(
                 view('scripts.deployments.bitbucket-deployment', [
                     'application' => $application,
                     'access_token' => $this->sourceProvider->access_token

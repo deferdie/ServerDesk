@@ -4,12 +4,14 @@ namespace App\Jobs;
 
 use App\Application;
 use Illuminate\Bus\Queueable;
+use App\Applications\Laravel;
+use App\Applications\StaticHtml;
 use App\SourceProviders\GitHub\GitHub;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use App\SourceProviders\BitBucket\BitBucket;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\SourceProviders\BitBucket\BitBucket;
 
 class DeployApplication implements ShouldQueue
 {
@@ -67,50 +69,12 @@ class DeployApplication implements ShouldQueue
                 
             // Deploy Laravel
             if ($this->application->type === 'Laravel') {
-                $server->exec(
-                    view('scripts.deployments.install-laravel', [
-                        'request' => $this->request,
-                        'application' => $this->application,
-                        'repositoryDirectory' => $this->application->domain,
-                    ])->render()
-                );
-
-                // Setup the Nginx config for this site
-                $server->exec(
-                    view('scripts.deployments.setup-nginx', [
-                        'application' => $this->application,
-                        'repositoryDirectory' => $this->application->domain,
-                    ])->render()
-                );
-
-                $this->application->deployment_script = view('scripts.apps.laravel.laravel-deploy-default', [
-                    'application' => $this->application
-                ])->render();
+                Laravel::deploy($this->application, $this->request);
             }
 
             // Deploy Static HTML
             if ($this->application->type === 'Static HTML') {
-                $server->exec(
-                    view('scripts.deployments.install-static-html', [
-                        'request' => $this->request,
-                        'application' => $this->application,
-                        'repositoryDirectory' => $this->application->domain,
-                    ])->render()
-                );
-
-                // Setup the Nginx config for this site
-                $server->exec(
-                    view('scripts.deployments.setup-nginx', [
-                        'application' => $this->application,
-                        'repositoryDirectory' => $this->application->domain,
-                    ])->render()
-                );
-
-                $this->application->deployment_script = view('scripts.apps.static-html.static-html-deploy-default', [
-                    'application' => $this->application
-                ])->render();
-
-                $server->exec("sudo systemctl restart nginx");
+                StaticHtml::deploy($this->application, $this->request);
             }
 
             // Set the application status as deployed
