@@ -2,6 +2,7 @@
 
 namespace App\SourceProviders\BitBucket;
 
+use App\Application;
 use App\Server;
 use GuzzleHttp\Client;
 use App\UserSourceProvider;
@@ -89,15 +90,27 @@ class BitBucket
      *
      * @return void
      */
-    public function cloneRepository(Server $server, string $repository)
+    public function cloneRepository(Server $server, Application $application)
     {
-        try{
-            $output = $server->exec(
-                'git clone https://x-token-auth:' . $this->sourceProvider->access_token . '@bitbucket.org/deferdie/triple.git'
+        try {
+            $this->getUser();
+
+            $result = $server->exec(
+                view('scripts.deployments.bitbucket-deployment', [
+                    'application' => $application,
+                    'access_token' => $this->sourceProvider->access_token
+                ])->render()
             );
+
+            \Log::info($result->output);
             
-        } catch (\Exception $e) {
-            dd($e);
+        } catch (ClientException $e) {
+            if ($e->getResponse()->getStatusCode() === 401) {
+                if ($this->retries <= $this->maxRetries) {
+                    $this->retries = $this->retries + 1;
+                    $this->refreshToken();
+                }
+            }
         }
     }
     

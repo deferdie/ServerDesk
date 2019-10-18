@@ -14,7 +14,7 @@ class UserSourceProviderController extends Controller
     public function index()
     {
         return UserSourceProviderResource::collection(
-            UserSourceProvider::where('user_id', auth()->user()->id)->get()
+            UserSourceProvider::where('user_id', auth()->user()->id)->with('sourceProvider')->get()
         );
     }
 }
