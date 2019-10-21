@@ -7,7 +7,8 @@ const ApplicationAvatar = (props) => {
 
   const types = {
     'Laravel': '/images/applications/laravel.png',
-    'Static HTML': '/images/applications/html.png'
+    'Static HTML': '/images/applications/html.png',
+    'Adonis JS': '/images/applications/adonis.jpg'
   };
 
   return (
