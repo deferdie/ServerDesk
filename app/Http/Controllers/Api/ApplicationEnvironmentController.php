@@ -21,6 +21,12 @@ class ApplicationEnvironmentController extends Controller
 
             return $result->output;
         }
+        
+        if ($application->type === 'Adonis JS') {
+            $result = $application->server->exec('cat /var/www/html/serverdesk/'.$application->domain.'/.env');
+
+            return $result->output;
+        }
     }
     
     /**

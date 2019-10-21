@@ -23,6 +23,7 @@ const ApplicationEnvironment = (props) => {
     setLoading(true);
     axios.post(`/api/applications/${application.id}/env`).then((data) => {
       setLoading(false);
+      console.log(data.data)
       setEnv(data.data);
     });
   }, []);
