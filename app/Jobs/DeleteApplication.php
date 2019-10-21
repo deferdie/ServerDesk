@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Application;
 use Illuminate\Bus\Queueable;
 use App\Events\ApplicationDeleted;
+use App\Process;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -49,6 +50,11 @@ class DeleteApplication implements ShouldQueue
 
         if ($this->application->ssl_enabled) {
             $this->application->server->exec('sudo certbot delete --cert-name ' . $this->application->domain);
+        }
+
+        // Remove any application processes
+        foreach ($this->application->processes as $process) {
+            DeleteProcess::dispatch($this->application->server, $process);
         }
 
         // Reload Nginx

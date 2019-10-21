@@ -38,6 +38,7 @@ class Adonis implements ApplicationInterface
             'command' => 'adonis serve',
             'directory' => '/var/www/html/serverdesk/' . $application->domain . '/',
             'process_count' => 1,
+            'application_id' => $application->id,
         ]);
 
         // Install the process to run the Adonis server

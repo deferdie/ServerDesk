@@ -19,6 +19,7 @@ class CreateProcessesTable extends Migration
             $table->string('command');
             $table->string('directory')->nullable();
             $table->string('user');
+            $table->unsignedInteger('application_id')->nullable();
             $table->unsignedInteger('process_count')->default(1);
             $table->unsignedInteger('server_id');
             $table->enum('status', [

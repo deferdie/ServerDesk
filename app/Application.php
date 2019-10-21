@@ -74,4 +74,14 @@ class Application extends Model
     {
         return $this->hasOne(SSLProvider::class, 'id', 'ssl_provider_id');
     }
+    
+    /**
+     * An application has many processes
+     *
+     * @return void
+     */
+    public function processes()
+    {
+        return $this->hasMany(Process::class);
+    }
 }
