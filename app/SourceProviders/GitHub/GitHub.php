@@ -78,7 +78,7 @@ class GitHub
      */
     public function createSSHKey(Server $server)
     {
-        if (! $this->sourceProvider->source_provider_ssh_key_id) {
+        if ($this->sourceProvider->source_provider_ssh_key_id === null) {
             // Create the key
             try {
                 $response = $this->client->post('/user/keys', [
@@ -112,6 +112,8 @@ class GitHub
                         }
                     }
                 }
+            } catch (\Exception $e) {
+                \Log::info($e);
             }
         }
     }

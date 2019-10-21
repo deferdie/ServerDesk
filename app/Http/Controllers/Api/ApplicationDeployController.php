@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Application;
+use App\Jobs\DeployAdonis;
 use App\Jobs\DeployLaravel;
 use App\Jobs\DeployStaticHTML;
 use App\Events\DeployingApplication;
@@ -29,6 +30,10 @@ class ApplicationDeployController extends Controller
         
         if ($application->type === 'Static HTML') {
             DeployStaticHTML::dispatch($application);
+        }
+
+        if ($application->type === 'Adonis JS') {
+            DeployAdonis::dispatch($application);
         }
     }
 }

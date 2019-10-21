@@ -45,6 +45,13 @@ sudo systemctl enable nginx
     @include('scripts.php.composer-install')
 @endif
 
+## Install Node
+@if ($server->wants_node)
+    sudo apt-get install curl
+    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+    sudo apt-get install nodejs -y
+@endif
+
 ## Start Nginx
 sudo nginx -t
 sudo systemctl start nginx

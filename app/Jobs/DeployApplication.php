@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Application;
+use App\Applications\Adonis;
 use Illuminate\Bus\Queueable;
 use App\Applications\Laravel;
 use App\Applications\StaticHtml;
@@ -75,6 +76,11 @@ class DeployApplication implements ShouldQueue
             // Deploy Static HTML
             if ($this->application->type === 'Static HTML') {
                 StaticHtml::deploy($this->application, $this->request);
+            }
+            
+            // Deploy AdonisJS
+            if ($this->application->type === 'Adonis JS') {
+                Adonis::deploy($this->application, $this->request);
             }
 
             // Set the application status as deployed

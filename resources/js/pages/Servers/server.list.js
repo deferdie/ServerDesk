@@ -35,6 +35,7 @@ const ServerList = () => {
     php_version: '',
     mysql_version: '',
     wants_php: false,
+    wants_node: false,
     wants_mysql: false,
     server_provider_id: '',
     provider_server_region: null,

@@ -18,6 +18,7 @@ class Process extends Model
         'command',
         'server_id',
         'process_count',
+        'application_id',
     ];
 
     /**
@@ -28,5 +29,15 @@ class Process extends Model
     public function server()
     {
         return $this->belongsTo(Server::class, 'server_id', 'id');
+    }
+
+    /**
+     * A process can belongs to an application
+     *
+     * @return void
+     */
+    public function application()
+    {
+        return $this->belongsTo(Application::class, 'application_id', 'id');
     }
 }

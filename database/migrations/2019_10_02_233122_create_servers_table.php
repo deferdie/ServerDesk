@@ -33,6 +33,9 @@ class CreateServersTable extends Migration
             $table->string('php_version')->nullable();
             $table->string('mysql_version')->nullable();
 
+            // NodeJS settings
+            $table->boolean('wants_node')->default(false);
+            
             // Database settings
             $table->boolean('wants_mysql')->default(false);
 

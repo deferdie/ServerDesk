@@ -56,6 +56,8 @@ class DeleteApplication implements ShouldQueue
 
         $applicationId = $this->application->id;
 
+        // Delete any application background processes
+
         $this->application->delete();
 
         broadcast(new ApplicationDeleted($applicationId));

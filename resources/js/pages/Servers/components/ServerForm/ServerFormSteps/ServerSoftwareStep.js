@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import {
   Grid,
   Switch,
@@ -29,6 +28,7 @@ const ServerSoftwareStep = (props) => {
           value={formData.wants_php}
           control={(
             <Switch
+              checked={formData.wants_php}
               color="primary"
               onChange={(e) => {
                 handleChange({
@@ -87,9 +87,37 @@ const ServerSoftwareStep = (props) => {
         xs={12}
       >
         <FormControlLabel
+          value={formData.wants_node}
+          control={(
+            <Switch
+              checked={formData.wants_node}
+              color="primary"
+              onChange={(e) => {
+                handleChange({
+                  target: {
+                    value: e.target.value === 'false',
+                    name: 'wants_node'
+                  }
+                });
+              }}
+              name="wants_node"
+            />
+          )}
+          label="Install NodeJS"
+          labelPlacement="start"
+        />
+      </Grid>
+
+      <Grid
+        item
+        md={12}
+        xs={12}
+      >
+        <FormControlLabel
           value={formData.wants_mysql}
           control={(
             <Switch
+              checked={formData.wants_mysql}
               color="primary"
               onChange={(e) => {
                 handleChange({

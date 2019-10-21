@@ -12,7 +12,7 @@ const ApplicationEnvironmentStep = (props) => {
   const {
     formErrors,
     applicationFormData,
-    handleChange,
+    handleChange
   } = props;
 
   return (

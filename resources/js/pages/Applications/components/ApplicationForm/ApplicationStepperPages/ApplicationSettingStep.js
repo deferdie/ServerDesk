@@ -46,8 +46,9 @@ const ApplicationSettingStep = (props) => {
         >
           <option selected>Please select</option>
           {[
-            'Static HTML',
-            'Laravel'
+            'Laravel',
+            'Adonis JS',
+            'Static HTML'
           ].map(option => (
             <option
               key={option}

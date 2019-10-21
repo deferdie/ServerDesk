@@ -112,6 +112,7 @@ const ServerForm = (props) => {
               let fields = [
                 'name',
                 'wants_php',
+                'wants_node',
                 'wants_mysql',
                 'php_version',
                 'mysql_version'

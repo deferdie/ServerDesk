@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -24,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function ApplicationStepper (props) {
+const ApplicationStepper = (props) => {
   const { steps, onFinish } = props;
 
   const classes = useStyles();
@@ -48,7 +49,7 @@ export default function ApplicationStepper (props) {
       if (page.error() === true) {
         hasError = true;
       }
-    })
+    });
 
     return hasError;
   };
@@ -99,16 +100,23 @@ export default function ApplicationStepper (props) {
               Back
             </Button>
           ) : (
-              <Button
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                className={classes.button}
-              >
+            <Button
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              className={classes.button}
+            >
                 Back
-              </Button>
+            </Button>
           )}
         </Paper>
       )}
     </div>
   );
-}
+};
+
+ApplicationStepper.propTypes = {
+  steps: PropTypes.array.isRequired,
+  onFinish: PropTypes.func.isRequired
+};
+
+export default ApplicationStepper;
