@@ -170,4 +170,32 @@ class Server extends Model
 
         return (object) $result;
     }
+
+    /**
+     * Return an avaliable port from the server
+     *
+     * @param integer $portFrom
+     * @param integer $portTo
+     * @return void
+     */
+    public function getAvaliablePort($portFrom = 3000, $portTo = 4000)
+    {
+        $portAvaliable = false;
+        $port = null;
+        
+        while($portAvaliable === false) {
+            $portToCheck = rand($portFrom, $portTo);
+            // Get an avaliable port from the server
+            $result = $this->exec(
+                'sudo lsof -i :' . $portToCheck
+            );
+
+            if (strlen($result->output) === 0) {
+                $portAvaliable = true;
+                $port = $portToCheck;
+            }
+        }
+
+        return $port;
+    }
 }

@@ -1,6 +1,6 @@
 cd /var/www/html/serverdesk/{{$application->domain}}
 
-git pull -u origin master
+git pull origin master
 
 composer install --no-interaction --prefer-dist --optimize-autoloader
 

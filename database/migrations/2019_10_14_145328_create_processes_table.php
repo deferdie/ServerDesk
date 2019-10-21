@@ -17,6 +17,7 @@ class CreateProcessesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('command');
+            $table->string('directory')->nullable();
             $table->string('user');
             $table->unsignedInteger('process_count')->default(1);
             $table->unsignedInteger('server_id');

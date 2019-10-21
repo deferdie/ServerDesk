@@ -23,10 +23,31 @@ class Adonis implements ApplicationInterface
             ])->render()
         );
 
+        $portToRunOn = $application->server->getAvaliablePort();
+
+        // Set the port for Adonis to run on
+        $application->server->exec(
+            "cd /var/www/html/serverdesk/" . $application->domain . " && sed -i 's/PORT=.*/PORT=" . $portToRunOn . "/g' .env"
+        );
+
+        // Create the Adonis server process
+        $process = Process::create([
+            'name' => 'NodeJS process for ' . $application->domain,
+            'user' => 'root',
+            'server_id' => $application->server_id,
+            'command' => 'adonis serve',
+            'directory' => '/var/www/html/serverdesk/' . $application->domain . '/',
+            'process_count' => 1,
+        ]);
+
+        // Install the process to run the Adonis server
+        InstallProcess::dispatchNow($application->server, $process);
+
         // Setup the Nginx config for this site
         $application->server->exec(
             view('scripts.deployments.setup-nginx', [
                 'application' => $application,
+                'portToRunOn' => $portToRunOn
             ])->render()
         );
 
@@ -34,19 +55,10 @@ class Adonis implements ApplicationInterface
             'application' => $application
         ])->render();
 
-        $application->server->exec("sudo systemctl restart nginx");
-
         $application->save();
 
-        $process = Process::create([
-            'name' => 'NodeJS process for ' . $application->domain,
-            'user' => 'root',
-            'server_id' => $application->server_id,
-            'command' => 'node /var/www/html/serverdesk/' . $application->domain . '/server.js',
-            'process_count' => 1,
-        ]);
-
-        InstallProcess::dispatch($application->server, $process);
+        // Restart Nginx
+        $application->server->exec("sudo systemctl restart nginx");
 
         return $application->fresh();
     }

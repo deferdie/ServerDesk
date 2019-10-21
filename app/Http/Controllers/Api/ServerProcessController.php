@@ -61,6 +61,7 @@ class ServerProcessController extends Controller
             'user' => $request->user,
             'server_id' => $server->id,
             'command' => $request->command,
+            'directory' => $request->directory,
             'process_count' => $request->process_count,
         ]);
 

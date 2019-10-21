@@ -16,6 +16,7 @@ class Process extends Model
         'user',
         'status',
         'command',
+        'directory',
         'server_id',
         'process_count',
         'application_id',

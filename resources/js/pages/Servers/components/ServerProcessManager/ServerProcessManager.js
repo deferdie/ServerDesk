@@ -54,8 +54,8 @@ const ServerProcessManager = (props) => {
     axios.delete(`/api/servers/${server.id}/process/${processId}`).then((data) => {
       let s = {...server};
       s.processes.splice(showDeleteModal, 1);
-      setServer(s);
       setShowDeleteModal(false);
+      setServer(s);
       addToast(`Process deleted`, { appearance: 'success', autoDismiss: true });
     });
   };
@@ -75,8 +75,8 @@ const ServerProcessManager = (props) => {
     axios.put(`/api/servers/${server.id}/process/${processId}`).then((data) => {
       let s = { ...server };
       s.processes[showRestartModal] = data.data.data;
-      setServer(s);
       setShowRestartModal(false);
+      setServer(s);
       addToast(`Process restarting`, { appearance: 'success', autoDismiss: true });
     });
   };

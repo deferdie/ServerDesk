@@ -12,10 +12,12 @@
 */
 
 use App\SourceProviders\BitBucket\BitBucket;
-use App\UserSourceProvider;
+use App\Server;
 
 Route::get('/test', function () {
-    return (new BitBucket(UserSourceProvider::find(22)))->getRepositories();
+    $server = Server::find(24);
+    // Get an avaliable port from the server
+    dd($server->getAvaliablePort());
 });
 
 Route::get('/{uri?}', function () {
