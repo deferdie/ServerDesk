@@ -8,6 +8,7 @@ import _ from 'lodash';
 import { ApplicationToolbar, ApplicationTable, ApplicationForm } from './components';
 import Modal from '../../components/Modal';
 import { destructServerErrors } from '../../helpers/error';
+import PageLoader from '../../components/PageLoader/PageLoader';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,6 +23,7 @@ const ApplicationList = () => {
   const { Echo } = window;
   const classes = useStyles();
   const { addToast } = useToasts();
+  const [loading, setLoading] = useState(true);
   const [applications, setApplications] = useState([]);
   const [showApplicationForm, setShowApplicationForm] = useState(false);
   const [applicationFormErrors, setApplicationFormErrors] = useState({});
@@ -43,6 +45,8 @@ const ApplicationList = () => {
       data.data.data.map((application) => {
         connectApplicationToSocket(application);
       });
+
+      setLoading(false);
     });
   }, []);
 
@@ -61,12 +65,17 @@ const ApplicationList = () => {
     const applicationsCopy = [...applications];
     Echo.private(`application.${application.id}`).listen('ApplicationDeployed', data => {
       let applicationToUpdate = _.findIndex(applicationsCopy, function (o) { return o.id === data.application.id; });
-      console.log(data);
       applicationsCopy.splice(applicationToUpdate, 1, data.application);
       setApplications(applicationsCopy);
       addToast(`Application '${data.application.domain}' created`, { appearance: 'success', autoDismiss: true });
     });
   };
+
+  if (loading) {
+    return (
+      <PageLoader loading={loading} />
+    );
+  }
 
   return (
     <div className={classes.root}>

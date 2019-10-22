@@ -9,6 +9,7 @@ import {
   GitHubConnector,
   BitBucketConnector
 } from './components';
+import PageLoader from '../../components/PageLoader/PageLoader';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,14 +22,22 @@ const useStyles = makeStyles(theme => ({
 
 const SourceProviders = () => {
   const classes = useStyles();
+  const [loading, setLoading] = useState(true);
   const [providers, setProviders] = useState([]);
   const [userProviders, setUserProviders] = useState([]);
 
   useEffect(() => {
     axios.get('/api/source-providers').then(data => {
       setProviders(data.data.data);
+      setLoading(false);
     });
   }, []);
+
+  if (loading) {
+    return (
+      <PageLoader loading={loading} />
+    );
+  }
 
   return (
     <Grid container className={classes.root} spacing={2}>

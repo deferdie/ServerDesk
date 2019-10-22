@@ -7,6 +7,7 @@ import { useToasts } from 'react-toast-notifications';
 import Modal from '../../components/Modal';
 import { destructServerErrors } from '../../helpers/error';
 import { ServerProviderToolbar, ServerProviderTable, ServerProviderForm } from './components';
+import PageLoader from '../../components/PageLoader/PageLoader';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,6 +24,7 @@ const ServerProviderList = () => {
   const [providers, setProviders] = useState([]);
   const [showProviderForm, setShowProviderForm] = useState(false);
   const [providerFormErrors, setProviderFormErrors] = useState({});
+  const [pageLoading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const initialFormState = {
     key: null,
@@ -34,6 +36,7 @@ const ServerProviderList = () => {
   useEffect(() => {
     axios.get('/api/user/server-providers').then((data) => {
       setProviders(data.data.data);
+      setPageLoading(false);
     });
   }, []);
 
@@ -57,6 +60,12 @@ const ServerProviderList = () => {
       setLoading(false);
     });
   };
+
+  if (pageLoading) {
+    return (
+      <PageLoader loading={pageLoading} />
+    );
+  }
 
   return (
     <div className={classes.root}>

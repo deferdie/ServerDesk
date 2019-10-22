@@ -12,6 +12,7 @@ import {
 import Modal from '../../components/Modal';
 import { useToasts } from 'react-toast-notifications';
 import { destructServerErrors } from '../../helpers/error';
+import PageLoader from '../../components/PageLoader/PageLoader';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,6 +28,7 @@ const ServerList = () => {
   const classes = useStyles();
   const { addToast } = useToasts();
   const [servers, setServers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showServerForm, setShowServerForm] = useState(false);
   const [serverFormErrors, setServerFormErrors] = useState([]);
   const [serverFormData, setServerFormData] = useState({
@@ -51,6 +53,8 @@ const ServerList = () => {
       servers.map((server) => {
         connectServerToSocket(server);
       });
+
+      setLoading(false);
     });
   }, []);
 
@@ -87,6 +91,12 @@ const ServerList = () => {
       }
     });
   };
+
+  if (loading) {
+    return (
+      <PageLoader loading={loading} />
+    );
+  }
 
   return (
     <div className={classes.root}>
