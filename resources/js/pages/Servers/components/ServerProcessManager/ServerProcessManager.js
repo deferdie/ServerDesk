@@ -38,10 +38,13 @@ const ServerProcessManager = (props) => {
   const { server, setServer } = props;
   const classes = useStyles();
   const { addToast } = useToasts();
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showRestartModal, setShowRestartModal] = useState(false);
-  const [showProcessForm, setShowProcessForm] = useState(false);
   const [formErrors, setFormErrors] = useState({});
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showProcessForm, setShowProcessForm] = useState(false);
+  const [showRestartModal, setShowRestartModal] = useState(false);
+  const [formLoaders, setFormLoaders] = useState({
+    creatingProcess: false
+  });
   const [processFormData, setProcessFormData] = useState({
     name: '',
     user: 'root',
@@ -61,12 +64,19 @@ const ServerProcessManager = (props) => {
   };
 
   const createProcess = () => {
+    setFormLoaders(...formLoaders, {
+      creatingProcess: true
+    });
+
     axios.post(`/api/servers/${server.id}/process`, processFormData).then((data) => {
       let s = {...server};
       s.processes.push(data.data.data);
       setServer(s);
       closeForm();
       addToast(`Installing process`, { appearance: 'success', autoDismiss: true });
+      setFormLoaders(...formLoaders, {
+        creatingProcess: false
+      });
     }).catch(error => setFormErrors(destructServerErrors(error)));
   };
 
@@ -214,6 +224,7 @@ const ServerProcessManager = (props) => {
         onClose={closeForm}
         onSave={createProcess}
         saveButton="Create process"
+        loading={formLoaders.creatingProcess}
       >
         <ProcessForm
           server={server}

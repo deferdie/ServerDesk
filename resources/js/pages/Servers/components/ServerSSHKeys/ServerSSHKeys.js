@@ -43,13 +43,23 @@ const ServerSSHKeys = (props) => {
     name: '',
     key: ''
   });
+  const [formLoaders, setFormLoaders] = useState({
+    creatingSshKey: false
+  });
 
   const createSSHKey = () => {
+    setFormLoaders(...formLoaders, {
+      creatingSshKey: true
+    });
+
     axios.post(`/api/servers/${server.id}/public-key`, sshKeyFormData).then((data) => {
       let s = {...server};
       s.public_keys.push(data.data.data);
       setServer(s);
       closeForm();
+      setFormLoaders(...formLoaders, {
+        creatingSshKey: false
+      });
     }).catch(error => setFormErrors(destructServerErrors(error)));
   };
 
@@ -58,8 +68,8 @@ const ServerSSHKeys = (props) => {
     axios.delete(`/api/servers/${server.id}/public-key/${key}`).then((data) => {
       let s = { ...server };
       s.public_keys.splice(showDeleteModal, 1);
-      setServer(s);
       setShowDeleteModal(false);
+      setServer(s);
     });
   };
 
@@ -149,6 +159,7 @@ const ServerSSHKeys = (props) => {
         onClose={closeForm}
         onSave={createSSHKey}
         saveButton="Create SSH key"
+        loading={formLoaders.creatingSshKey}
       >
         <ServerSSHKeyForm
           server={server}
