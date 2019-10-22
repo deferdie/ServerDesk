@@ -10,6 +10,7 @@ import {
   DeploymentScriptEditor,
   ApplicationEncryptionManager
 } from './components';
+import PageLoader from '../../components/PageLoader/PageLoader';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,6 +27,7 @@ const ApplicationEdit = (props) => {
   const classes = useStyles();
   const { addToast } = useToasts();
   const [application, setApplication] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios.get(`/api/applications/${match.params.application}`).then((data) => {
@@ -43,6 +45,7 @@ const ApplicationEdit = (props) => {
           addToast(data.message, { appearance: 'success', autoDismiss: true });
           setApplication(data.application);
         });
+      setLoading(false);
     });
   }, []);
 
@@ -63,6 +66,10 @@ const ApplicationEdit = (props) => {
             setApplication={setApplication}
           />
         </div>
+      )}
+
+      {loading && (
+        <PageLoader loading={loading} label="Getting details about your server" />
       )}
     </div>
   );
