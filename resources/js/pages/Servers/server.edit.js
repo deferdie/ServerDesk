@@ -15,6 +15,7 @@ import {
   ServerProcessManager
 } from './components';
 import Tabs from '../../components/Tabs';
+import PageLoader from '../../components/PageLoader/PageLoader';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,9 +29,10 @@ const useStyles = makeStyles(theme => ({
 const ServerEdit = (props) => {
   const { match } = props;
   const classes = useStyles();
-  const [server, setServer] = useState(null);
   const { Echo } = window;
   const { addToast } = useToasts();
+  const [server, setServer] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios.get(`/api/servers/${match.params.server}`).then((data) => {
@@ -40,8 +42,15 @@ const ServerEdit = (props) => {
           addToast(data.message, { appearance: 'success', autoDismiss: true });
           setServer(data.server);
         });
+      setLoading(false);
     });
   }, []);
+
+  if (loading) {
+    return (
+      <PageLoader loading={loading} />
+    );
+  }
 
   return (
     <div className={classes.root}>
