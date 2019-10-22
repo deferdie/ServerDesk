@@ -5,6 +5,7 @@ import store from './store';
 import App from './router';
 import { Provider } from 'react-redux';
 import { ToastProvider } from 'react-toast-notifications';
+import 'react-perfect-scrollbar/dist/css/styles.css';
 
 ReactDOM.render(
   <Provider store={store}>

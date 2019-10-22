@@ -10,7 +10,10 @@ import _ from 'lodash';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%'
+    width: '100%',
+    maxHeight: '400px',
+    overflow: 'scroll',
+    overflowX: 'hidden'
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
@@ -24,8 +27,16 @@ const NotificationList = (props) => {
     notifications
   } = props;
 
+  const userScrolled = (event) => {
+    const clientTotalScrollHeight = event.target.scrollTop + event.target.clientHeight;
+
+    if (clientTotalScrollHeight >= event.target.scrollHeight) {
+      // Load the next set of data
+    }
+  };
+
   return (
-    <div className={classes.root}>
+    <div className={classes.root} onScroll={userScrolled}>
       {_.get(notifications, 'data', []).map((notification) => {
         return (
           <ExpansionPanel key={notification.id}>

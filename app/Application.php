@@ -3,12 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
 
 class Application extends Model
 {
-    use Notifiable;
-
     /**
      * The fillable attribute for this model
      *
@@ -86,15 +83,5 @@ class Application extends Model
     public function processes()
     {
         return $this->hasMany(Process::class);
-    }
-
-    /**
-     * The channels the user receives notification broadcasts on.
-     *
-     * @return string
-     */
-    public function receivesBroadcastNotificationsOn()
-    {
-        return 'App.User.' . $this->user_id;
     }
 }
