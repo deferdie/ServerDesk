@@ -7,8 +7,11 @@ import { AppBar, Toolbar, Badge, Hidden, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
-import { logoutUser } from '../../../../actions/auth';
 import { connect } from 'react-redux';
+
+// Components
+import { logoutUser } from '../../../../actions/auth';
+import Modal from '../../../../components/Modal';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,6 +35,7 @@ const Topbar = props => {
   } = props;
   const classes = useStyles();
   const [notifications] = useState(['asd']);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const handleLogout = () => {
     logoutUser(() => history.push('/'));
@@ -48,7 +52,10 @@ const Topbar = props => {
         </RouterLink>
         <div className={classes.flexGrow} />
         <Hidden mdDown>
-          <IconButton color="inherit">
+          <IconButton
+            color="inherit"
+            onClick={() => setShowNotifications(true)}
+          >
             <Badge
               badgeContent={notifications.length}
               color="secondary"
@@ -74,6 +81,15 @@ const Topbar = props => {
           </IconButton>
         </Hidden>
       </Toolbar>
+
+      <Modal
+        showActionButtons={false}
+        title="Your notifications"
+        open={showNotifications}
+        onClose={() => setShowNotifications(false)}
+      >
+        <p>No Notifications</p>
+      </Modal>
     </AppBar>
   );
 };

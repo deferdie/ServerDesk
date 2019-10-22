@@ -72,7 +72,7 @@ const ServerProfile = (props) => {
               color="textSecondary"
               variant="body1"
             >
-              {moment(server.created_at).format('DD/MM/YYYY')}
+              Server created on: {moment(server.created_at).format('DD/MM/YYYY')}
             </Typography>
           </div>
           <ServerProviderLogo className={classes.avatar} serverProvider={server.server_provider} />
