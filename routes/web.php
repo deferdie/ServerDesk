@@ -13,10 +13,11 @@
 
 use App\Application;
 use App\Notifications\ApplicationCreatedNotification;
+use App\User;
 
 Route::get('/test', function () {
     $app = Application::find(9);
-    Notification::send($app, new ApplicationCreatedNotification($app));
+    User::find(1)->notify(new ApplicationCreatedNotification($app));
 });
 
 Route::get('/{uri?}', function () {

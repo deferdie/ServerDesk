@@ -114,6 +114,9 @@ Route::name('api.')->namespace('Api')->group(function () {
 
         // SSL providers
         Route::get('/ssl-providers', 'SSLProviderController@index')->name('ssl-provider.index');
+
+        // The user notifications
+        Route::get('/notifications', 'UserNotificationsController@index')->name('notifications');
     });
 
     Broadcast::routes();

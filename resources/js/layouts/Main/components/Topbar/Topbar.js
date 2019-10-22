@@ -8,10 +8,12 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 // Components
 import { logoutUser } from '../../../../actions/auth';
 import Modal from '../../../../components/Modal';
+import NotificationList from '../../../../components/Notifications';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,14 +37,20 @@ const Topbar = props => {
     ...rest
   } = props;
   const classes = useStyles();
-  const [notifications] = useState(['asd']);
+  const [notifications, setNotifications] = useState({});
   const [showNotifications, setShowNotifications] = useState(false);
+  const { Echo } = window;
 
   useEffect(() => {
-    window.Echo.private(`App.User.${auth.user.id}`)
+    Echo.private(`App.User.${auth.user.id}`)
       .notification((notification) => {
         console.log(notification);
       });
+
+    // Get the user notifications
+    axios.get('/api/notifications').then((data) => {
+      setNotifications(data.data);
+    });
   }, []);
 
   const handleLogout = () => {
@@ -96,7 +104,7 @@ const Topbar = props => {
         open={showNotifications}
         onClose={() => setShowNotifications(false)}
       >
-        <p>No Notifications</p>
+        <NotificationList notifications={notifications} />
       </Modal>
     </AppBar>
   );
