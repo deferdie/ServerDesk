@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 import { useToasts } from 'react-toast-notifications';
+import _ from 'lodash';
 
 // Components
 import { ApplicationToolbar, ApplicationTable, ApplicationForm } from './components';
@@ -18,6 +19,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ApplicationList = () => {
+  const { Echo } = window;
   const classes = useStyles();
   const { addToast } = useToasts();
   const [applications, setApplications] = useState([]);
@@ -37,6 +39,10 @@ const ApplicationList = () => {
     // Fetch all of the server applications for this user
     axios.get('/api/applications').then((data) => {
       setApplications(data.data.data);
+
+      data.data.data.map((application) => {
+        connectApplicationToSocket(application);
+      });
     });
   }, []);
 
@@ -49,6 +55,17 @@ const ApplicationList = () => {
       setApplicationFormErrors({});
       addToast(`Crafting your application, please wait`, { appearance: 'success', autoDismiss: true });
     }).catch(error => setApplicationFormErrors(destructServerErrors(error)));
+  };
+
+  const connectApplicationToSocket = (application) => {
+    const applicationsCopy = [...applications];
+    Echo.private(`application.${application.id}`).listen('ApplicationDeployed', data => {
+      let applicationToUpdate = _.findIndex(applicationsCopy, function (o) { return o.id === data.application.id; });
+      console.log(data);
+      applicationsCopy.splice(applicationToUpdate, 1, data.application);
+      setApplications(applicationsCopy);
+      addToast(`Application '${data.application.domain}' created`, { appearance: 'success', autoDismiss: true });
+    });
   };
 
   return (

@@ -88,7 +88,7 @@ class DeployApplication implements ShouldQueue
             $this->application->status = 'running';
             $this->application->save();
 
-            broadcast(new ApplicationDeployed($this->application));
+            broadcast(new ApplicationDeployed($this->application->fresh()));
         } catch (\Exception $e) {
             \Log::info($e);
         }
