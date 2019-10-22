@@ -6,11 +6,11 @@ use App\Server;
 use App\ServerProvider;
 use App\Jobs\DeployServer;
 use App\Http\Controllers\Controller;
+use App\ServerProviders\Vultr\Vultr;
 use App\UserServerProviderCredential;
 use App\Http\Resources\ServerResource;
 use App\Http\Requests\ServerStoreRequest;
 use App\ServerProviders\DigitalOcean\DigitalOcean;
-use App\ServerProviders\Vultr\Vultr;
 
 class ServerController extends Controller
 {
@@ -116,18 +116,11 @@ class ServerController extends Controller
     public function destroy(Server $server)
     {
         if ($server->serverProvider->name === 'Digital Ocean') {
-            $do = new DigitalOcean($server->credential);
-            try {
-                $do->droplet()->delete($server->provider_server_id);
-            } catch (\Exception $e) {
-                \Log::info($e);
-            }
+            (new DigitalOcean($server->credential))->deleteServer($server->provider_server_id);
         }
         
         if ($server->serverProvider->name === 'Vultr') {
-            $vultr = new Vultr($server->credential);
-            
-            $vultr->deleteServer($server->provider_server_id);
+            (new Vultr($server->credential))->deleteServer($server->provider_server_id);
         }
 
         // Delete all of the applications of the server
@@ -148,6 +141,21 @@ class ServerController extends Controller
         // Delete all of the databases
         foreach ($server->mySQLDatabase as $db) {
             $db->delete();
+        }
+        
+        // Delete all of the processes
+        foreach ($server->processes as $process) {
+            $process->delete();
+        }
+        
+        // Delete all of the cronjobs
+        foreach ($server->cronjobs as $job) {
+            $job->delete();
+        }
+        
+        // Delete all of the services
+        foreach ($server->services as $service) {
+            $service->delete();
         }
 
         $server->delete();

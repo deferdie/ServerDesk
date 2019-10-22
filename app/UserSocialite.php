@@ -13,8 +13,12 @@ class UserSocialite extends Model
     */
     protected $guarded = [];
 
-    
-    public function user(): BelongsToo
+    /**
+     * A user socialite belongs to a User
+     *
+     * @return void
+     */
+    public function user()
     {
         return $this->belongsTo(User::class);
     }

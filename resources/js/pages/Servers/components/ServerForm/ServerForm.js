@@ -27,12 +27,14 @@ const ServerForm = (props) => {
   const [serverProviderPlans, setServerProviderPlans] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/server-providers').then(data => {
-      setServerProviders(data.data.data);
-    });
+    const serverProvidersCopy = [...serverProviders];
 
     axios.get('/api/user/server-providers').then(data => {
+      data.data.data.map((cred) => {
+        serverProvidersCopy.push(cred.server_provider);
+      });
       setUserServerCreds(data.data.data);
+      setServerProviders(serverProvidersCopy);
     });
   }, []);
 

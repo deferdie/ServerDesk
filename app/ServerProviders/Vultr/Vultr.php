@@ -2,8 +2,6 @@
 
 namespace App\ServerProviders\Vultr;
 
-use App\Http\Requests\ServerStoreRequest;
-use App\Server;
 use GuzzleHttp\Client;
 use App\UserServerProviderCredential;
 
@@ -17,7 +15,7 @@ class Vultr
     public $client;
 
     /**
-     * A proxy for the DigitalOceanV2
+     * Bootstrap the Vultr API
      *
      * @param \App\UserServerProviderCredential $UserServerProviderCredential
      */

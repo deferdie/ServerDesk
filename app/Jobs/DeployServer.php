@@ -9,15 +9,15 @@ use Illuminate\Support\Str;
 use App\Events\ServerCreated;
 use App\Events\ServerUpdated;
 use Illuminate\Bus\Queueable;
-use App\Events\ServerFailedToCreate;
 use App\Mail\ServerCreatedMail;
+use App\Events\ServerFailedToCreate;
+use Illuminate\Support\Facades\Mail;
+use App\ServerProviders\Vultr\Vultr;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\ServerProviders\DigitalOcean\DigitalOcean;
-use App\ServerProviders\Vultr\Vultr;
-use Illuminate\Support\Facades\Mail;
 
 class DeployServer implements ShouldQueue
 {
@@ -63,25 +63,22 @@ class DeployServer implements ShouldQueue
      */
     public function handle()
     {
+        $data = [
+            'server' => $this->server,
+            'dbRootPass' => Str::random(26),
+            'rootPassword' => Str::random(26),
+        ];
+
         if ($this->provider->name === 'Digital Ocean') {
             $do = new DigitalOcean($this->server->credential);
 
-            $data = [
-                'server' => $this->server,
-                'dbRootPass' => Str::random(26),
-                'rootPassword' => Str::random(26),
-            ];
-
-            $server = $do->droplet()->create(
-                $this->server->name,
+            $server = $do->createServer(
+                $this->plan->slug,
                 $this->server->provider_server_region,
-                $this->plan->slug, // The users selected DO plan
-                'ubuntu-18-04-x64', // Image name
-                false, // Enable backups
-                false, // Enable IPV6
-                false, // Option for private netowrking
+                'ubuntu-18-04-x64',
+                view('scripts.provision-ubuntu1804', $data)->render(),
                 [$this->server->credential->server_provider_key_id],
-                view('scripts.provision-ubuntu1804', $data)->render()
+                $this->server->name
             );
 
             $this->server->provider_server_id = $server->id;
@@ -94,61 +91,13 @@ class DeployServer implements ShouldQueue
                 }
                 break;
             }
-
-            // Check if the server is ready
-            $client = new Client();
-            $siteReady = false;
-            
-            while($siteReady === false) {
-                try {
-                    $httpStatus = $client->request('GET', $this->server->ip_address)->getStatusCode();
-                    if ($httpStatus === 200) {
-                        $siteReady = true;
-                    }
-    
-                    sleep(3);
-                } catch (\Exception $e) {
-                    sleep(3);
-                }
-            }
-
-            if ($this->server->wants_php) {
-                // Check if the PHP site is ready
-                $siteReady = false;
-                while ($siteReady === false) {
-                    try {
-                        $httpStatus = $client->request('GET', $this->server->ip_address . '/info.php')->getStatusCode();
-                        if ($httpStatus === 200) {
-                            $siteReady = true;
-                        }
-
-                        sleep(3);
-                    } catch (\Exception $e) {
-                        sleep(3);
-                    }
-                }
-            }
-
-            $this->server->status = 'running';
-            $this->server->save();
-            $this->server = $this->server->fresh();
-
-            broadcast(new ServerUpdated($this->server));
-            broadcast(new ServerCreated($this->server));
-
-            // Lets send an email to the user to provide them their credentials
-            Mail::to(User::find($this->server->user_id))
-                ->send(new ServerCreatedMail($this->server, $data));
         }
-        
+
+        $script = null;
+        $vultr = null;
+
         if ($this->provider->name === 'Vultr') {
             $vultr = new Vultr($this->server->credential);
-
-            $data = [
-                'server' => $this->server,
-                'dbRootPass' => Str::random(26),
-                'rootPassword' => Str::random(26),
-            ];
 
             $script = $vultr->createScript("ServerDesk provision", view('scripts.provision-ubuntu1804', $data)->render());
 
@@ -166,7 +115,7 @@ class DeployServer implements ShouldQueue
             // Check if the server is ready
             $server = $vultr->getServer($server->SUBID);
 
-            while($server->status == 'pending') {
+            while ($server->status == 'pending') {
                 $server = $vultr->getServer($server->SUBID);
                 sleep(4);
             }
@@ -174,53 +123,55 @@ class DeployServer implements ShouldQueue
             $this->server->ip_address = $server->main_ip;
             $this->server->save();
             $this->server = $this->server->fresh();
+        }
 
-            $client = new Client();
+        // Check if the server is ready
+        $client = new Client();
+        $siteReady = false;
+        
+        while($siteReady === false) {
+            try {
+                $httpStatus = $client->request('GET', $this->server->ip_address)->getStatusCode();
+                if ($httpStatus === 200) {
+                    $siteReady = true;
+                }
+
+                sleep(3);
+            } catch (\Exception $e) {
+                sleep(3);
+            }
+        }
+
+        if ($this->server->wants_php) {
+            // Check if the PHP site is ready
             $siteReady = false;
-            
-            while($siteReady === false) {
+            while ($siteReady === false) {
                 try {
-                    $httpStatus = $client->request('GET', $this->server->ip_address)->getStatusCode();
+                    $httpStatus = $client->request('GET', $this->server->ip_address . '/info.php')->getStatusCode();
                     if ($httpStatus === 200) {
                         $siteReady = true;
                     }
-    
+
                     sleep(3);
                 } catch (\Exception $e) {
                     sleep(3);
                 }
             }
-
-            if ($this->server->wants_php) {
-                // Check if the PHP site is ready
-                $siteReady = false;
-                while ($siteReady === false) {
-                    try {
-                        $httpStatus = $client->request('GET', $this->server->ip_address . '/info.php')->getStatusCode();
-                        if ($httpStatus === 200) {
-                            $siteReady = true;
-                        }
-
-                        sleep(3);
-                    } catch (\Exception $e) {
-                        sleep(3);
-                    }
-                }
-            }
-
-            $vultr->deleteScript($script->SCRIPTID);
-
-            $this->server->status = 'running';
-            $this->server->save();
-            $this->server = $this->server->fresh();
-
-            broadcast(new ServerUpdated($this->server));
-            broadcast(new ServerCreated($this->server));
-
-            // Lets send an email to the user to provide them their credentials
-            Mail::to(User::find($this->server->user_id))
-                ->send(new ServerCreatedMail($this->server, $data));
         }
+
+        if ($this->provider->name === 'Vultr') {
+            $vultr->deleteScript($script->SCRIPTID);
+        }
+
+        $this->server->status = 'running';
+        $this->server->save();
+        $this->server = $this->server->fresh();
+
+        broadcast(new ServerUpdated($this->server));
+        broadcast(new ServerCreated($this->server));
+
+        // Lets send an email to the user to provide them their credentials
+        Mail::to(User::find($this->server->user_id))->send(new ServerCreatedMail($this->server, $data));
     }
 
     /**

@@ -24,17 +24,23 @@ const ServerProviderList = () => {
   const [showProviderForm, setShowProviderForm] = useState(false);
   const [providerFormErrors, setProviderFormErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [providerFormData, setProviderFormData] = useState({
+  const initialFormState = {
     key: null,
     name: null,
     server_provider_id: ''
-  });
+  };
+  const [providerFormData, setProviderFormData] = useState(initialFormState);
 
   useEffect(() => {
     axios.get('/api/user/server-providers').then((data) => {
       setProviders(data.data.data);
     });
   }, []);
+
+  const closeModal = () => {
+    setShowProviderForm(false);
+    setProviderFormData(initialFormState);
+  };
 
   const submitProviderCreateForm = () => {
     setLoading(true);
@@ -43,7 +49,7 @@ const ServerProviderList = () => {
       let provider = data.data.data;
       p.push(provider);
       setProviders(p);
-      setShowProviderForm(false);
+      closeModal();
       setLoading(false);
       addToast(`We successfully linked your ${provider.name} to your account`, { appearance: 'success', autoDismiss: true });
     }).catch((error) => {
@@ -66,7 +72,7 @@ const ServerProviderList = () => {
         title="Link your provider"
         saveButton="Create Provider"
         open={showProviderForm}
-        onClose={() => setShowProviderForm(false)}
+        onClose={closeModal}
         onSave={submitProviderCreateForm}
       >
         <ServerProviderForm
