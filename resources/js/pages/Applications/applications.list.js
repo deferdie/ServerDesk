@@ -57,18 +57,27 @@ const ApplicationList = () => {
       setApplications(a);
       setShowApplicationForm(false);
       setApplicationFormErrors({});
+      connectApplicationToSocket(data.data.data);
       addToast(`Crafting your application, please wait`, { appearance: 'success', autoDismiss: true });
     }).catch(error => setApplicationFormErrors(destructServerErrors(error)));
   };
 
   const connectApplicationToSocket = (application) => {
-    const applicationsCopy = [...applications];
-    Echo.private(`application.${application.id}`).listen('ApplicationDeployed', data => {
-      let applicationToUpdate = _.findIndex(applicationsCopy, function (o) { return o.id === data.application.id; });
-      applicationsCopy.splice(applicationToUpdate, 1, data.application);
-      setApplications(applicationsCopy);
-      addToast(`Application '${data.application.domain}' created`, { appearance: 'success', autoDismiss: true });
-    });
+    Echo.private(`application.${application.id}`)
+      .listen('ApplicationDeployed', data => {
+        const applicationsCopy = [...applications];
+        let applicationToUpdate = _.findIndex(applicationsCopy, function (o) { return o.id === data.application.id; });
+        applicationsCopy.splice(applicationToUpdate, 1, data.application);
+        setApplications(applicationsCopy);
+        addToast(`Application '${data.application.domain}' created`, { appearance: 'success', autoDismiss: true });
+      })
+      .listen('ApplicationDeleted', data => {
+        const applicationsCopy = [...applications];
+        let applicationDelete = _.findIndex(applicationsCopy, function (o) { return o.id === data.applicationID; });
+        applicationsCopy.splice(applicationDelete, 1);
+        setApplications(applicationsCopy);
+        addToast(`Application deleted`, { appearance: 'success', autoDismiss: true });
+      });
   };
 
   if (loading) {
