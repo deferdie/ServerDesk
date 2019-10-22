@@ -45,12 +45,13 @@ const ServerProcessManager = (props) => {
   const [formLoaders, setFormLoaders] = useState({
     creatingProcess: false
   });
-  const [processFormData, setProcessFormData] = useState({
+  const defaultFormState = {
     name: '',
     user: 'root',
     command: '',
     process_count: 1
-  });
+  };
+  const [processFormData, setProcessFormData] = useState(defaultFormState);
 
   const deleteProcess = () => {
     let processId = _.get(server.processes, [showDeleteModal, 'id']);
@@ -93,12 +94,7 @@ const ServerProcessManager = (props) => {
 
   const closeForm = () => {
     setFormErrors({});
-    setProcessFormData({
-      name: '',
-      user: 'root',
-      command: '',
-      process_count: 1
-    });
+    setProcessFormData(defaultFormState);
     setShowProcessForm(false);
   };
 

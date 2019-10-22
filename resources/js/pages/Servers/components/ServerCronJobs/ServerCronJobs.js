@@ -42,13 +42,17 @@ const ServerCronJobs = (props) => {
   const [showRestartModal, setShowRestartModal] = useState(false);
   const [showJobForm, setShowJobForm] = useState(false);
   const [formErrors, setFormErrors] = useState({});
-  const [jobFormData, setJobFormData] = useState({
+  const defaultFormState = {
     name: '',
     user: 'root',
     cron: '* * * * *',
     command: '',
     recurrence: ''
+  };
+  const [formLoaders, setFormLoaders] = useState({
+    creatingCron: false
   });
+  const [jobFormData, setJobFormData] = useState(defaultFormState);
 
   const deleteJob = () => {
     let jobId = _.get(server.cronjobs, [showDeleteModal, 'id']);
@@ -62,12 +66,18 @@ const ServerCronJobs = (props) => {
   };
 
   const createJob = () => {
+    setFormLoaders(...formLoaders, {
+      creatingCron: true
+    });
     axios.post(`/api/servers/${server.id}/cron-job`, jobFormData).then((data) => {
       let s = { ...server };
       s.cronjobs.push(data.data.data);
       setServer(s);
       closeForm();
       addToast(`Installing job`, { appearance: 'success', autoDismiss: true });
+      setFormLoaders(...formLoaders, {
+        creatingCron: false
+      });
     }).catch(error => setFormErrors(destructServerErrors(error)));
   };
 
@@ -84,12 +94,7 @@ const ServerCronJobs = (props) => {
 
   const closeForm = () => {
     setFormErrors({});
-    setJobFormData({
-      name: '',
-      user: 'root',
-      command: '',
-      process_count: 1
-    });
+    setJobFormData(defaultFormState);
     setShowJobForm(false);
   };
 
@@ -219,6 +224,7 @@ const ServerCronJobs = (props) => {
         onClose={closeForm}
         onSave={createJob}
         saveButton="Create job"
+        loading={formLoaders.creatingCron}
       >
         <CronJobForm
           formData={jobFormData}

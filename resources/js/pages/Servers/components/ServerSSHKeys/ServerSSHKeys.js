@@ -39,10 +39,11 @@ const ServerSSHKeys = (props) => {
   const [showSSHKeyForm, setShowSSHKeyForm] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [formErrors, setFormErrors] = useState({});
-  const [sshKeyFormData, setSshKeyFormData] = useState({
+  const defaultFormState = {
     name: '',
     key: ''
-  });
+  };
+  const [sshKeyFormData, setSshKeyFormData] = useState(defaultFormState);
   const [formLoaders, setFormLoaders] = useState({
     creatingSshKey: false
   });
@@ -74,10 +75,7 @@ const ServerSSHKeys = (props) => {
   };
 
   const closeForm = () => {
-    setSshKeyFormData({
-      name: '',
-      key: ''
-    });
+    setSshKeyFormData(defaultFormState);
     setShowSSHKeyForm(false);
   };
 
