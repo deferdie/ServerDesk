@@ -14,7 +14,7 @@ const SelectServerStep = (props) => {
     formErrors,
     handleChange,
     applicationFormData,
-    sourceProviderChanged,
+    sourceProviderChanged
   } = props;
 
   const [servers, setServers] = useState([]);
@@ -120,6 +120,13 @@ const SelectServerStep = (props) => {
       </Grid>
     </React.Fragment>
   );
+};
+
+SelectServerStep.propTypes = {
+  formErrors: PropTypes.object,
+  handleChange: PropTypes.func,
+  applicationFormData: PropTypes.object,
+  sourceProviderChanged: PropTypes.func
 };
 
 export default SelectServerStep;

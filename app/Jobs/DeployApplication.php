@@ -7,6 +7,7 @@ use App\Applications\Adonis;
 use Illuminate\Bus\Queueable;
 use App\Applications\Laravel;
 use App\Applications\StaticHtml;
+use App\Events\ApplicationDeployed;
 use App\SourceProviders\GitHub\GitHub;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -86,6 +87,8 @@ class DeployApplication implements ShouldQueue
             // Set the application status as deployed
             $this->application->status = 'running';
             $this->application->save();
+
+            broadcast(new ApplicationDeployed($this->application));
         } catch (\Exception $e) {
             \Log::info($e);
         }

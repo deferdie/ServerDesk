@@ -69,8 +69,10 @@ const ApplicationForm = (props) => {
               />
             ),
             error: () => {
-              let fields = ['server_id', 'user_source_provider_id'];
-              return fields.map((field) => {
+              return [
+                'server_id',
+                'user_source_provider_id'
+              ].map((field) => {
                 if (hasError(formErrors, field) === true) {
                   return true;
                 }
@@ -88,8 +90,10 @@ const ApplicationForm = (props) => {
               />
             ),
             error: () => {
-              let fields = ['type', 'domain'];
-              return fields.map((field) => {
+              return [
+                'type',
+                'domain'
+              ].map((field) => {
                 if (hasError(formErrors, field) === true) {
                   return true;
                 }
@@ -107,8 +111,9 @@ const ApplicationForm = (props) => {
               />
             ),
             error: () => {
-              let fields = ['env_variables'];
-              return fields.map((field) => {
+              return [
+                'env_variables'
+              ].map((field) => {
                 if (hasError(formErrors, field) === true) {
                   return true;
                 }

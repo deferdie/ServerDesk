@@ -26,8 +26,9 @@ class CreateApplicationsTable extends Migration
             $table->boolean('deploy_form_git')->default(true);
             $table->enum('type', [
                 'PHP',
+                'Laravel',
+                'Adonis JS',
                 'Static HTML',
-                'Laravel'
             ]);
             $table->text('deployment_script')->nullable();
             $table->enum('status', [

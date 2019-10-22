@@ -49,7 +49,7 @@ const VerticalStepper = (props) => {
       if (page.error() === true) {
         hasError = true;
       }
-    })
+    });
 
     return hasError;
   };

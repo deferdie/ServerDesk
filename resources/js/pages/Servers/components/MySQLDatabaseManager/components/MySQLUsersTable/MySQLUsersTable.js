@@ -57,7 +57,7 @@ const MySQLUsersTable = (props) => {
 
 MySQLUsersTable.propTypes = {
   users: PropTypes.array,
-  setShowUserDeleteConfirm: PropTypes.object
+  setShowUserDeleteConfirm: PropTypes.func
 };
 
 export default MySQLUsersTable;
