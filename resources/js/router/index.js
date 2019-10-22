@@ -16,16 +16,16 @@ import SignIn from '../pages/auth/SignIn';
 import Dashboard from '../pages/Dashboard';
 import Register from '../pages/auth/Register';
 import Applications from '../pages/Applications';
-import ApplicationEdit from '../pages/Applications/applications.edit';
 import ServerEdit from '../pages/Servers/server.edit';
 import SourceProviders from '../pages/SourceProviders';
 import ServerProviders from '../pages/ServerProviders';
 import ResetPassword from '../pages/auth/ResetPassword';
 import ForgotPassword from '../pages/auth/ForgotPassword';
+import ApplicationEdit from '../pages/Applications/applications.edit';
 
 const propTypes = {
-  setLoading: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
+  setLoading: PropTypes.func.isRequired,
   initAuthFromExistingToken: PropTypes.func.isRequired
 };
 

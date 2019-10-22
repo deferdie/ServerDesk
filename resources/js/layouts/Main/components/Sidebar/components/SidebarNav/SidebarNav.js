@@ -5,7 +5,12 @@ import { NavLink as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import { List, ListItem, Button, colors } from '@material-ui/core';
+import { List, ListItem, Button, colors, Divider } from '@material-ui/core';
+import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
+import { connect } from 'react-redux';
+
+// Components
+import { setShowNotifications } from '../../../../../../actions/notifications';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -50,7 +55,12 @@ const CustomRouterLink = forwardRef((props, ref) => (
 ));
 
 const SidebarNav = props => {
-  const { pages, className, ...rest } = props;
+  const {
+    pages,
+    className,
+    setShowNotifications,
+    ...rest
+  } = props;
 
   const classes = useStyles();
 
@@ -76,13 +86,36 @@ const SidebarNav = props => {
           </Button>
         </ListItem>
       ))}
+
+      <Divider />
+
+      <ListItem
+        className={classes.item}
+        disableGutters
+      >
+        <Button
+          activeClassName={classes.active}
+          className={classes.button}
+          onClick={() => setShowNotifications(true) }
+        >
+          <div className={classes.icon}>
+            <NotificationsIcon />
+          </div>
+          Notifications
+        </Button>
+      </ListItem>
     </List>
   );
 };
 
 SidebarNav.propTypes = {
   className: PropTypes.string,
-  pages: PropTypes.array.isRequired
+  pages: PropTypes.array.isRequired,
+  setShowNotifications: PropTypes.func.isRequired
 };
 
-export default SidebarNav;
+const mapDispatchToProps = {
+  setShowNotifications
+};
+
+export default connect(null, mapDispatchToProps)(SidebarNav);

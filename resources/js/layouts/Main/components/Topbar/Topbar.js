@@ -9,9 +9,11 @@ import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import _ from 'lodash';
 
 // Components
 import { logoutUser } from '../../../../actions/auth';
+import { setShowNotifications } from '../../../../actions/notifications';
 import Modal from '../../../../components/Modal';
 import NotificationList from '../../../../components/Notifications';
 
@@ -30,22 +32,25 @@ const useStyles = makeStyles(theme => ({
 const Topbar = props => {
   const {
     auth,
-    className,
-    onSidebarOpen,
-    logoutUser,
     history,
+    className,
+    logoutUser,
+    onSidebarOpen,
+    showNotifications,
+    setShowNotifications,
     ...rest
   } = props;
   const classes = useStyles();
   const [notifications, setNotifications] = useState({});
-  const [showNotifications, setShowNotifications] = useState(false);
   const { Echo } = window;
 
   useEffect(() => {
-    Echo.private(`App.User.${auth.user.id}`)
-      .notification((notification) => {
-        console.log(notification);
-      });
+    if (_.get(auth, 'user.id', false)) {
+      Echo.private(`App.User.${auth.user.id}`)
+        .notification((notification) => {
+          console.log(notification);
+        });
+    }
 
     // Get the user notifications
     axios.get('/api/notifications').then((data) => {
@@ -115,11 +120,16 @@ Topbar.propTypes = {
   className: PropTypes.string,
   onSidebarOpen: PropTypes.func,
   history: PropTypes.object.isRequired,
-  logoutUser: PropTypes.func.isRequired
+  logoutUser: PropTypes.func.isRequired,
+  showNotifications: PropTypes.bool.isRequired,
+  setShowNotifications: PropTypes.func.isRequired
 };
 
-const mapDispatchToProps = { logoutUser };
-const mapStateToProps = ({ auth }) => ({ auth });
+const mapDispatchToProps = {
+  logoutUser,
+  setShowNotifications
+};
+const mapStateToProps = ({ auth, showNotifications }) => ({ auth, showNotifications });
 
 export default connect(
   mapStateToProps,

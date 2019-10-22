@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import AppLayout from '../pages/layouts/AppLayout';
 import PropTypes from 'prop-types';
 
 const propTypes = {
