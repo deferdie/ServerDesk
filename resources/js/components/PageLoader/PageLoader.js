@@ -39,7 +39,7 @@ const PageLoader = (props) => {
 };
 
 PageLoader.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   loading: PropTypes.bool.isRequired
 };
 

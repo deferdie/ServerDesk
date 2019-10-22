@@ -8,12 +8,14 @@ use Illuminate\Bus\Queueable;
 use App\Applications\Laravel;
 use App\Applications\StaticHtml;
 use App\Events\ApplicationDeployed;
+use App\Notifications\ApplicationCreatedNotification;
 use App\SourceProviders\GitHub\GitHub;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\SourceProviders\BitBucket\BitBucket;
+use Illuminate\Support\Facades\Notification;
 
 class DeployApplication implements ShouldQueue
 {
@@ -87,6 +89,8 @@ class DeployApplication implements ShouldQueue
             // Set the application status as deployed
             $this->application->status = 'running';
             $this->application->save();
+
+            Notification::send($this->application, new ApplicationCreatedNotification($this->application));
 
             broadcast(new ApplicationDeployed($this->application->fresh()));
         } catch (\Exception $e) {

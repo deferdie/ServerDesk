@@ -11,13 +11,12 @@
 |
 */
 
-use App\SourceProviders\BitBucket\BitBucket;
-use App\Server;
+use App\Application;
+use App\Notifications\ApplicationCreatedNotification;
 
 Route::get('/test', function () {
-    $server = Server::find(24);
-    // Get an avaliable port from the server
-    dd($server->getAvaliablePort());
+    $app = Application::find(9);
+    Notification::send($app, new ApplicationCreatedNotification($app));
 });
 
 Route::get('/{uri?}', function () {

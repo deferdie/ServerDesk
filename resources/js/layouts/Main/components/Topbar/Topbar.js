@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -27,6 +27,7 @@ const useStyles = makeStyles(theme => ({
 
 const Topbar = props => {
   const {
+    auth,
     className,
     onSidebarOpen,
     logoutUser,
@@ -36,6 +37,13 @@ const Topbar = props => {
   const classes = useStyles();
   const [notifications] = useState(['asd']);
   const [showNotifications, setShowNotifications] = useState(false);
+
+  useEffect(() => {
+    window.Echo.private(`App.User.${auth.user.id}`)
+      .notification((notification) => {
+        console.log(notification);
+      });
+  }, []);
 
   const handleLogout = () => {
     logoutUser(() => history.push('/'));
@@ -95,6 +103,7 @@ const Topbar = props => {
 };
 
 Topbar.propTypes = {
+  auth: PropTypes.object,
   className: PropTypes.string,
   onSidebarOpen: PropTypes.func,
   history: PropTypes.object.isRequired,
