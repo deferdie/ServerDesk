@@ -51,6 +51,12 @@ const MySQLDatabaseManager = (props) => {
   const [userFormData, setUserFormData] = useState({ name: '', password: null });
   const [serverFormData, setServerFormData] = useState({ name: '' });
 
+  // Form loaders
+  const [formLoaders, setFormLoaders] = useState({
+    addingUser: false,
+    addingDatabase: false
+  });
+
   // Modal states
   const [showDatabaseUserForm, setShowDatabaseUserForm] = useState(false);
   const [showDatabaseCreateForm, setShowDatabaseCreateForm] = useState(false);
@@ -64,6 +70,9 @@ const MySQLDatabaseManager = (props) => {
   }, []);
 
   const createDatabase = () => {
+    setFormLoaders(...formLoaders, {
+      addingDatabase: true
+    });
     axios.post(`/api/servers/${server.id}/mysql`, serverFormData).then(data => {
       setServerFormData({name: '', password: ''});
       setShowDatabaseCreateForm(false);
@@ -71,10 +80,16 @@ const MySQLDatabaseManager = (props) => {
       d.push(data.data.data);
       setDatabases(d);
       setServerFormErrors([]);
+      setFormLoaders(...formLoaders, {
+        addingDatabase: false
+      });
     }).catch(error => setServerFormErrors(destructServerErrors(error)));
   };
 
   const createUser = () => {
+    setFormLoaders(...formLoaders, {
+      addingUser: true
+    });
     axios.post(`/api/servers/${server.id}/mysql-user`, userFormData).then(data => {
       setUserFormData({name: ''});
       setShowDatabaseUserCreateForm(false);
@@ -82,6 +97,9 @@ const MySQLDatabaseManager = (props) => {
       d.push(data.data.data);
       setUsers(d);
       setServerFormErrors([]);
+      setFormLoaders(...formLoaders, {
+        addingUser: false
+      });
     }).catch(error => setServerFormErrors(destructServerErrors(error)));
   };
 
@@ -201,6 +219,7 @@ const MySQLDatabaseManager = (props) => {
         onClose={() => setShowDatabaseCreateForm(false)}
         onSave={createDatabase}
         saveButton="Create database"
+        loading={formLoaders.addingDatabase}
       >
         <MySQLDatabaseForm
           formData={serverFormData}
@@ -216,6 +235,7 @@ const MySQLDatabaseManager = (props) => {
         open={Boolean(showDatabaseUserForm !== false)}
         onClose={() => setShowDatabaseUserForm(false)}
         onSave={createDatabase}
+        loading={formLoaders.addingUser}
       >
         <MySQLDatabaseUserForm
           users={users}
@@ -230,6 +250,7 @@ const MySQLDatabaseManager = (props) => {
         onClose={() => setShowDatabaseUserCreateForm(false)}
         onSave={createUser}
         saveButton="Create database user"
+        loading={formLoaders.addingUser}
       >
         <MySQLUserForm
           formData={userFormData}
@@ -261,8 +282,6 @@ const MySQLDatabaseManager = (props) => {
           setShowUserDeleteConfirm(false);
         }}
       />
-
-      {/* <ListManager selectedList={[]} avaliableList={} /> */}
     </React.Fragment>
   );
 };
