@@ -7,6 +7,7 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import _ from 'lodash';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,14 +25,30 @@ const useStyles = makeStyles(theme => ({
 const NotificationList = (props) => {
   const classes = useStyles();
   const {
-    notifications
+    notifications,
+    setNotifications
   } = props;
 
   const userScrolled = (event) => {
     const clientTotalScrollHeight = event.target.scrollTop + event.target.clientHeight;
 
     if (clientTotalScrollHeight >= event.target.scrollHeight) {
-      // Load the next set of data
+      axios.get(notifications.next_page_url).then((data) => {
+        let n = {...notifications};
+
+        data.data.data.map((data) => {
+          n.data.push(data);
+        });
+
+        n.from = data.data.from;
+        n.total = data.data.total;
+        n.to = data.data.to;
+        n.last_page = data.data.last_page;
+        n.next_page_url = data.data.next_page_url;
+        n.current_page = data.data.current_page;
+        console.log(n)
+        setNotifications(n);
+      });
     }
   };
 
@@ -62,7 +79,8 @@ const NotificationList = (props) => {
 };
 
 NotificationList.propTypes = {
-  notifications: PropTypes.object.isRequired
+  notifications: PropTypes.object.isRequired,
+  setNotifications: PropTypes.func.isRequired
 };
 
 export default NotificationList;

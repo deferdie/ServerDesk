@@ -109,7 +109,10 @@ const Topbar = props => {
         open={showNotifications}
         onClose={() => setShowNotifications(false)}
       >
-        <NotificationList notifications={notifications} />
+        <NotificationList
+          notifications={notifications}
+          setNotifications={setNotifications}
+        />
       </Modal>
     </AppBar>
   );
