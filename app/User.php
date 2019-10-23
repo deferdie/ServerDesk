@@ -18,7 +18,11 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'is_admin',
+        'password',
+        'parent_user_id',
     ];
 
     /**
@@ -59,5 +63,25 @@ class User extends Authenticatable implements JWTSubject
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPasswordNotification($token));
+    }
+
+    /**
+     * All of the users team members
+     *
+     * @return void
+     */
+    public function team()
+    {
+        return $this->hasMany(User::class, 'parent_user_id', 'id');
+    }
+
+    /**
+     * Return the owner for this account
+     *
+     * @return void
+     */
+    public function owner()
+    {
+        return $this->hasOne(User::class, 'parent_user_id', 'id');
     }
 }

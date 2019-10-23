@@ -8,6 +8,7 @@ import CloudIcon from '@material-ui/icons/Cloud';
 import DnsIcon from '@material-ui/icons/Dns';
 import MergeTypeIcon from '@material-ui/icons/MergeType';
 import AppsIcon from '@material-ui/icons/Apps';
+import GroupIcon from '@material-ui/icons/Group';
 
 // Components
 import { Profile, SidebarNav, UpgradePlan } from './components';
@@ -65,6 +66,11 @@ const Sidebar = props => {
       title: 'Source provider',
       href: '/source-providers',
       icon: <MergeTypeIcon />
+    },
+    {
+      title: 'Team',
+      href: '/teams',
+      icon: <GroupIcon />
     }
   ];
 

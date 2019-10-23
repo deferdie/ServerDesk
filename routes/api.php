@@ -117,6 +117,9 @@ Route::name('api.')->namespace('Api')->group(function () {
 
         // The user notifications
         Route::get('/notifications', 'UserNotificationsController@index')->name('notifications');
+        
+        // The team for the user
+        Route::get('/teams', 'TeamController@index')->name('teams');
     });
 
     Broadcast::routes();
