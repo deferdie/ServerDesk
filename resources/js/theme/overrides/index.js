@@ -5,13 +5,15 @@ import MuiTableCell from './MuiTableCell';
 import MuiTableHead from './MuiTableHead';
 import MuiTypography from './MuiTypography';
 import MuiCardActions from './MuiCardActions';
+import MuiDivider from './MuiDivider';
 
 export default {
-  MuiButton,
-  MuiIconButton,
   MuiPaper,
+  MuiButton,
+  MuiDivider,
   MuiTableCell,
   MuiTableHead,
-  MuiCardActions,
-  MuiTypography
+  MuiIconButton,
+  MuiTypography,
+  MuiCardActions
 };
