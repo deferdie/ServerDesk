@@ -65,7 +65,8 @@ class ApplicationCreatedNotification extends Notification implements ShouldQueue
     {
         return [
             'title' => 'Application Created',
-            'body' => 'Your new application is running at: ' . $this->application->domain 
+            'alert' => 'success',
+            'body' => 'Your new application is running at: ' . $this->application->domain
         ];
     }
 
@@ -78,8 +79,11 @@ class ApplicationCreatedNotification extends Notification implements ShouldQueue
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            'title' => 'Application Created',
-            'body' => 'Your new application is running at: ' . $this->application->domain 
+            'data' => [
+                'title' => 'Application Created',
+                'alert' => 'success',
+                'body' => 'Your new application is running at: ' . $this->application->domain 
+            ]
         ]);
     }
 }

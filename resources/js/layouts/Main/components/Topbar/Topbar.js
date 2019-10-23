@@ -10,6 +10,7 @@ import InputIcon from '@material-ui/icons/Input';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import _ from 'lodash';
+import { useToasts } from 'react-toast-notifications';
 
 // Components
 import { logoutUser } from '../../../../actions/auth';
@@ -43,23 +44,32 @@ const Topbar = props => {
   const classes = useStyles();
   const [notifications, setNotifications] = useState({});
   const { Echo } = window;
+  const { addToast } = useToasts();
 
   useEffect(() => {
-    if (_.get(auth, 'user.id', false)) {
-      Echo.private(`App.User.${auth.user.id}`)
-        .notification((notification) => {
-          console.log(notification);
-        });
-    }
-
     // Get the user notifications
     axios.get('/api/notifications').then((data) => {
       setNotifications(data.data);
+
+      if (_.get(auth, 'user.id', false)) {
+        Echo.private(`App.User.${auth.user.id}`)
+          .notification((notification) => {
+            let alert = _.get(notification, 'data.alert', 'info');
+            let title = _.get(notification, 'data.title');
+            updateNotifications(notification, data.data);
+            addToast(`${title}`, { appearance: alert, autoDismiss: true });
+          });
+      }
     });
   }, []);
 
   const handleLogout = () => {
     logoutUser(() => history.push('/'));
+  };
+
+  const updateNotifications = (notification, data) => {
+    data.data.unshift(notification);
+    setNotifications(data);
   };
 
   return (

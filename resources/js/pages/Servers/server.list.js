@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 import _ from 'lodash';
+import { useToasts } from 'react-toast-notifications';
 
 // Components
 import {
@@ -10,7 +11,6 @@ import {
   ServersToolbar
 } from './components';
 import Modal from '../../components/Modal';
-import { useToasts } from 'react-toast-notifications';
 import { destructServerErrors } from '../../helpers/error';
 import PageLoader from '../../components/PageLoader/PageLoader';
 
