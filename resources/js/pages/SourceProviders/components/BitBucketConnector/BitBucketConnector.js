@@ -91,7 +91,7 @@ BitBucketConnector.propTypes = {
   match: PropTypes.object,
   location: PropTypes.object,
   setProviders: PropTypes.func,
-  sourceProvider: PropTypes.array
+  sourceProvider: PropTypes.object
 };
 
 export default withRouter(BitBucketConnector);

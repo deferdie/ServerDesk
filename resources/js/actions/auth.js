@@ -1,4 +1,6 @@
 import { checkTokenExists, setToken } from '../helpers/auth';
+import Echo from 'laravel-echo';
+import localforage from 'localforage';
 
 export const SET_USER_DATA = 'SET_USER_DATA';
 export const SET_AUTHENTICATED = 'SET_AUTHENTICATED';
@@ -19,9 +21,25 @@ export const setAuthenticated = authenticated => ({
   authenticated
 });
 
+const connectToSocket = jwt => {
+  window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: process.env.MIX_PUSHER_APP_KEY,
+    cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+    encrypted: true,
+    authEndpoint: '/api/broadcasting/auth',
+    auth: {
+      headers: {
+        Authorization: 'Bearer ' + jwt
+      }
+    }
+  });
+};
+
 export const signInUser = credentials => dispatch => {
   return window.axios.post('/api/signin', credentials).then(({ data: { data, meta } }) => {
     setToken(meta.token);
+    connectToSocket(meta.token)
     dispatch(setUserData(data));
     dispatch(setAuthenticated(true));
     return Promise.resolve({ data, meta });
@@ -45,6 +63,7 @@ export const registerUser = credentials => dispatch => {
   return window.axios.post('/api/register', credentials
   ).then(({ data: { data, meta } }) => {
     setToken(meta.token);
+    connectToSocket(meta.token);
     dispatch(setUserData(data));
     dispatch(setAuthenticated(true));
     return Promise.resolve({ data, meta });

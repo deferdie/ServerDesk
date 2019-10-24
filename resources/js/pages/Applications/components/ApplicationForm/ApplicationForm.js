@@ -128,7 +128,7 @@ const ApplicationForm = (props) => {
 
 ApplicationForm.propTypes = {
   formErrors: PropTypes.object,
-  formAction: PropTypes.object,
+  formAction: PropTypes.func.isRequired,
   applicationFormData: PropTypes.object,
   setApplicationFormData: PropTypes.func
 };

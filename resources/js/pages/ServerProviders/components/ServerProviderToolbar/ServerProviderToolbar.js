@@ -54,7 +54,7 @@ const ServerProviderToolbar = props => {
 
 ServerProviderToolbar.propTypes = {
   className: PropTypes.string,
-  onAddProvider: PropTypes.object
+  onAddProvider: PropTypes.func.isRequired
 };
 
 export default ServerProviderToolbar;

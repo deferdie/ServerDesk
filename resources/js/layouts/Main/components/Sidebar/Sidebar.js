@@ -11,7 +11,7 @@ import AppsIcon from '@material-ui/icons/Apps';
 import GroupIcon from '@material-ui/icons/Group';
 
 // Components
-import { Profile, SidebarNav, UpgradePlan } from './components';
+import { SidebarNav, UpgradePlan } from './components';
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -86,7 +86,6 @@ const Sidebar = props => {
         {...rest}
         className={clsx(classes.root, className)}
       >
-        <Profile />
         <Divider className={classes.divider} />
         <SidebarNav
           className={classes.nav}

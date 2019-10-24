@@ -135,7 +135,7 @@ const ServerForm = (props) => {
 
 ServerForm.propTypes = {
   formAction: PropTypes.func,
-  formErrors: PropTypes.object,
+  formErrors: PropTypes.array,
   serverFormData: PropTypes.object.isRequired,
   setServerFormData: PropTypes.func.isRequired
 };

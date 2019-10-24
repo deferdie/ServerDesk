@@ -55,7 +55,7 @@ const ApplicationToolbar = props => {
 
 ApplicationToolbar.propTypes = {
   className: PropTypes.string,
-  onAddApplication: PropTypes.object
+  onAddApplication: PropTypes.func.isRequired
 };
 
 export default ApplicationToolbar;
