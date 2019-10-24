@@ -27,7 +27,7 @@ const TeamList = () => {
   useEffect(() => {
     // Fetch all of the servers for the user
     axios.get('/api/teams').then((data) => {
-      // setTeam(data.data.data);
+      setTeam(data.data.data);
 
       setLoading(false);
     });
@@ -56,6 +56,7 @@ const TeamList = () => {
         saveButton="Add user"
         open={showTeamForm}
         title="Add a new team member"
+        onSave={addTeam}
         onClose={() => setShowTeamForm(false)}
       >
         <TeamForm

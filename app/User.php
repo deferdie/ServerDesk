@@ -72,7 +72,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function team()
     {
-        return $this->hasMany(User::class, 'parent_user_id', 'id');
+        return $this->hasMany(User::class, 'parent_user_id', 'id')->get();
     }
 
     /**
