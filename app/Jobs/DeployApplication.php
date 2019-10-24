@@ -90,7 +90,7 @@ class DeployApplication implements ShouldQueue
             $this->application->status = 'running';
             $this->application->save();
 
-            Notification::send($this->application, new ApplicationCreatedNotification($this->application));
+            Notification::send($this->application->user, new ApplicationCreatedNotification($this->application));
 
             broadcast(new ApplicationDeployed($this->application->fresh()));
         } catch (\Exception $e) {

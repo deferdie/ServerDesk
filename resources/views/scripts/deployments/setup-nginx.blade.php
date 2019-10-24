@@ -10,7 +10,7 @@ touch /etc/nginx/sites-available/{{$application->domain}}
 ## Create the server block for the site
 echo '{!!view("scripts.nginx.site-nginx", [
     "application" => $application,
-    "portToRunOn" => $portToRunOn,
+    "portToRunOn" => $portToRunOn ?? '80',
 ])->render()!!}' > /etc/nginx/sites-available/{{$application->domain}}
 
 ## Enable the site
