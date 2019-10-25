@@ -1,6 +1,5 @@
 import { checkTokenExists, setToken } from '../helpers/auth';
 import Echo from 'laravel-echo';
-import localforage from 'localforage';
 
 export const SET_USER_DATA = 'SET_USER_DATA';
 export const SET_AUTHENTICATED = 'SET_AUTHENTICATED';

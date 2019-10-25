@@ -52,13 +52,15 @@ const Topbar = props => {
       setNotifications(data.data);
 
       if (_.get(auth, 'user.id', false)) {
-        Echo.private(`App.User.${auth.user.id}`)
-          .notification((notification) => {
-            let alert = _.get(notification, 'data.alert', 'info');
-            let title = _.get(notification, 'data.title');
-            updateNotifications(notification, data.data);
-            addToast(`${title}`, { appearance: alert, autoDismiss: true });
-          });
+        if (Echo) {
+          Echo.private(`App.User.${auth.user.id}`)
+            .notification((notification) => {
+              let alert = _.get(notification, 'data.alert', 'info');
+              let title = _.get(notification, 'data.title');
+              updateNotifications(notification, data.data);
+              addToast(`${title}`, { appearance: alert, autoDismiss: true });
+            });
+        }
       }
     });
   }, []);

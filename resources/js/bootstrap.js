@@ -1,6 +1,7 @@
 import axios from 'axios';
 import _ from 'lodash';
 import loadProgressBar from './helpers/progress-bar';
+import Echo from 'laravel-echo';
 
 window._ = _;
 window.axios = axios;

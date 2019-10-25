@@ -120,6 +120,7 @@ Route::name('api.')->namespace('Api')->group(function () {
         
         // The team for the user
         Route::get('/teams', 'TeamController@index')->name('teams');
+        Route::post('/teams', 'TeamController@store')->name('teams.store');
     });
 
     Broadcast::routes();

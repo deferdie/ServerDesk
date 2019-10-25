@@ -1,9 +1,11 @@
+import _ from 'lodash';
+
 export const destructServerErrors = error => {
   if (error.response && error.response.data && error.response.data.errors) {
     return error.response.data.errors;
   }
 
-  return '';
+  return [];
 };
 
 export const hasError = (errors, field) => {

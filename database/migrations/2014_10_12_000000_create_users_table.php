@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->boolean('is_admin')->default(false);
             $table->unsignedInteger('parent_user_id')->nullable();
             $table->boolean('active')->default(true);
+            $table->boolean('welcome_completed')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

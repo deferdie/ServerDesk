@@ -16,6 +16,7 @@ import {
 const TeamList = () => {
   const [team, setTeam] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [formLoading, setFormLoading] = useState(false);
   const [showTeamForm, setShowTeamForm] = useState(false);
   const [teamFormErrors, setTeamFormErrors] = useState([]);
   const defaultFormData = {
@@ -34,7 +35,23 @@ const TeamList = () => {
   }, []);
 
   const addTeam = () => {
-    console.log('adding team');
+    setFormLoading(true);
+    axios.post('/api/teams', teamFormData).then((data) => {
+      let t = [...team];
+      t.push(data.data.data);
+      resetTeamForm();
+      setTeam(t);
+    }).catch((error) => {
+      setFormLoading(false);
+      setTeamFormErrors(destructServerErrors(error));
+    });
+  };
+
+  const resetTeamForm = () => {
+    setFormLoading(false);
+    setTeamFormErrors([]);
+    setShowTeamForm(false);
+    setTeamFormData(defaultFormData);
   };
 
   if (loading) {
@@ -57,7 +74,8 @@ const TeamList = () => {
         open={showTeamForm}
         title="Add a new team member"
         onSave={addTeam}
-        onClose={() => setShowTeamForm(false)}
+        onClose={resetTeamForm}
+        loading={formLoading}
       >
         <TeamForm
           formData={teamFormData}
