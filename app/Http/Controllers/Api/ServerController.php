@@ -11,6 +11,8 @@ use App\UserServerProviderCredential;
 use App\Http\Resources\ServerResource;
 use App\Http\Requests\ServerStoreRequest;
 use App\ServerProviders\DigitalOcean\DigitalOcean;
+use App\ServerService;
+use App\Service;
 
 class ServerController extends Controller
 {
@@ -101,6 +103,42 @@ class ServerController extends Controller
                 'provider_credential_id' => $request->provider_credential_id,
                 'user_server_provider_credential_id' => $request->user_server_provider_credential_id,
             ]);
+
+            // Attach the services to this server
+            if ($request->wants_php) {
+                $service = Service::whereName('PHP-FPM')->first();
+                ServerService::create([
+                    'service_id' => $service->id,
+                    'server_id' => $server->id,
+                    'status' => 'running',
+                ]);
+            }
+            
+            if ($request->wants_node) {
+                $service = Service::whereName('NodeJS')->first();
+                ServerService::create([
+                    'service_id' => $service->id,
+                    'server_id' => $server->id,
+                    'status' => 'running',
+                ]);
+            }
+            
+            if ($request->wants_mysql) {
+                $service = Service::whereName('MySQL')->first();
+                ServerService::create([
+                    'service_id' => $service->id,
+                    'server_id' => $server->id,
+                    'status' => 'running',
+                ]);
+            }
+            
+            $service = Service::whereName('Nginx')->first();
+            ServerService::create([
+                'service_id' => $service->id,
+                'server_id' => $server->id,
+                'status' => 'running',
+            ]);
+            
 
             DeployServer::dispatch($server, $plan, $provider);
 

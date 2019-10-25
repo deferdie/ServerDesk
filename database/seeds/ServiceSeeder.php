@@ -14,7 +14,9 @@ class ServiceSeeder extends Seeder
     {
         $providers = [
             'Nginx',
-            'PHP-FPM'
+            'PHP-FPM',
+            'NodeJS',
+            'MySQL',
         ];
 
         foreach ($providers as $provider) {
