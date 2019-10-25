@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\User;
+use App\Mail\TeamWelcomeMail;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\TeamStoreRequest;
 
 class TeamController extends Controller
@@ -37,6 +39,7 @@ class TeamController extends Controller
         ]);
 
         // Send a welcome email to activa the account
+        Mail::to($user)->send(new TeamWelcomeMail($user));
 
         return new UserResource($user);
     }

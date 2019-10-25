@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class TeamWelcomeMail extends Mailable
@@ -36,6 +37,20 @@ class TeamWelcomeMail extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        $token = $this->broker()->createToken($this->user);
+        return $this->markdown('emails.team.welcome')->with([
+            'user' => $this->user,
+            'token' => $token
+        ]);
+    }
+
+    /**
+     * Get the broker to be used during password reset.
+     *
+     * @return \Illuminate\Contracts\Auth\PasswordBroker
+     */
+    public function broker()
+    {
+        return Password::broker();
     }
 }

@@ -76,20 +76,32 @@ const ServerList = () => {
 
   const connectServerToSocket = (server) => {
     const serverCopy = [...servers];
-    Echo.private(`server.${server.id}`).listen('ServerUpdated', data => {
-      let serverToUpdate = _.findIndex(serverCopy, function (o) { return o.id === data.server.id; });
+    if (Echo) {
+      Echo.private(`server.${server.id}`).listen('ServerUpdated', data => {
+        let serverToUpdate = _.findIndex(serverCopy, function (o) {
+          return o.id === data.server.id;
+        });
 
-      serverCopy.splice(serverToUpdate, 1, data.server);
-      setServers(serverCopy);
-      addToast(`Server '${data.server.name}' updated`, { appearance: 'success', autoDismiss: true });
-    }).listen('ServerFailedToCreate', data => {
-      let serverToRemove = _.findIndex(serverCopy, function (o) { return o.id === data.server; });
-      if (serverToRemove) {
-        serverCopy.splice(serverToRemove, 1);
+        serverCopy.splice(serverToUpdate, 1, data.server);
         setServers(serverCopy);
-        addToast(`Server failed to create`, { appearance: 'error', autoDismiss: true });
-      }
-    });
+        addToast(`Server '${data.server.name}' updated`, {
+          appearance: 'success',
+          autoDismiss: true
+        });
+      }).listen('ServerFailedToCreate', data => {
+        let serverToRemove = _.findIndex(serverCopy, function (o) {
+          return o.id === data.server;
+        });
+        if (serverToRemove) {
+          serverCopy.splice(serverToRemove, 1);
+          setServers(serverCopy);
+          addToast(`Server failed to create`, {
+            appearance: 'error',
+            autoDismiss: true
+          });
+        }
+      });
+    }
   };
 
   if (loading) {
