@@ -63,21 +63,33 @@ const ApplicationList = () => {
   };
 
   const connectApplicationToSocket = (application) => {
-    Echo.private(`application.${application.id}`)
-      .listen('ApplicationDeployed', data => {
-        const applicationsCopy = [...applications];
-        let applicationToUpdate = _.findIndex(applicationsCopy, function (o) { return o.id === data.application.id; });
-        applicationsCopy.splice(applicationToUpdate, 1, data.application);
-        setApplications(applicationsCopy);
-        addToast(`Application '${data.application.domain}' created`, { appearance: 'success', autoDismiss: true });
-      })
-      .listen('ApplicationDeleted', data => {
-        const applicationsCopy = [...applications];
-        let applicationDelete = _.findIndex(applicationsCopy, function (o) { return o.id === data.applicationID; });
-        applicationsCopy.splice(applicationDelete, 1);
-        setApplications(applicationsCopy);
-        addToast(`Application deleted`, { appearance: 'success', autoDismiss: true });
-      });
+    if (Echo) {
+      Echo.private(`application.${application.id}`)
+        .listen('ApplicationDeployed', data => {
+          const applicationsCopy = [...applications];
+          let applicationToUpdate = _.findIndex(applicationsCopy, function (o) {
+            return o.id === data.application.id;
+          });
+          applicationsCopy.splice(applicationToUpdate, 1, data.application);
+          setApplications(applicationsCopy);
+          addToast(`Application '${data.application.domain}' created`, {
+            appearance: 'success',
+            autoDismiss: true
+          });
+        })
+        .listen('ApplicationDeleted', data => {
+          const applicationsCopy = [...applications];
+          let applicationDelete = _.findIndex(applicationsCopy, function (o) {
+            return o.id === data.applicationID;
+          });
+          applicationsCopy.splice(applicationDelete, 1);
+          setApplications(applicationsCopy);
+          addToast(`Application deleted`, {
+            appearance: 'success',
+            autoDismiss: true
+          });
+        });
+    }
   };
 
   if (loading) {

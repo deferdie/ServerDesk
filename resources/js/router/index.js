@@ -10,6 +10,7 @@ import GuestRoute from './GuestRoute';
 import NotFound from '../pages/404';
 import PropTypes from 'prop-types';
 import Teams from '../pages/Teams';
+import SetUp from '../pages/SetUp';
 import Welcome from '../pages/Welcome';
 import Servers from '../pages/Servers';
 import Profile from '../pages/Profile';
@@ -63,6 +64,8 @@ class App extends Component {
           <AuthRoute path="/source-providers/:provider" component={SourceProviders} />
           <AuthRoute path="/source-providers" component={SourceProviders} />
           <AuthRoute path="/profile/:id" component={Profile} />
+
+          <AuthRoute path="/setup" component={SetUp} />
 
           {/* Error routes */}
           <Route component={NotFound} />

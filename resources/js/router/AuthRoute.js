@@ -7,11 +7,13 @@ import PropTypes from 'prop-types';
 import { ThemeProvider } from '@material-ui/styles';
 import theme from '../theme';
 import { Main as MainLayout } from '../layouts';
+import _ from 'lodash';
 
 const propTypes = {
   component: PropTypes.func.isRequired,
   rest: PropTypes.object,
-  location: PropTypes.object
+  location: PropTypes.object,
+  history: PropTypes.object
 };
 
 const AuthRoute = ({ component: Component, ...rest }) => (
@@ -20,10 +22,17 @@ const AuthRoute = ({ component: Component, ...rest }) => (
       <Route
         {...rest}
         render={props => {
-          const { auth: { authenticated } } = store.getState();
+          const { auth: { authenticated, user } } = store.getState();
 
           if (!authenticated) {
             setIntendedUrl(props.location.pathname);
+          }
+
+          // Send the user to the setup page if they have not completed it
+          if (_.get(user, 'is_admin', 0) === 0 && _.get(user, 'welcome_completed', 0) === 0) {
+            if (props.location.pathname !== '/setup') {
+              props.history.push('/setup');
+            }
           }
 
           return authenticated ? (
