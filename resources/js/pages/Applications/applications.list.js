@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 import { useToasts } from 'react-toast-notifications';
 import _ from 'lodash';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 // Components
 import { ApplicationToolbar, ApplicationTable, ApplicationForm } from './components';
@@ -19,15 +21,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ApplicationList = () => {
-  const { Echo } = window;
+const ApplicationList = (props) => {
+  const { auth } = props;
   const classes = useStyles();
   const { addToast } = useToasts();
   const [loading, setLoading] = useState(true);
   const [applications, setApplications] = useState([]);
   const [showApplicationForm, setShowApplicationForm] = useState(false);
   const [applicationFormErrors, setApplicationFormErrors] = useState({});
-  const [applicationFormData, setApplicationFormData] = useState({
+  const defaultState = {
     type: '',
     domain: '',
     directory: '',
@@ -35,7 +37,8 @@ const ApplicationList = () => {
     respository: '',
     env_variables: '',
     user_source_provider_id: ''
-  });
+  };
+  const [applicationFormData, setApplicationFormData] = useState(defaultState);
 
   useEffect(() => {
     // Fetch all of the server applications for this user
@@ -58,38 +61,37 @@ const ApplicationList = () => {
       setShowApplicationForm(false);
       setApplicationFormErrors({});
       connectApplicationToSocket(data.data.data);
+      setApplicationFormData(defaultState);
       addToast(`Crafting your application, please wait`, { appearance: 'success', autoDismiss: true });
     }).catch(error => setApplicationFormErrors(destructServerErrors(error)));
   };
 
   const connectApplicationToSocket = (application) => {
-    if (Echo) {
-      Echo.private(`application.${application.id}`)
-        .listen('ApplicationDeployed', data => {
-          const applicationsCopy = [...applications];
-          let applicationToUpdate = _.findIndex(applicationsCopy, function (o) {
-            return o.id === data.application.id;
-          });
-          applicationsCopy.splice(applicationToUpdate, 1, data.application);
-          setApplications(applicationsCopy);
-          addToast(`Application '${data.application.domain}' created`, {
-            appearance: 'success',
-            autoDismiss: true
-          });
-        })
-        .listen('ApplicationDeleted', data => {
-          const applicationsCopy = [...applications];
-          let applicationDelete = _.findIndex(applicationsCopy, function (o) {
-            return o.id === data.applicationID;
-          });
-          applicationsCopy.splice(applicationDelete, 1);
-          setApplications(applicationsCopy);
-          addToast(`Application deleted`, {
-            appearance: 'success',
-            autoDismiss: true
-          });
+    auth.echo.private(`application.${application.id}`)
+      .listen('ApplicationDeployed', data => {
+        const applicationsCopy = [...applications];
+        let applicationToUpdate = _.findIndex(applicationsCopy, function (o) {
+          return o.id === data.application.id;
         });
-    }
+        applicationsCopy.splice(applicationToUpdate, 1, data.application);
+        setApplications(applicationsCopy);
+        addToast(`Application '${data.application.domain}' created`, {
+          appearance: 'success',
+          autoDismiss: true
+        });
+      })
+      .listen('ApplicationDeleted', data => {
+        const applicationsCopy = [...applications];
+        let applicationDelete = _.findIndex(applicationsCopy, function (o) {
+          return o.id === data.applicationID;
+        });
+        applicationsCopy.splice(applicationDelete, 1);
+        setApplications(applicationsCopy);
+        addToast(`Application deleted`, {
+          appearance: 'success',
+          autoDismiss: true
+        });
+      });
   };
 
   if (loading) {
@@ -123,4 +125,10 @@ const ApplicationList = () => {
   );
 };
 
-export default ApplicationList;
+ApplicationList.propTypes = {
+  auth: PropTypes.object
+};
+
+const mapStateToProps = ({ auth }) => ({ auth });
+
+export default connect(mapStateToProps, null, null)(ApplicationList);

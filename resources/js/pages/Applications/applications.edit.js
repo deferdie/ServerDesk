@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 import { useToasts } from 'react-toast-notifications';
+import { connect } from 'react-redux';
 
 // Components
 import {
@@ -22,8 +23,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ApplicationEdit = (props) => {
-  const { match } = props;
-  const { Echo } = window;
+  const { match, auth } = props;
   const classes = useStyles();
   const { addToast } = useToasts();
   const [application, setApplication] = useState(null);
@@ -32,7 +32,7 @@ const ApplicationEdit = (props) => {
   useEffect(() => {
     axios.get(`/api/applications/${match.params.application}`).then((data) => {
       setApplication(data.data.data);
-      Echo.private(`application.${match.params.application}`)
+      auth.echo.private(`application.${match.params.application}`)
         .listen('DeployingApplication', data => {
           addToast(data.message, { appearance: 'warning', autoDismiss: true });
           setApplication(data.application);
@@ -76,7 +76,10 @@ const ApplicationEdit = (props) => {
 };
 
 ApplicationEdit.propTypes = {
+  auth: PropTypes.object,
   match: PropTypes.object
 };
 
-export default ApplicationEdit;
+const mapStateToProps = ({ auth }) => ({ auth });
+
+export default connect(mapStateToProps, null, null)(ApplicationEdit);

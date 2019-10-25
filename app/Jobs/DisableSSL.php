@@ -39,10 +39,15 @@ class DisableSSL implements ShouldQueue
     public function handle()
     {
         $this->application->ssl_enabled = false;
+        $this->application->redirect_ssl = false;
         $this->application->save();
 
         $this->application = $this->application->fresh();
 
+        $nginxBefore = view('scripts.nginx.nginx-before', [
+            'application' => $this->application
+        ])->render();
+        
         $nginxHeader = view('scripts.nginx.nginx-head', [
             'application' => $this->application
         ])->render();
@@ -51,6 +56,10 @@ class DisableSSL implements ShouldQueue
             'application' => $this->application
         ])->render();
 
+        $this->application->server->exec(
+            "echo '" . $nginxBefore . "' > /etc/nginx/serverdesk/" . $this->application->domain . ".before"
+        );
+        
         $this->application->server->exec(
             "echo '" . $nginxHeader . "' > /etc/nginx/serverdesk/" . $this->application->domain . ".head"
         );

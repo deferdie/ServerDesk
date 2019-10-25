@@ -40,5 +40,6 @@ class RemoveSSLCertSSL implements ShouldQueue
         $this->application->server->exec('sudo certbot delete --cert-name ' . $this->application->domain);
 
         DisableSSL::dispatch($this->application);
+        DisableSSLRedirect::dispatch($this->application);
     }
 }

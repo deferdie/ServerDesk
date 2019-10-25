@@ -20,6 +20,7 @@ class Application extends Model
         'git_branch',
         'ssl_enabled',
         'respository',
+        'redirect_ssl',
         'ssl_provider_id',
         'deploy_form_git',
         'deployment_script',

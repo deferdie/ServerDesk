@@ -43,7 +43,6 @@ const Topbar = props => {
   } = props;
   const classes = useStyles();
   const [notifications, setNotifications] = useState({});
-  const { Echo } = window;
   const { addToast } = useToasts();
 
   useEffect(() => {
@@ -52,15 +51,13 @@ const Topbar = props => {
       setNotifications(data.data);
 
       if (_.get(auth, 'user.id', false)) {
-        if (Echo) {
-          Echo.private(`App.User.${auth.user.id}`)
-            .notification((notification) => {
-              let alert = _.get(notification, 'data.alert', 'info');
-              let title = _.get(notification, 'data.title');
-              updateNotifications(notification, data.data);
-              addToast(`${title}`, { appearance: alert, autoDismiss: true });
-            });
-        }
+        auth.echo.private(`App.User.${auth.user.id}`)
+          .notification((notification) => {
+            let alert = _.get(notification, 'data.alert', 'info');
+            let title = _.get(notification, 'data.title');
+            updateNotifications(notification, data.data);
+            addToast(`${title}`, { appearance: alert, autoDismiss: true });
+          });
       }
     });
   }, []);

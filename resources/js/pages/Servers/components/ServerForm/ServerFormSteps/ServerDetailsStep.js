@@ -73,68 +73,69 @@ const ServerDetailsStep = (props) => {
       </Grid>
 
       {formData.user_server_provider_credential_id !== '' && (
-        <Grid
-          item
-          md={12}
-          xs={12}
-        >
-          <TextField
-            fullWidth
-            label="Select server provider"
-            margin="dense"
-            name="server_provider_id"
-            onChange={serverChanged}
-            required
-            select
-            SelectProps={{ native: true }}
-            value={formData.server_provider_id}
-            variant="outlined"
-            helperText={hasError(formErrors, 'server_provider_id') ? getError(formErrors, 'server_provider_id') : 'Please select your server provider'}
-            error={hasError(formErrors, 'server_provider_id')}
+        <React.Fragment>
+          <Grid
+            item
+            md={12}
+            xs={12}
           >
-            <option selected>Please select</option>
-            {serverProviders.map(option => (
-              <option
-                key={option.name}
-                value={option.id}
-              >
-                {option.name}
-              </option>
-            ))}
-          </TextField>
-        </Grid>
-      )}
-
-      <Grid
-        item
-        md={12}
-        xs={12}
-      >
-        <TextField
-          fullWidth
-          label="Select your plan"
-          margin="dense"
-          name="plan"
-          onChange={handleChange}
-          required
-          select
-          SelectProps={{ native: true }}
-          value={formData.plan}
-          variant="outlined"
-          helperText={hasError(formErrors, 'plan') ? getError(formErrors, 'plan') : 'Please select your plan for this provider'}
-          error={hasError(formErrors, 'plan')}
-        >
-          <option selected>Please select</option>
-          {_.get(serverProviderPlans, formData.server_provider_id, []).map(option => (
-            <option
-              key={option.name}
-              value={option.name}
+            <TextField
+              fullWidth
+              label="Select server provider"
+              margin="dense"
+              name="server_provider_id"
+              onChange={serverChanged}
+              required
+              select
+              SelectProps={{ native: true }}
+              value={formData.server_provider_id}
+              variant="outlined"
+              helperText={hasError(formErrors, 'server_provider_id') ? getError(formErrors, 'server_provider_id') : 'Please select your server provider'}
+              error={hasError(formErrors, 'server_provider_id')}
             >
-              {option.label}
-            </option>
-          ))}
-        </TextField>
-      </Grid>
+              <option selected>Please select</option>
+              {serverProviders.map(option => (
+                <option
+                  key={option.name}
+                  value={option.id}
+                >
+                  {option.name}
+                </option>
+              ))}
+            </TextField>
+          </Grid>
+          <Grid
+            item
+            md={12}
+            xs={12}
+          >
+            <TextField
+              fullWidth
+              label="Select your plan"
+              margin="dense"
+              name="plan"
+              onChange={handleChange}
+              required
+              select
+              SelectProps={{ native: true }}
+              value={formData.plan}
+              variant="outlined"
+              helperText={hasError(formErrors, 'plan') ? getError(formErrors, 'plan') : 'Please select your plan for this provider'}
+              error={hasError(formErrors, 'plan')}
+            >
+              <option selected>Please select</option>
+              {_.get(serverProviderPlans, formData.server_provider_id, []).map(option => (
+                <option
+                  key={option.name}
+                  value={option.name}
+                >
+                  {option.label}
+                </option>
+              ))}
+            </TextField>
+          </Grid>
+        </React.Fragment>
+      )}
 
       {/* Regions */}
       {formData.plan !== null && (

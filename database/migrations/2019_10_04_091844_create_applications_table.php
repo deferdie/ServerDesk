@@ -38,6 +38,7 @@ class CreateApplicationsTable extends Migration
                 'deploying',
             ])->default('creating');
             $table->boolean('ssl_enabled')->default(false);
+            $table->boolean('redirect_ssl')->default(false);
             $table->boolean('active')->default(true);
             $table->timestamps();
         });

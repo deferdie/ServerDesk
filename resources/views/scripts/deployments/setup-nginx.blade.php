@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ## Create the Nginx config files
+echo '{!! view("scripts.nginx.nginx-before", ["application" => $application])->render()!!}' > /etc/nginx/serverdesk/{{$application->domain}}.before
 echo '{!! view("scripts.nginx.nginx-head", ["application" => $application])->render()!!}' > /etc/nginx/serverdesk/{{$application->domain}}.head
 echo '{!! view("scripts.nginx.nginx-main", ["application" => $application])->render()!!}' > /etc/nginx/serverdesk/{{$application->domain}}.main
 

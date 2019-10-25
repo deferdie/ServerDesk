@@ -1,3 +1,5 @@
+include /etc/nginx/serverdesk/{{$application->domain}}.before;
+
 server {
     include /etc/nginx/serverdesk/{{$application->domain}}.head;
     

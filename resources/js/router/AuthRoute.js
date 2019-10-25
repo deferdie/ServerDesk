@@ -29,11 +29,11 @@ const AuthRoute = ({ component: Component, ...rest }) => (
           }
 
           // Send the user to the setup page if they have not completed it
-          if (_.get(user, 'is_admin', 0) === 1 && _.get(user, 'welcome_completed', 0) === 0) {
-            if (props.location.pathname !== '/setup') {
-              props.history.push('/setup');
-            }
-          }
+          // if (_.get(user, 'is_admin', 0) === 1 && _.get(user, 'welcome_completed', 0) === 0) {
+          //   if (props.location.pathname !== '/setup') {
+          //     props.history.push('/setup');
+          //   }
+          // }
 
           return authenticated ? (
             <AppLayoutRoute component={Component} {...props} />

@@ -71,8 +71,8 @@ const MySQLDatabaseTable = (props) => {
 
 MySQLDatabaseTable.propTypes = {
   databases: PropTypes.array,
-  setShowDatabaseUserForm: PropTypes.object,
-  setShowDatabaseDeleteConfirm: PropTypes.object
+  setShowDatabaseUserForm: PropTypes.func,
+  setShowDatabaseDeleteConfirm: PropTypes.func
 };
 
 export default MySQLDatabaseTable;

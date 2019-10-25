@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 import _ from 'lodash';
 import { useToasts } from 'react-toast-notifications';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 // Components
 import {
@@ -23,8 +25,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ServerList = () => {
-  const { Echo } = window;
+const ServerList = (props) => {
+  const { auth } = props;
   const classes = useStyles();
   const { addToast } = useToasts();
   const [servers, setServers] = useState([]);
@@ -76,32 +78,30 @@ const ServerList = () => {
 
   const connectServerToSocket = (server) => {
     const serverCopy = [...servers];
-    if (Echo) {
-      Echo.private(`server.${server.id}`).listen('ServerUpdated', data => {
-        let serverToUpdate = _.findIndex(serverCopy, function (o) {
-          return o.id === data.server.id;
-        });
+    auth.echo.private(`server.${server.id}`).listen('ServerUpdated', data => {
+      let serverToUpdate = _.findIndex(serverCopy, function (o) {
+        return o.id === data.server.id;
+      });
 
-        serverCopy.splice(serverToUpdate, 1, data.server);
+      serverCopy.splice(serverToUpdate, 1, data.server);
+      setServers(serverCopy);
+      addToast(`Server '${data.server.name}' updated`, {
+        appearance: 'success',
+        autoDismiss: true
+      });
+    }).listen('ServerFailedToCreate', data => {
+      let serverToRemove = _.findIndex(serverCopy, function (o) {
+        return o.id === data.server;
+      });
+      if (serverToRemove) {
+        serverCopy.splice(serverToRemove, 1);
         setServers(serverCopy);
-        addToast(`Server '${data.server.name}' updated`, {
-          appearance: 'success',
+        addToast(`Server failed to create`, {
+          appearance: 'error',
           autoDismiss: true
         });
-      }).listen('ServerFailedToCreate', data => {
-        let serverToRemove = _.findIndex(serverCopy, function (o) {
-          return o.id === data.server;
-        });
-        if (serverToRemove) {
-          serverCopy.splice(serverToRemove, 1);
-          setServers(serverCopy);
-          addToast(`Server failed to create`, {
-            appearance: 'error',
-            autoDismiss: true
-          });
-        }
-      });
-    }
+      }
+    });
   };
 
   if (loading) {
@@ -135,4 +135,10 @@ const ServerList = () => {
   );
 };
 
-export default ServerList;
+ServerList.propTypes = {
+  auth: PropTypes.object
+};
+
+const mapStateToProps = ({ auth, echo }) => ({ auth, echo });
+
+export default connect(mapStateToProps, null, null)(ServerList);

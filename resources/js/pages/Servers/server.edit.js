@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
@@ -27,9 +28,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ServerEdit = (props) => {
-  const { match } = props;
+  const { match, auth } = props;
   const classes = useStyles();
-  const { Echo } = window;
   const { addToast } = useToasts();
   const [server, setServer] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -37,7 +37,7 @@ const ServerEdit = (props) => {
   useEffect(() => {
     axios.get(`/api/servers/${match.params.server}`).then((data) => {
       setServer(data.data.data);
-      Echo.private(`server.${match.params.server}`)
+      auth.echo.private(`server.${match.params.server}`)
         .listen('ServerUpdated', data => {
           addToast(data.message, { appearance: 'success', autoDismiss: true });
           setServer(data.server);
@@ -104,7 +104,10 @@ const ServerEdit = (props) => {
 };
 
 ServerEdit.propTypes = {
+  auth: PropTypes.object,
   match: PropTypes.object
 };
 
-export default ServerEdit;
+const mapStateToProps = ({ auth, echo }) => ({ auth, echo });
+
+export default connect(mapStateToProps, null, null)(ServerEdit);
