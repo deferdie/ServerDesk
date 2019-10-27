@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Server;
-use Illuminate\Http\Request;
-use App\Http\Resources\ServerServiceResource;
+use App\ServerService;
 use App\Jobs\InstallNodeJS;
+use App\Filters\ServerServiceFilter;
+use App\Http\Resources\ServerServiceResource;
 
 class ServerServiceController extends Controller
 {
@@ -14,9 +15,10 @@ class ServerServiceController extends Controller
      *
      * @return void
      */
-    public function index(Server $server)
+    public function index(Server $server, ServerServiceFilter $filter)
     {
-        $services = $server->services;
+        $services = ServerService::where('server_id', $server->id)
+            ->filterResult($filter)->get();
 
         return ServerServiceResource::collection($services);
     }

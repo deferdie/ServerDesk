@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
 class ServerService extends Model
 {
+    use Filterable;
+
     /**
      * The fillable attributes for this model
      *
