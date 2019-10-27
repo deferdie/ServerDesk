@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Server;
 use App\ServerService;
 use App\Jobs\InstallNodeJS;
+use App\Http\Controllers\Controller;
 use App\Filters\ServerServiceFilter;
 use App\Http\Resources\ServerServiceResource;
 

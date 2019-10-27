@@ -35,6 +35,12 @@ Route::name('api.')->namespace('Api')->group(function () {
             Route::post('logout', 'LogoutController@logout')->name('logout');
         });
 
+        // Server Services
+        Route::get('servers/{server}/services', 'ServerServiceController@index')->name('server.services');
+
+        // Server services
+        Route::post('servers/{server}/restart-service', 'ServerServiceRestartController@restart');
+
         // Server processes
         Route::put('servers/{server}/process/{process}', 'ServerProcessController@update');
         Route::post('servers/{server}/process', 'ServerProcessController@store');
@@ -44,9 +50,6 @@ Route::name('api.')->namespace('Api')->group(function () {
         Route::put('servers/{server}/cron-job/{job}', 'CronJobController@update');
         Route::post('servers/{server}/cron-job', 'CronJobController@store');
         Route::delete('servers/{server}/cron-job/{job}', 'CronJobController@destroy');
-        
-        // Server services
-        Route::post('servers/{server}/restart-service', 'ServerServiceRestartController@restart');
 
         // Mysql users
         Route::get('servers/{server}/mysql-users', 'MySQLUserController@index')->name('server.mysql-user.index');
