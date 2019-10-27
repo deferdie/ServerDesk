@@ -20,6 +20,7 @@ class CreateServerServicesTable extends Migration
             $table->enum('status', [
                 'running',
                 'stopped',
+                'installing',
                 'restarting'
             ]);
             $table->timestamps();

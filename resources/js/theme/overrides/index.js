@@ -6,8 +6,10 @@ import MuiTableHead from './MuiTableHead';
 import MuiTypography from './MuiTypography';
 import MuiCardActions from './MuiCardActions';
 import MuiDivider from './MuiDivider';
+import MuiCard from './MuiCard';
 
 export default {
+  MuiCard,
   MuiPaper,
   MuiButton,
   MuiDivider,

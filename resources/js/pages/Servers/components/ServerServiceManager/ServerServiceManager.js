@@ -12,22 +12,16 @@ import {
   CardContent,
   Typography
 } from '@material-ui/core';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/styles';
 import SettingsBackupRestoreIcon from '@material-ui/icons/SettingsBackupRestore';
 import axios from 'axios';
 import _ from 'lodash';
 import ClipLoader from 'react-spinners/ClipLoader';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    marginBottom: '15px'
-  }
-}));
+// Components
+import { ServerSoftwareManager } from '../index';
 
 const ServerServiceManager = (props) => {
-  const { server, setServer, className } = props;
-  const classes = useStyles();
+  const { server, setServer } = props;
 
   const restartService = (service) => {
     axios.post(`/api/servers/${server.id}/restart-service`, {
@@ -38,9 +32,7 @@ const ServerServiceManager = (props) => {
   };
 
   return (
-    <Card
-      className={clsx(classes.root, className)}
-    >
+    <Card>
       <CardContent>
         <React.Fragment>
           <Typography
@@ -56,7 +48,7 @@ const ServerServiceManager = (props) => {
             You can restart some of your server processes here
           </Typography>
           {/* Databases */}
-          <div className={classes.inner}>
+          <div>
             <Table>
               <TableHead>
                 <TableRow>
@@ -69,7 +61,7 @@ const ServerServiceManager = (props) => {
                   return (
                     <TableRow
                       key={service.id}
-                      className={classes.tableRow}
+
                       hover
                     >
                       <TableCell>
@@ -104,6 +96,12 @@ const ServerServiceManager = (props) => {
                 })}
               </TableBody>
             </Table>
+
+            {/* Avaliable services to install */}
+            <ServerSoftwareManager
+              server={server}
+              setServer={setServer}
+            />
           </div>
         </React.Fragment>
       </CardContent>
@@ -113,7 +111,6 @@ const ServerServiceManager = (props) => {
 };
 
 ServerServiceManager.propTypes = {
-  className: PropTypes.object,
   server: PropTypes.object.isRequired,
   setServer: PropTypes.func.isRequired
 };

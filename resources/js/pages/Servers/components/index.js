@@ -10,3 +10,4 @@ export { default as ServerProcessManager } from './ServerProcessManager';
 export { default as ProcessForm } from './ProcessForm';
 export { default as CronJobForm } from './CronJobForm';
 export { default as ServerCronJobs } from './ServerCronJobs';
+export { default as ServerSoftwareManager } from './ServerSoftwareManager';

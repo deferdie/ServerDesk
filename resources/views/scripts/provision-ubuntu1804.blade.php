@@ -47,9 +47,7 @@ sudo systemctl enable nginx
 
 ## Install Node
 @if ($server->wants_node)
-    sudo apt-get install curl
-    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-    sudo apt-get install nodejs -y
+    @include('scripts.deployments.install-nodejs')
 @endif
 
 ## Start Nginx
