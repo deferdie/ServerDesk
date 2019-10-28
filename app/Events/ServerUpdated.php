@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Http\Resources\ServerResource;
 use App\Server;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -32,7 +33,7 @@ class ServerUpdated implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(Server $server, string $message = null)
+    public function __construct(ServerResource $server, string $message = null)
     {
         $this->server = $server;
         $this->message = $message;

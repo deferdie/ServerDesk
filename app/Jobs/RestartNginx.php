@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Server;
 use App\ServerService;
 use App\Events\ServerUpdated;
+use App\Http\Resources\ServerResource;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -18,7 +19,7 @@ class RestartNginx implements ShouldQueue
     /**
      * The server the application is deployed on
      *
-     * @var server
+     * @var \App\Server
      */
     protected $server;
     
@@ -52,6 +53,6 @@ class RestartNginx implements ShouldQueue
         $this->service->status = 'running';
         $this->service->save();
 
-        broadcast(new ServerUpdated($this->server->fresh(), 'Nginx Restarted'));
+        broadcast(new ServerUpdated(new ServerResource($this->server->fresh()), 'Nginx Restarted'));
     }
 }

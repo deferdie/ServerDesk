@@ -33,8 +33,17 @@ class ServerServiceController extends Controller
      */
     public function store(Server $server, Service $service)
     {
+        $serverService = ServerService::create([
+            'server_id' => $server->id,
+            'service_id' => $service->id,
+            'status' => 'installinga'
+        ]);
+
         if ($service->name == 'NodeJS') {
-            InstallNodeJS::dispatch($server);
+            // Create the service for the server
+            InstallNodeJS::dispatch($server, $serverService);
         }
+
+        return new ServerServiceResource($serverService);
     }
 }

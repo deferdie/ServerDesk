@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Server;
 use App\ServerService;
 use App\Events\ServerUpdated;
+use App\Http\Resources\ServerResource;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -52,6 +53,6 @@ class RestartPHP implements ShouldQueue
         $this->service->status = 'running';
         $this->service->save();
 
-        broadcast(new ServerUpdated($this->server->fresh(), 'PHP Restarted'));
+        broadcast(new ServerUpdated(new ServerResource($this->server->fresh()), 'PHP Restarted'));
     }
 }

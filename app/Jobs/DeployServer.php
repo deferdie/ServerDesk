@@ -10,9 +10,10 @@ use App\Events\ServerCreated;
 use App\Events\ServerUpdated;
 use Illuminate\Bus\Queueable;
 use App\Mail\ServerCreatedMail;
-use App\Events\ServerFailedToCreate;
 use Illuminate\Support\Facades\Mail;
+use App\Events\ServerFailedToCreate;
 use App\ServerProviders\Vultr\Vultr;
+use App\Http\Resources\ServerResource;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -167,7 +168,7 @@ class DeployServer implements ShouldQueue
         $this->server->save();
         $this->server = $this->server->fresh();
 
-        broadcast(new ServerUpdated($this->server));
+        broadcast(new ServerUpdated(new ServerResource($this->server)));
         broadcast(new ServerCreated($this->server));
 
         // Lets send an email to the user to provide them their credentials

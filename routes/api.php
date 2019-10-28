@@ -36,7 +36,9 @@ Route::name('api.')->namespace('Api')->group(function () {
         });
 
         // Server Services
-        Route::get('servers/{server}/services', 'ServerServiceController@index')->name('server.services');
+        Route::get('servers/{server}/services', 'ServerServiceController@index')->name('server.services.index');
+        Route::post('servers/{server}/services', 'ServerServiceController@store')->name('server.services.store');
+        Route::post('servers/{server}/services/{service}', 'ServerServiceController@store')->name('server.services.store');
 
         // Server services
         Route::post('servers/{server}/restart-service', 'ServerServiceRestartController@restart');

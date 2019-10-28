@@ -9,14 +9,25 @@ import {
   TableRow,
   Typography
 } from '@material-ui/core';
-import clsx from 'clsx';
+import _ from 'lodash';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import Axios from 'axios';
 
 const ServerSoftwareManager = (props) => {
   const {
     server,
-    serServer
+    setServer
   } = props;
+
+  const installService = (service, index) => {
+    const s = {...server};
+    s.avaliable_service_installs.splice(index, 1);
+    setServer(s);
+
+    Axios.post(`/api/servers/${server.id}/services/${service.id}`).then((data) => {
+      console.log(data);
+    });
+  };
 
   return (
     <React.Fragment>
@@ -34,27 +45,32 @@ const ServerSoftwareManager = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow
-            hover
-          >
-            <TableCell>
-              <Typography variant="body1">
-                NodeJS
-              </Typography>
-            </TableCell>
-            <TableCell style={{ textAlign: 'right' }}>
-              <React.Fragment>
-                <Fab
-                  size="small"
-                  color="secondary"
-                  aria-label="edit"
-                  onClick={() => console.log('install service')}
-                >
-                  <GetAppIcon />
-                </Fab>
-              </React.Fragment>
-            </TableCell>
-          </TableRow>
+          {_.get(server, 'avaliable_service_installs', []).map((service, index) => {
+            return (
+              <TableRow
+                hover
+                key={service.id}
+              >
+                <TableCell>
+                  <Typography variant="body1">
+                    {service.name}
+                  </Typography>
+                </TableCell>
+                <TableCell style={{ textAlign: 'right' }}>
+                  <React.Fragment>
+                    <Fab
+                      size="small"
+                      color="secondary"
+                      aria-label="edit"
+                      onClick={() => installService(service, index)}
+                    >
+                      <GetAppIcon />
+                    </Fab>
+                  </React.Fragment>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </React.Fragment>

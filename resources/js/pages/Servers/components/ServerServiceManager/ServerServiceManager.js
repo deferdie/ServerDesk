@@ -31,6 +31,8 @@ const ServerServiceManager = (props) => {
     });
   };
 
+  console.log(server)
+
   return (
     <Card>
       <CardContent>
@@ -88,6 +90,13 @@ const ServerServiceManager = (props) => {
                             size={20}
                             color={'#123abc'}
                             loading={service.status === 'restarting'}
+                          />
+
+                          <ClipLoader
+                            sizeUnit={'px'}
+                            size={20}
+                            color={'#123abc'}
+                            loading={service.status === 'installing'}
                           />
                         </React.Fragment>
                       </TableCell>
