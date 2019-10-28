@@ -12,14 +12,4 @@ class ServerServiceFilter extends Filter
     protected $filterable = [
         'available'
     ];
-
-    /**
-     * Returns all of the services that can be installed 
-     *
-     * @return void
-     */
-    public function available($query)
-    {
-
-    }
 }

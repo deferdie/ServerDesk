@@ -89,22 +89,16 @@ abstract class Filter
         $appliedFilters = [];
         foreach ($this->filterable as $filterField => $filterMethod) {
             if (method_exists($this, $filterMethod)) {
-                if ($this->request->exists($filterField)) {
+                if ($this->request->exists($filterMethod)) {
                     $this->$filterMethod($this->request->$filterField);
                     $appliedFilters[$filterField] = $this->request->$filterField;
                 } else if (substr($filterField, 0, strlen(self::REQUEST_PREFIX)) == self::REQUEST_PREFIX) {
-                    
                     // This filter requires the full request object
                     $this->$filterMethod($this->request);
                     $appliedFilters[substr($filterField, strlen(self::REQUEST_PREFIX))] = $this->request;
                 }
             }
         }
-
-        // Save filter data in the session
-        session([
-            'filtering' => count($appliedFilters) ? $appliedFilters : null,
-        ]);
 
         return $this->builder;
     }
