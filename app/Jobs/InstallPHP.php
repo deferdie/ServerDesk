@@ -4,7 +4,9 @@ namespace App\Jobs;
 
 use App\Server;
 use App\ServerService;
+use App\Events\ServerUpdated;
 use Illuminate\Bus\Queueable;
+use App\Http\Resources\ServerResource;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -46,9 +48,11 @@ class InstallPHP implements ShouldQueue
      */
     public function handle()
     {
-        $this->server->exec(
-            view('scripts.deployments.install-php72')->render()
-        );
+        if ($this->server->php_version === '7.2') {
+            $this->server->exec(
+                view('scripts.deployments.install-php72')->render()
+            );
+        }
 
         $this->service->status = 'running';
         $this->service->save();

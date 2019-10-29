@@ -13,6 +13,7 @@ import Axios from 'axios';
 import Modal from '../../../../components/Modal';
 
 const ServerSoftwareManager = (props) => {
+  const [loading, setLoading] = useState(false);
   const [service, setService] = useState({});
   const [installServiceForm, setInstallServiceForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -42,13 +43,15 @@ const ServerSoftwareManager = (props) => {
   };
 
   const installService = () => {
+    setLoading(true);
     // const s = {...server};
 
     // s.avaliable_service_installs.splice(index, 1);
     // setServer(s);
 
     Axios.post(`/api/servers/${server.id}/services/${service.id}`, formData).then((data) => {
-      console.log(data);
+      setLoading(false);
+      setInstallServiceForm(false);
     });
   };
 
@@ -73,6 +76,7 @@ const ServerSoftwareManager = (props) => {
         open={installServiceForm}
         onSave={installService}
         onClose={() => setInstallServiceForm(false)}
+        loading={loading}
       >
         <TextField
           fullWidth

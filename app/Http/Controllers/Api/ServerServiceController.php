@@ -36,24 +36,23 @@ class ServerServiceController extends Controller
      */
     public function store(ServerServiceStoreRequest $request, Server $server, Service $service)
     {
-        \Log::info($request->all());
-        // $serverService = ServerService::create([
-        //     'server_id' => $server->id,
-        //     'service_id' => $service->id,
-        //     'status' => 'installing'
-        // ]);
+        $serverService = ServerService::create([
+            'server_id' => $server->id,
+            'service_id' => $service->id,
+            'status' => 'installing'
+        ]);
 
-        // if ($service->name == 'NodeJS') {
-        //     InstallNodeJS::dispatch($server, $serverService);
-        // }
+        if ($service->name == 'NodeJS') {
+            InstallNodeJS::dispatch($server, $serverService);
+        }
         
-        // if ($service->name == 'PHP-FPM') {
-        //     $server->wants_php = true;
-        //     $server->php_version = $request->php_version;
-        //     $server->save();
-        //     InstallPHP::dispatch($server, $serverService);
-        // }
+        if ($service->name == 'PHP-FPM') {
+            $server->wants_php = true;
+            $server->php_version = $request->php_version;
+            $server->save();
+            InstallPHP::dispatch($server, $serverService);
+        }
 
-        // return new ServerServiceResource($serverService);
+        return new ServerServiceResource($serverService);
     }
 }
