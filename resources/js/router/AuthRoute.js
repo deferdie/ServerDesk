@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { ThemeProvider } from '@material-ui/styles';
 import theme from '../theme';
 import { Main as MainLayout } from '../layouts';
-import _ from 'lodash';
+// import _ from 'lodash';
 
 const propTypes = {
   component: PropTypes.func.isRequired,

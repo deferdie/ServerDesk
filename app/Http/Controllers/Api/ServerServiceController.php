@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Server;
+use App\Service;
 use App\ServerService;
 use App\Jobs\InstallNodeJS;
 use App\Http\Controllers\Controller;
@@ -36,7 +37,7 @@ class ServerServiceController extends Controller
         $serverService = ServerService::create([
             'server_id' => $server->id,
             'service_id' => $service->id,
-            'status' => 'installinga'
+            'status' => 'installing'
         ]);
 
         if ($service->name == 'NodeJS') {

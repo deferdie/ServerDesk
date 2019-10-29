@@ -58,15 +58,13 @@ const SidebarNav = props => {
   const {
     pages,
     className,
-    setShowNotifications,
-    ...rest
+    setShowNotifications
   } = props;
 
   const classes = useStyles();
 
   return (
     <List
-      {...rest}
       className={clsx(classes.root, className)}
     >
       {pages.map(page => (

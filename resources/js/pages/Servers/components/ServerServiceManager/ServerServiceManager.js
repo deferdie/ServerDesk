@@ -31,8 +31,6 @@ const ServerServiceManager = (props) => {
     });
   };
 
-  console.log(server)
-
   return (
     <Card>
       <CardContent>

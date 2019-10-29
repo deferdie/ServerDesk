@@ -73,7 +73,6 @@ const Topbar = props => {
 
   return (
     <AppBar
-      {...rest}
       className={clsx(classes.root, className)}
     >
       <Toolbar>

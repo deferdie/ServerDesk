@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ServerProfile = (props) => {
-  const { className, server, history, ...rest } = props;
+  const { className, server, history } = props;
   const classes = useStyles();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -48,7 +48,6 @@ const ServerProfile = (props) => {
 
   return (
     <Card
-      {...rest}
       className={clsx(classes.root, className)}
     >
       <CardContent>
