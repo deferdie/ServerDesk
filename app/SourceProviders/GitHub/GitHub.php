@@ -78,39 +78,38 @@ class GitHub
      */
     public function createSSHKey(Server $server)
     {
-        if ($this->sourceProvider->source_provider_ssh_key_id === null) {
-            // Create the key
+        // Get the list of ssh keys and check if the key exists
+        $keys = $this->client->get('/user/keys');
+                    
+        $keys = json_decode($keys->getBody(true)->getContents());
+
+        $keyFound = false;
+
+        if (is_array($keys)) {
+            foreach ($keys as $key) {
+                if ($key->title === 'ServerDesk ('.$server->name.')') {
+                    $this->sourceProvider->source_provider_ssh_key_id = $key->id;
+                    $this->sourceProvider->save();
+                    $keyFound = true;
+                    break;
+                }
+            }
+        }
+
+        if ($keyFound === false) {
             try {
                 $response = $this->client->post('/user/keys', [
                     'json' => [
-                        'title' => 'ServerDesk',
+                        'title' => 'ServerDesk ('.$server->name.')',
                         'key' => $server->credential->public_key
                     ]
                 ]);
-
+    
                 $response = json_decode($response->getBody(true)->getContents());
-
+    
                 if (is_object($response)) {
                     $this->sourceProvider->source_provider_ssh_key_id = $response->id;
                     $this->sourceProvider->save();
-                }
-
-            } catch (ClientException $e) {
-                if ($e->hasResponse() && $e->getResponse()->getStatusCode() === 422) {
-                    // Get the list of ssh keys
-                    $keys = $this->client->get('/user/keys');
-                    
-                    $keys = json_decode($keys->getBody(true)->getContents());
-
-                    if (is_array($keys)) {
-                        foreach ($keys as $key) {
-                            if ($key->title === 'ServerDesk') {
-                                $this->sourceProvider->source_provider_ssh_key_id = $key->id;
-                                $this->sourceProvider->save();
-                                break;
-                            }
-                        }
-                    }
                 }
             } catch (\Exception $e) {
                 \Log::info($e);

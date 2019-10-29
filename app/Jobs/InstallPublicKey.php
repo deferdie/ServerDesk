@@ -40,5 +40,8 @@ class InstallPublicKey implements ShouldQueue
         $this->key->server->exec(view('scripts.deployments.install-public-key', [
             'key' => $this->key
         ])->render());
+
+        $this->key->status = 'running';
+        $this->key->save();
     }
 }
