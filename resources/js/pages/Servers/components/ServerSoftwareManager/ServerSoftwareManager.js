@@ -18,7 +18,8 @@ const ServerSoftwareManager = (props) => {
   const [installServiceForm, setInstallServiceForm] = useState(false);
   const [formData, setFormData] = useState({
     service_id: '',
-    php_version: ''
+    php_version: '',
+    mysql_version: ''
   });
 
   const {
@@ -127,6 +128,42 @@ const ServerSoftwareManager = (props) => {
             {[
               '7.2'
             ].map((version, index) => {
+              return (
+                <option
+                  key={version}
+                  value={version}
+                >
+                  {version}
+                </option>
+              );
+            })}
+          </TextField>
+        )}
+
+        {_.get(service, 'name', []) === 'MySQL' && (
+          <TextField
+            fullWidth
+            label="Select MySQL version"
+            margin="dense"
+            name="mysql_version"
+            required
+            select
+            onChange={(e) => {
+              handleChange({
+                target: {
+                  value: e.target.value,
+                  name: 'mysql_version'
+                }
+              });
+            }}
+            SelectProps={{ native: true }}
+            value={formData.mysql_version}
+            variant="outlined"
+          >
+            <option selected>Please select</option>
+            {[
+              '5.7'
+            ].map((version) => {
               return (
                 <option
                   key={version}

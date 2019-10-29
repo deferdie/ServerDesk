@@ -6,6 +6,7 @@ use App\Server;
 use App\Service;
 use App\ServerService;
 use App\Jobs\InstallPHP;
+use App\Jobs\InstallMySQL;
 use App\Jobs\InstallNodeJS;
 use App\Http\Controllers\Controller;
 use App\Filters\ServerServiceFilter;
@@ -51,6 +52,13 @@ class ServerServiceController extends Controller
             $server->php_version = $request->php_version;
             $server->save();
             InstallPHP::dispatch($server, $serverService);
+        }
+        
+        if ($service->name == 'MySQL') {
+            $server->wants_mysql = true;
+            $server->mysql_version = $request->mysql_version;
+            $server->save();
+            InstallMySQL::dispatch($server, $serverService);
         }
 
         return new ServerServiceResource($serverService);
