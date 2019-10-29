@@ -38,6 +38,7 @@ class InstallNodeJS implements ShouldQueue
     public function __construct(Server $server, ServerService $service)
     {
         $this->server = $server;
+        $this->service = $service;
     }
 
     /**
