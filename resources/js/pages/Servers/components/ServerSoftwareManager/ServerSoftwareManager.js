@@ -1,30 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropPypes from 'prop-types';
 import {
-  Fab,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
+  Button,
+  TextField,
   Typography
 } from '@material-ui/core';
 import _ from 'lodash';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import Axios from 'axios';
 
+// Components
+import Modal from '../../../../components/Modal';
+
 const ServerSoftwareManager = (props) => {
+  const [service, setService] = useState({});
+  const [installServiceForm, setInstallServiceForm] = useState(false);
+  const [formData, setFormData] = useState({
+    service_id: '',
+    php_version: ''
+  });
+
   const {
     server,
     setServer
   } = props;
 
-  const installService = (service, index) => {
-    const s = {...server};
-    s.avaliable_service_installs.splice(index, 1);
-    setServer(s);
+  const serviceChanged = (e) => {
+    let s = _.get(server, `avaliable_service_installs.${e.target.value}`);
+    setService(s);
+    setFormData({
+      ...formData,
+      service_id: e.target.value
+    });
+  };
 
-    Axios.post(`/api/servers/${server.id}/services/${service.id}`).then((data) => {
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const installService = () => {
+    // const s = {...server};
+
+    // s.avaliable_service_installs.splice(index, 1);
+    // setServer(s);
+
+    Axios.post(`/api/servers/${server.id}/services/${service.id}`, formData).then((data) => {
       console.log(data);
     });
   };
@@ -37,42 +60,81 @@ const ServerSoftwareManager = (props) => {
       >
         Install additional services
       </Typography>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Service</TableCell>
-            <TableCell style={{ textAlign: 'right' }}>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
+      <Button
+        color="secondary"
+        onClick={() => setInstallServiceForm(true)}
+      >
+        Install services
+      </Button>
+
+      <Modal
+        saveButton="Install service"
+        title="Service manager"
+        open={installServiceForm}
+        onSave={installService}
+        onClose={() => setInstallServiceForm(false)}
+      >
+        <TextField
+          fullWidth
+          label="What service would you like to install"
+          margin="dense"
+          name="service_id"
+          required
+          select
+          onChange={serviceChanged}
+          SelectProps={{ native: true }}
+          value={formData.service_id}
+          variant="outlined"
+        >
+          <option selected>Please select</option>
           {_.get(server, 'avaliable_service_installs', []).map((service, index) => {
             return (
-              <TableRow
-                hover
-                key={service.id}
+              <option
+                key={service.name}
+                value={index}
               >
-                <TableCell>
-                  <Typography variant="body1">
-                    {service.name}
-                  </Typography>
-                </TableCell>
-                <TableCell style={{ textAlign: 'right' }}>
-                  <React.Fragment>
-                    <Fab
-                      size="small"
-                      color="secondary"
-                      aria-label="edit"
-                      onClick={() => installService(service, index)}
-                    >
-                      <GetAppIcon />
-                    </Fab>
-                  </React.Fragment>
-                </TableCell>
-              </TableRow>
+                {service.name}
+              </option>
             );
           })}
-        </TableBody>
-      </Table>
+        </TextField>
+
+        {_.get(service, 'name', []) === 'PHP-FPM' && (
+          <TextField
+            fullWidth
+            label="Select PHP version"
+            margin="dense"
+            name="php_version"
+            required
+            select
+            onChange={(e) => {
+              handleChange({
+                target: {
+                  value: e.target.value,
+                  name: 'php_version'
+                }
+              });
+            }}
+            SelectProps={{ native: true }}
+            value={formData.php_version}
+            variant="outlined"
+          >
+            <option selected>Please select</option>
+            {[
+              '7.2'
+            ].map((version, index) => {
+              return (
+                <option
+                  key={version}
+                  value={version}
+                >
+                  {version}
+                </option>
+              );
+            })}
+          </TextField>
+        )}
+      </Modal>
     </React.Fragment>
   );
 };

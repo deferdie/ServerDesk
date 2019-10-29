@@ -2,8 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Events\ServerUpdated;
-use App\Http\Resources\ServerResource;
 use App\Server;
 use App\ServerService;
 use Illuminate\Bus\Queueable;
@@ -12,7 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class InstallNodeJS implements ShouldQueue
+class InstallPHP implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -49,11 +47,8 @@ class InstallNodeJS implements ShouldQueue
     public function handle()
     {
         $this->server->exec(
-            view('scripts.deployments.install-nodejs')->render()
+            view('scripts.deployments.install-php72')->render()
         );
-
-        $this->server->wants_node = true;
-        $this->server->save();
 
         $this->service->status = 'running';
         $this->service->save();
@@ -69,6 +64,9 @@ class InstallNodeJS implements ShouldQueue
     public function failed()
     {
         $this->service->delete();
+        $this->server->wants_php = false;
+        $this->server->php_version = null;
+        $this->server->save();
 
         broadcast(new ServerUpdated(new ServerResource($this->server->fresh())));
     }

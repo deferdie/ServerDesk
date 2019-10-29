@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Server;
 use App\Service;
 use App\ServerService;
+use App\Jobs\InstallPHP;
 use App\Jobs\InstallNodeJS;
 use App\Http\Controllers\Controller;
 use App\Filters\ServerServiceFilter;
+use App\Http\Requests\ServerServiceStoreRequest;
 use App\Http\Resources\ServerServiceResource;
 
 class ServerServiceController extends Controller
@@ -32,19 +34,26 @@ class ServerServiceController extends Controller
      * @param Service $service
      * @return void
      */
-    public function store(Server $server, Service $service)
+    public function store(ServerServiceStoreRequest $request, Server $server, Service $service)
     {
-        $serverService = ServerService::create([
-            'server_id' => $server->id,
-            'service_id' => $service->id,
-            'status' => 'installing'
-        ]);
+        \Log::info($request->all());
+        // $serverService = ServerService::create([
+        //     'server_id' => $server->id,
+        //     'service_id' => $service->id,
+        //     'status' => 'installing'
+        // ]);
 
-        if ($service->name == 'NodeJS') {
-            // Create the service for the server
-            InstallNodeJS::dispatch($server, $serverService);
-        }
+        // if ($service->name == 'NodeJS') {
+        //     InstallNodeJS::dispatch($server, $serverService);
+        // }
+        
+        // if ($service->name == 'PHP-FPM') {
+        //     $server->wants_php = true;
+        //     $server->php_version = $request->php_version;
+        //     $server->save();
+        //     InstallPHP::dispatch($server, $serverService);
+        // }
 
-        return new ServerServiceResource($serverService);
+        // return new ServerServiceResource($serverService);
     }
 }
