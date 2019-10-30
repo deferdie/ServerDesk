@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/styles';
 
 // Components
 import Server from '../Servers';
+import ServerProvider from '../ServerProviders';
 import SourceProvider from '../SourceProviders';
 import VerticalStepper from '../../components/VerticalStepper';
 
@@ -17,7 +18,7 @@ const formAction = () => {
   console.log('Submit foirm');
 };
 
-const SetUp = (props) => {
+const SetUp = () => {
   const classes = useStyles();
 
   return (
@@ -35,6 +36,15 @@ const SetUp = (props) => {
         },
         {
           title: 'Server Provider',
+          content: (
+            <ServerProvider
+              showList={false}
+            />
+          ),
+          error: () => {}
+        },
+        {
+          title: 'Servers',
           content: (
             <Server
               showList={false}

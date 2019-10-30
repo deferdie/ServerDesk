@@ -113,12 +113,12 @@ const ServerList = (props) => {
 
   if (showList === false) {
     return (
-      <Button
-        color="primary"
-        variant="contained"
-      >
-        Create Server
-      </Button>
+      <ServerForm
+        formErrors={serverFormErrors}
+        serverFormData={serverFormData}
+        formAction={submitServerCreateForm}
+        setServerFormData={setServerFormData}
+      />
     );
   }
 
@@ -152,7 +152,8 @@ ServerList.defaultProps = {
 };
 
 ServerList.propTypes = {
-  auth: PropTypes.object
+  auth: PropTypes.object,
+  showList: PropTypes.bool
 };
 
 const mapStateToProps = ({ auth, echo }) => ({ auth, echo });
