@@ -26,7 +26,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const VerticalStepper = (props) => {
-  const { steps, onFinish, style } = props;
+  const {
+    steps,
+    style,
+    onFinish,
+    setActiveStepOverride
+  } = props;
 
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
@@ -36,6 +41,11 @@ const VerticalStepper = (props) => {
 
     if (activeStep + 1 === steps.length) {
       onFinish();
+      
+      console.log(setActiveStepOverride);
+      // if (setActiveStepOverride) {
+      //   setActiveStep(setActiveStepOverride);
+      // }
     }
   };
 
@@ -121,6 +131,7 @@ VerticalStepper.defaultProps = {
 VerticalStepper.propTypes = {
   style: PropTypes.object,
   onFinish: PropTypes.func,
+  setActiveStepOverride: PropTypes.any,
   steps: PropTypes.array.isRequired
 };
 

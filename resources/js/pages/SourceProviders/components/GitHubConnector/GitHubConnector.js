@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const GitHubConnector = (props) => {
-  const { location, match, sourceProvider, setProviders } = props;
+  const { location, match, sourceProvider, setProviders, history } = props;
   const classes = useStyles();
   const [connecting, setConnecting] = useState(false);
 
@@ -43,6 +43,7 @@ const GitHubConnector = (props) => {
       }).then(data => {
         setConnecting(false);
         setProviders(data.data.data);
+        history.push(location.pathname);
       });
     }
   }, []);
@@ -96,6 +97,7 @@ const GitHubConnector = (props) => {
 
 GitHubConnector.propTypes = {
   match: PropTypes.object,
+  history: PropTypes.object,
   location: PropTypes.object,
   setProviders: PropTypes.func,
   sourceProvider: PropTypes.object
