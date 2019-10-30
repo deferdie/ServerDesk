@@ -30,7 +30,7 @@ const VerticalStepper = (props) => {
     steps,
     style,
     onFinish,
-    setActiveStepOverride
+    activeStepOverride
   } = props;
 
   const classes = useStyles();
@@ -41,11 +41,10 @@ const VerticalStepper = (props) => {
 
     if (activeStep + 1 === steps.length) {
       onFinish();
-      
-      console.log(setActiveStepOverride);
-      // if (setActiveStepOverride) {
-      //   setActiveStep(setActiveStepOverride);
-      // }
+
+      if (activeStepOverride) {
+        setActiveStep(1);
+      }
     }
   };
 
@@ -125,13 +124,14 @@ const VerticalStepper = (props) => {
 };
 
 VerticalStepper.defaultProps = {
-  style: {}
+  style: {},
+  activeStepOverride: false
 };
 
 VerticalStepper.propTypes = {
   style: PropTypes.object,
   onFinish: PropTypes.func,
-  setActiveStepOverride: PropTypes.any,
+  activeStepOverride: PropTypes.any,
   steps: PropTypes.array.isRequired
 };
 

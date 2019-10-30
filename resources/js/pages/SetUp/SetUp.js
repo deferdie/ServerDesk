@@ -30,7 +30,6 @@ const SetUp = () => {
         if (data.data.data.length > 0) {
           setHasSourceProvider(true);
         } else {
-          setLoading(false);
           // Set toast warning about this
           setActiveStepOverride(0);
         }
@@ -38,13 +37,13 @@ const SetUp = () => {
     }
 
     // Check if a user has setup a server provider
-    if (hasSourceProvider === false) {
+    if (hasServerProvider === false) {
       Axios.get('/api/user/server-providers').then((data) => {
         if (data.data.data.length > 0) {
-          setHasSourceProvider(true);
+          setHasServerProvider(true);
         } else {
-          setLoading(false);
           // Set toast warning about this
+          setLoading(false);
           setActiveStepOverride(1);
         }
       });
@@ -70,7 +69,7 @@ const SetUp = () => {
       style={{width: '100%'}}
       className={classes.root}
       onFinish={formAction}
-      setActiveStepOverride={activeStepOverride}
+      activeStepOverride={activeStepOverride}
       steps={[
         {
           title: 'Source Providers',
