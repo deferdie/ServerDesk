@@ -34,6 +34,12 @@ class SourceProvider extends Model
     {
         $user = auth()->user();
 
-        return $this->hasOne(UserSourceProvider::class, 'source_provider_id', 'id')->where('user_id', $user->id);
+        $relation = $this->hasOne(UserSourceProvider::class, 'source_provider_id', 'id');
+        
+        if ($user) {
+            $relation->where('user_id', $user->id);
+        }
+
+        return $relation;
     }
 }
