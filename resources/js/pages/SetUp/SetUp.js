@@ -50,9 +50,12 @@ const SetUp = () => {
     }
 
     // Set the setup as complete
-    if (hasSourceProvider === true && hasServerProvider === true) {
-      // Set the user setup to completed
-    }
+    Axios.put('/api/user', {
+      welcome_completed: true
+    }).then((data) => {
+      // Fire a happy notification to set as complete
+      // Update the user in state and redirect the user to the applications page
+    });
   };
 
   if (loading === true) {

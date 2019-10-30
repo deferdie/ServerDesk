@@ -31,7 +31,8 @@ Route::name('api.')->namespace('Api')->group(function () {
     // Protected routes
     Route::middleware('auth:api')->group(function () {
         Route::namespace('Auth')->group(function () {
-            Route::get('me', 'MeController@me')->name('me');
+            Route::get('me', 'UserController@show')->name('me');
+            Route::patch('user', 'UserController@update')->name('user.update');
             Route::post('logout', 'LogoutController@logout')->name('logout');
         });
 
