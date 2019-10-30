@@ -27,7 +27,12 @@ const BitBucketConnector = (props) => {
   const [connecting, setConnecting] = useState(false);
 
   useEffect(() => {
-    const provider = _.get(match.params, 'provider', false);
+    let provider = _.get(match.params, 'provider', false);
+
+    if (provider === false) {
+      provider = _.get(queryString.parse(location.search), 'source_provider', false);
+    }
+
     if (provider === 'bitbucket') {
       const queryParams = queryString.parse(location.search);
       setConnecting(true);

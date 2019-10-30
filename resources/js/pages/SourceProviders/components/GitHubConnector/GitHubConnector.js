@@ -28,7 +28,12 @@ const GitHubConnector = (props) => {
   const [connecting, setConnecting] = useState(false);
 
   useEffect(() => {
-    const provider = _.get(match.params, 'provider', false);
+    let provider = _.get(match.params, 'provider', false);
+
+    if (provider === false) {
+      provider = _.get(queryString.parse(location.search), 'source_provider', false);
+    }
+
     if (provider === 'github') {
       const queryParams = queryString.parse(location.search);
       setConnecting('github');
@@ -59,8 +64,6 @@ const GitHubConnector = (props) => {
       </Button>
     );
   };
-
-  console.log(sourceProvider);
 
   return (
     <Card className={classes.card}>
