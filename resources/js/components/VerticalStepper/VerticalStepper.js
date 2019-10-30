@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const VerticalStepper = (props) => {
-  const { steps, onFinish } = props;
+  const { steps, onFinish, style } = props;
 
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
@@ -59,7 +59,7 @@ const VerticalStepper = (props) => {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={style}>
       <Stepper activeStep={activeStep} orientation="vertical">
         {steps.map((page, index) => (
           <Step key={index}>
@@ -114,9 +114,14 @@ const VerticalStepper = (props) => {
   );
 };
 
+VerticalStepper.defaultProps = {
+  style: {}
+};
+
 VerticalStepper.propTypes = {
-  steps: PropTypes.array.isRequired,
-  onFinish: PropTypes.func
+  style: PropTypes.object,
+  onFinish: PropTypes.func,
+  steps: PropTypes.array.isRequired
 };
 
 export default VerticalStepper;

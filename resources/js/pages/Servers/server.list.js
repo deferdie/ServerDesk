@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { useToasts } from 'react-toast-notifications';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Button } from '@material-ui/core';
 
 // Components
 import {
@@ -26,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ServerList = (props) => {
-  const { auth } = props;
+  const { auth, showList } = props;
   const classes = useStyles();
   const { addToast } = useToasts();
   const [servers, setServers] = useState([]);
@@ -110,6 +111,17 @@ const ServerList = (props) => {
     );
   }
 
+  if (showList === false) {
+    return (
+      <Button
+        color="primary"
+        variant="contained"
+      >
+        Create Server
+      </Button>
+    );
+  }
+
   return (
     <div className={classes.root}>
       <ServersToolbar onAddServer={() => setShowServerForm(true)}/>
@@ -133,6 +145,10 @@ const ServerList = (props) => {
       </Modal>
     </div>
   );
+};
+
+ServerList.defaultProps = {
+  showList: true
 };
 
 ServerList.propTypes = {

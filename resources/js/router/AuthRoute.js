@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { ThemeProvider } from '@material-ui/styles';
 import theme from '../theme';
 import { Main as MainLayout } from '../layouts';
-// import _ from 'lodash';
+import _ from 'lodash';
 
 const propTypes = {
   component: PropTypes.func.isRequired,
@@ -29,11 +29,11 @@ const AuthRoute = ({ component: Component, ...rest }) => (
           }
 
           // Send the user to the setup page if they have not completed it
-          // if (_.get(user, 'is_admin', 0) === 1 && _.get(user, 'welcome_completed', 0) === 0) {
-          //   if (props.location.pathname !== '/setup') {
-          //     props.history.push('/setup');
-          //   }
-          // }
+          if (_.get(user, 'is_admin', 0) === 1 && _.get(user, 'welcome_completed', 0) === 0) {
+            if (props.location.pathname !== '/setup') {
+              props.history.push('/setup');
+            }
+          }
 
           return authenticated ? (
             <AppLayoutRoute component={Component} {...props} />

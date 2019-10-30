@@ -6,7 +6,6 @@ import {
   Typography
 } from '@material-ui/core';
 import _ from 'lodash';
-import GetAppIcon from '@material-ui/icons/GetApp';
 import Axios from 'axios';
 
 // Components
