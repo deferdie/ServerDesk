@@ -29,8 +29,11 @@ class UserController extends Controller
     {
         if ($request->has('welcome_completed')) {
             if ($request->welcome_completed === true) {
-                // Check if the user has a source provider
-                // Check if the user has a server provider
+                $user = auth()->user();
+                if (count($user->sourceProviders) > 0 && count($user->serverProviders) > 0) {
+                    $user->welcome_completed = true;
+                    $user->save();
+                }
             }
         }
     }

@@ -78,6 +78,26 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * A user has many user source providers
+     *
+     * @return void
+     */
+    public function sourceProviders()
+    {
+        return $this->hasMany(UserSourceProvider::class);
+    }
+    
+    /**
+     * A user has many server providers
+     *
+     * @return void
+     */
+    public function serverProviders()
+    {
+        return $this->hasMany(UserServerProviderCredential::class);
+    }
+
+    /**
      * Return the owner for this account
      *
      * @return void

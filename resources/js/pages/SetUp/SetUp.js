@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
+import { useToasts } from 'react-toast-notifications';
+
+// Actions
+import { setUserData } from '../../actions/auth';
 
 // Components
 import ServerProvider from '../ServerProviders';
@@ -15,8 +20,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const SetUp = () => {
+const SetUp = (props) => {
+  const {
+    history,
+    setUserData
+  } = props;
+
   const classes = useStyles();
+  const { addToast } = useToasts();
   const [loading, setLoading] = useState(false);
   const [hasSourceProvider, setHasSourceProvider] = useState(false);
   const [hasServerProvider, setHasServerProvider] = useState(false);
@@ -53,8 +64,10 @@ const SetUp = () => {
     Axios.put('/api/user', {
       welcome_completed: true
     }).then((data) => {
-      // Fire a happy notification to set as complete
+      addToast(`Setup completed... Add some applications`, { appearance: 'success', autoDismiss: true });
       // Update the user in state and redirect the user to the applications page
+      setUserData(data.data.data);
+      history.push('/applications');
     });
   };
 
@@ -95,5 +108,12 @@ const SetUp = () => {
   );
 };
 
+SetUp.propTypes = {
+  history: PropTypes.object,
+  setUserData: PropTypes.func
+};
+
+const mapDispatchToProps = { setUserData };
+
 const mapStateToProps = ({ auth: { authenticated } }) => ({ authenticated });
-export default connect(mapStateToProps)(SetUp);
+export default connect(mapStateToProps, mapDispatchToProps)(SetUp);

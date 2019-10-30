@@ -33,7 +33,7 @@ const AuthRoute = ({ component: Component, match, ...rest }) => (
           if (_.get(user, 'is_admin', 0) === 1 && _.get(user, 'welcome_completed', 0) === 0) {
             if (props.location.pathname !== '/setup') {
               const provider = _.get(props, 'match.params.provider', '');
-              props.history.push(`/setup${props.location.search}&source_provider=${provider}`);
+              props.history.push(`/setup${props.location.search}?&source_provider=${provider}`);
             }
           }
 

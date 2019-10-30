@@ -32,7 +32,7 @@ Route::name('api.')->namespace('Api')->group(function () {
     Route::middleware('auth:api')->group(function () {
         Route::namespace('Auth')->group(function () {
             Route::get('me', 'UserController@show')->name('me');
-            Route::patch('user', 'UserController@update')->name('user.update');
+            Route::put('user', 'UserController@update')->name('user.update');
             Route::post('logout', 'LogoutController@logout')->name('logout');
         });
 
