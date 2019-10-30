@@ -28,6 +28,7 @@ class ApplicationStoreRequest extends FormRequest
             'type' => ['required', Rule::in([
                 'PHP',
                 'Laravel',
+                'WordPress',
                 'Adonis JS',
                 'Static HTML',
             ])],

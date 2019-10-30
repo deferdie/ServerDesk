@@ -48,6 +48,7 @@ const ApplicationSettingStep = (props) => {
           {[
             'Laravel',
             'Adonis JS',
+            'WordPress',
             'Static HTML'
           ].map(option => (
             <option

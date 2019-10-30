@@ -6,6 +6,7 @@ use App\Application;
 use App\Applications\Adonis;
 use Illuminate\Bus\Queueable;
 use App\Applications\Laravel;
+use App\Applications\WordPress;
 use App\Applications\StaticHtml;
 use App\Events\ApplicationDeployed;
 use App\Notifications\ApplicationCreatedNotification;
@@ -84,6 +85,11 @@ class DeployApplication implements ShouldQueue
             // Deploy AdonisJS
             if ($this->application->type === 'Adonis JS') {
                 Adonis::deploy($this->application, $this->request);
+            }
+            
+            // Deploy WordPress
+            if ($this->application->type === 'WordPress') {
+                WordPress::deploy($this->application, $this->request);
             }
 
             // Set the application status as deployed

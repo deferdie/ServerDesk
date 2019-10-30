@@ -27,6 +27,7 @@ class CreateApplicationsTable extends Migration
             $table->enum('type', [
                 'PHP',
                 'Laravel',
+                'WordPress',
                 'Adonis JS',
                 'Static HTML',
             ]);
