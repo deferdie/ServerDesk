@@ -5,7 +5,6 @@ import _ from 'lodash';
 import { useToasts } from 'react-toast-notifications';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
 
 // Components
 import {

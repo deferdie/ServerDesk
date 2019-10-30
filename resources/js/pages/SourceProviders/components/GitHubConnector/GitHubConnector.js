@@ -60,6 +60,8 @@ const GitHubConnector = (props) => {
     );
   };
 
+  console.log(sourceProvider);
+
   return (
     <Card className={classes.card}>
       <CardActionArea>

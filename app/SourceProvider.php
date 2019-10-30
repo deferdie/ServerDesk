@@ -32,6 +32,8 @@ class SourceProvider extends Model
      */
     public function userCredential()
     {
-        return $this->hasOne(UserSourceProvider::class, 'source_provider_id', 'id');
+        $user = auth()->user();
+
+        return $this->hasOne(UserSourceProvider::class, 'source_provider_id', 'id')->where('user_id', $user->id);
     }
 }
