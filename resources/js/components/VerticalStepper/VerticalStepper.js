@@ -8,6 +8,7 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import _ from 'lodash';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -71,31 +72,33 @@ const VerticalStepper = (props) => {
     <div className={classes.root} style={style}>
       <Stepper activeStep={activeStep} orientation="vertical">
         {steps.map((page, index) => (
-          <Step key={index}>
-            <StepLabel error={page.error()}>{page.title}</StepLabel>
-            <StepContent>
-              <Typography>{page.content}</Typography>
-              <div className={classes.actionsContainer}>
-                <div>
-                  <Button
-                    disabled={activeStep === 0}
-                    onClick={handleBack}
-                    className={classes.button}
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleNext}
-                    className={classes.button}
-                  >
-                    {lastStep() ? 'Finish' : 'Next'}
-                  </Button>
+          _.get(page, 'show', true) && (
+            <Step key={index}>
+              <StepLabel error={page.error()}>{page.title}</StepLabel>
+              <StepContent>
+                <Typography>{page.content}</Typography>
+                <div className={classes.actionsContainer}>
+                  <div>
+                    <Button
+                      disabled={activeStep === 0}
+                      onClick={handleBack}
+                      className={classes.button}
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleNext}
+                      className={classes.button}
+                    >
+                      {lastStep() ? 'Finish' : 'Next'}
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            </StepContent>
-          </Step>
+              </StepContent>
+            </Step>
+          )
         ))}
       </Stepper>
       {activeStep === steps.length && (

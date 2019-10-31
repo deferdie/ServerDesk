@@ -65,9 +65,9 @@ const MySQLDatabaseManager = (props) => {
   const classes = useStyles();
 
   useEffect(() => {
-    setDatabases(server.my_s_q_l_database);
-    setUsers(server.my_s_q_l_users);
-  }, []);
+    setDatabases(_.get(server, 'my_s_q_l_database', []));
+    setUsers(_.get(server, 'my_s_q_l_users', []));
+  });
 
   const createDatabase = () => {
     setFormLoaders(...formLoaders, {

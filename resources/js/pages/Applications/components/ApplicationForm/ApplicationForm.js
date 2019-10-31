@@ -12,6 +12,7 @@ import VerticalStepper from '../../../../components/VerticalStepper';
 
 // Stepper pages
 import SelectServerStep from './ApplicationStepperPages/SelectServerStep';
+import WordPressSettingStep from './ApplicationStepperPages/WordPressSettingStep';
 import ApplicationSettingStep from './ApplicationStepperPages/ApplicationSettingStep';
 import ApplicationEnvironmentStep from './ApplicationStepperPages/ApplicationEnvironmentStep';
 
@@ -24,11 +25,15 @@ const ApplicationForm = (props) => {
   } = props;
 
   const [userSourceProviders, setUserSourceProviders] = useState([]);
-  const [selectedSourceProvider, setSelectedSourceProvider] = useState(null);
+  const [servers, setServers] = useState([]);
 
   useEffect(() => {
     axios.get('/api/user/source-providers').then(data => {
       setUserSourceProviders(data.data.data);
+    });
+
+    axios.get('/api/servers').then(data => {
+      setServers(data.data.data);
     });
   }, []);
 
@@ -40,13 +45,6 @@ const ApplicationForm = (props) => {
   };
 
   const sourceProviderChanged = event => {
-    // Find the provider
-    let provider = _.find(userSourceProviders, (o) => { return o.id == event.target.value; });
-
-    if (provider) {
-      setSelectedSourceProvider(provider.source_provider.name);
-    }
-
     handleChange(event);
   };
 
@@ -62,9 +60,11 @@ const ApplicationForm = (props) => {
             title: 'Deployment settings',
             content: (
               <SelectServerStep
+                servers={servers}
                 formErrors={formErrors}
                 handleChange={handleChange}
                 applicationFormData={applicationFormData}
+                userSourceProviders={userSourceProviders}
                 sourceProviderChanged={sourceProviderChanged}
               />
             ),
@@ -102,9 +102,32 @@ const ApplicationForm = (props) => {
             }
           },
           {
+            show: applicationFormData.type !== 'WordPress',
             title: 'Environment Settings',
             content: (
               <ApplicationEnvironmentStep
+                formErrors={formErrors}
+                handleChange={handleChange}
+                applicationFormData={applicationFormData}
+              />
+            ),
+            error: () => {
+              return [
+                'env_variables'
+              ].map((field) => {
+                if (hasError(formErrors, field) === true) {
+                  return true;
+                }
+                return false;
+              })[0];
+            }
+          },
+          {
+            show: applicationFormData.type === 'WordPress',
+            title: 'WordPress Settings',
+            content: (
+              <WordPressSettingStep
+                servers={servers}
                 formErrors={formErrors}
                 handleChange={handleChange}
                 applicationFormData={applicationFormData}

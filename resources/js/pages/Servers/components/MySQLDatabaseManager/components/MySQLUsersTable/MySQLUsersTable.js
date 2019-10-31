@@ -55,6 +55,10 @@ const MySQLUsersTable = (props) => {
   );
 };
 
+MySQLUsersTable.defaultProps = {
+  users: []
+};
+
 MySQLUsersTable.propTypes = {
   users: PropTypes.array,
   setShowUserDeleteConfirm: PropTypes.func

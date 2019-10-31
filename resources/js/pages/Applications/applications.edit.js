@@ -69,7 +69,7 @@ const ApplicationEdit = (props) => {
       )}
 
       {loading && (
-        <PageLoader loading={loading} label="Getting details about your server" />
+        <PageLoader loading={loading} label="Getting details about your application" />
       )}
     </div>
   );

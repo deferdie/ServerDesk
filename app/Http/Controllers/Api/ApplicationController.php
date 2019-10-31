@@ -66,12 +66,14 @@ class ApplicationController extends Controller
             abort(401);
         }
 
-        // Get the users desired source provider
-        $provider = UserSourceProvider::user($user->id)->where('id', $request->user_source_provider_id)->first();
-
-        if (! $provider) {
-            // Thow 401 exception
-            abort(401);
+        if ($request->type != 'WordPress') {
+            // Get the users desired source provider
+            $provider = UserSourceProvider::user($user->id)->where('id', $request->user_source_provider_id)->first();
+    
+            if (! $provider) {
+                // Thow 401 exception
+                abort(401);
+            }
         }
 
         $application = Application::create($request->all() + [

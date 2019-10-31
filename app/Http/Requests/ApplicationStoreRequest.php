@@ -24,7 +24,7 @@ class ApplicationStoreRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'type' => ['required', Rule::in([
                 'PHP',
                 'Laravel',
@@ -33,10 +33,17 @@ class ApplicationStoreRequest extends FormRequest
                 'Static HTML',
             ])],
             'domain' => 'required',
-            'respository' => 'required',
-            'directory' => 'string|nullable',
             'server_id' => 'required|alpha_num',
-            'user_source_provider_id' => 'required|alpha_num',
         ];
+
+        if (request()->has('type') && request()->type != 'WordPress') {
+            array_push($rules, [
+                'respository' => 'required',
+                'directory' => 'string|nullable',
+                'user_source_provider_id' => 'required|alpha_num'
+            ]);
+        }
+
+        return $rules;
     }
 }

@@ -24,50 +24,6 @@ const ApplicationSettingStep = (props) => {
       >
         <TextField
           fullWidth
-          label="What type of application do you want to deploy"
-          margin="dense"
-          name="type"
-          onChange={(e) => {
-            e.target.value === 'Laravel' && handleChange({
-              target: {
-                value: 'public',
-                name: 'directory'
-              }
-            });
-            handleChange(e);
-          }}
-          required
-          select
-          SelectProps={{ native: true }}
-          defaultValue={applicationFormData.type}
-          variant="outlined"
-          helperText={hasError(formErrors, 'type') ? getError(formErrors, 'type') : 'Please select your app type'}
-          error={hasError(formErrors, 'type')}
-        >
-          <option selected>Please select</option>
-          {[
-            'Laravel',
-            'Adonis JS',
-            'WordPress',
-            'Static HTML'
-          ].map(option => (
-            <option
-              key={option}
-              value={option}
-            >
-              {option}
-            </option>
-          ))}
-        </TextField>
-      </Grid>
-
-      <Grid
-        item
-        md={12}
-        xs={12}
-      >
-        <TextField
-          fullWidth
           required
           type="text"
           margin="dense"

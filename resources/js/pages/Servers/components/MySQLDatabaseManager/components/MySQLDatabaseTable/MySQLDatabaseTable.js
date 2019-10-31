@@ -69,6 +69,10 @@ const MySQLDatabaseTable = (props) => {
   );
 };
 
+MySQLDatabaseTable.defaultProps = {
+  databases: []
+};
+
 MySQLDatabaseTable.propTypes = {
   databases: PropTypes.array,
   setShowDatabaseUserForm: PropTypes.func,

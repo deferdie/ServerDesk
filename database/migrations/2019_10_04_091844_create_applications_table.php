@@ -21,7 +21,7 @@ class CreateApplicationsTable extends Migration
             $table->unsignedInteger('ssl_provider_id')->nullable();
             $table->string('domain');
             $table->string('directory')->nullable();
-            $table->string('respository');
+            $table->string('respository')->nullable();
             $table->string('git_branch')->default('master');
             $table->boolean('deploy_form_git')->default(true);
             $table->enum('type', [
