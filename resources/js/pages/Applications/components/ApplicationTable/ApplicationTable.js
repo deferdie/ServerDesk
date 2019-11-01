@@ -66,50 +66,52 @@ const ApplicationTable = props => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {_.get(applications, '', []).map(app => (
-                  <TableRow
-                    className={classes.tableRow}
-                    hover
-                    key={app.id}
-                  >
-                    <TableCell>
-                      <Typography variant="body1">
-                        {_.get(app, 'domain')}
-                      </Typography>
-                    </TableCell>
+                {applications && (
+                  applications.map(app => (
+                    <TableRow
+                      className={classes.tableRow}
+                      hover
+                      key={app.id}
+                    >
+                      <TableCell>
+                        <Typography variant="body1">
+                          {_.get(app, 'domain')}
+                        </Typography>
+                      </TableCell>
 
-                    <TableCell>
-                      {_.get(app, 'server.server_provider.name')}
-                    </TableCell>
+                      <TableCell>
+                        {_.get(app, 'server.server_provider.name')}
+                      </TableCell>
 
-                    <TableCell>
-                      {_.get(app, 'server.name')}
-                    </TableCell>
+                      <TableCell>
+                        {_.get(app, 'server.name')}
+                      </TableCell>
 
-                    <TableCell>
-                      <ApplicationStatusIcon application={app} />
-                    </TableCell>
+                      <TableCell>
+                        <ApplicationStatusIcon application={app} />
+                      </TableCell>
 
-                    <TableCell>
-                      {moment(app.created_at).format('DD/MM/YYYY')}
-                    </TableCell>
-                    <TableCell>
-                      {app.status !== 'deleting' && (
-                        <React.Fragment>
-                          <Fab
-                            to={`/applications/${app.id}`}
-                            size="small"
-                            color="primary"
-                            aria-label="edit"
-                            component={CustomRouterLink}
-                          >
-                            <EditIcon />
-                          </Fab>
-                        </React.Fragment>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      <TableCell>
+                        {moment(app.created_at).format('DD/MM/YYYY')}
+                      </TableCell>
+                      <TableCell>
+                        {app.status !== 'deleting' && (
+                          <React.Fragment>
+                            <Fab
+                              to={`/applications/${app.id}`}
+                              size="small"
+                              color="primary"
+                              aria-label="edit"
+                              component={CustomRouterLink}
+                            >
+                              <EditIcon />
+                            </Fab>
+                          </React.Fragment>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </div>
