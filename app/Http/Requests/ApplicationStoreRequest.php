@@ -43,6 +43,10 @@ class ApplicationStoreRequest extends FormRequest
                 'user_source_provider_id' => 'required|alpha_num'
             ]);
         }
+        
+        if (request()->has('type') && request()->type === 'WordPress') {
+            $rules['mysql_database_id'] = 'required';
+        }
 
         return $rules;
     }

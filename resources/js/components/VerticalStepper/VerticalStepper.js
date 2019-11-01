@@ -40,7 +40,7 @@ const VerticalStepper = (props) => {
   const handleNext = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1);
 
-    if (activeStep + 1 === steps.length) {
+    if (activeStep + 1 === stepperLength()) {
       onFinish();
 
       if (activeStepOverride) {
@@ -65,7 +65,19 @@ const VerticalStepper = (props) => {
   };
 
   const lastStep = () => {
-    return activeStep === steps.length - 1;
+    return activeStep === stepperLength() - 1;
+  };
+
+  const stepperLength = () => {
+    let length = 0;
+
+    steps.map((step) => {
+      if (_.get(step, 'show', true) === true) {
+        length = length + 1;
+      }
+    });
+
+    return length;
   };
 
   return (
@@ -101,7 +113,7 @@ const VerticalStepper = (props) => {
           )
         ))}
       </Stepper>
-      {activeStep === steps.length && (
+      {activeStep === stepperLength() && (
         <Paper square elevation={0} className={classes.resetContainer}>
           {stepperHasError() ? (
             <Button

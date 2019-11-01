@@ -66,7 +66,7 @@ const ApplicationTable = props => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {applications.map(app => (
+                {_.get(applications, '', []).map(app => (
                   <TableRow
                     className={classes.tableRow}
                     hover
@@ -117,6 +117,10 @@ const ApplicationTable = props => {
       </CardContent>
     </Card>
   );
+};
+
+ApplicationTable.defaultProps = {
+  applications: []
 };
 
 ApplicationTable.propTypes = {

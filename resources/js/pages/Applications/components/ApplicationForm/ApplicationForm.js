@@ -135,7 +135,7 @@ const ApplicationForm = (props) => {
             ),
             error: () => {
               return [
-                'env_variables'
+                'mysql_database_id'
               ].map((field) => {
                 if (hasError(formErrors, field) === true) {
                   return true;

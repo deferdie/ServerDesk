@@ -36,6 +36,7 @@ const ApplicationList = (props) => {
     server_id: '',
     respository: '',
     env_variables: '',
+    mysql_database_id: '',
     user_source_provider_id: ''
   };
   const [applicationFormData, setApplicationFormData] = useState(defaultState);
