@@ -10,6 +10,7 @@ import { destructServerErrors, hasError, getError } from '../../../helpers/error
 const RegistrationForm = (props) => {
   const {
     history,
+    className,
     registerUser
   } = props;
 
@@ -40,10 +41,10 @@ const RegistrationForm = (props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}
-      method="POST"
-    >
-      <h2 className="text-center mt-4 mb-6 text-grey-darker">Register</h2>
+    <form onSubmit={handleSubmit} method="POST" className={className}>
+      <h2 className="text-center mt-4 mb-6 text-grey-darker">
+        Sign-up for your free 5 day trial
+      </h2>
       <div className="mb-4">
         <label className="block text-grey-darkest text-sm font-bold mb-2" htmlFor="username">
           Username
@@ -120,6 +121,7 @@ const RegistrationForm = (props) => {
 };
 
 RegistrationForm.propTypes = {
+  className: PropTypes.string,
   registerUser: PropTypes.func.isRequired,
   googleSignIn: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired

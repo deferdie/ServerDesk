@@ -4753,6 +4753,12 @@ button,
   background: url("/images/bak/banner_bg.jpg") no-repeat;
 }
 
+.registrationForm {
+  padding: 30px;
+  margin-top: 110px;
+  background: #fffffff5;
+}
+
 .homepage-heading {
   margin-top: 130px;
   margin-left: 50px;
@@ -4762,6 +4768,7 @@ button,
   margin-left: 58px;
   border-radius: 5px;
   min-width: 150px;
+  margin-top: 30px;
   text-transform: uppercase;
 }
 

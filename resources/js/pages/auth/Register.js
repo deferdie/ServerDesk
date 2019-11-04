@@ -67,7 +67,6 @@ class Register extends Component {
           </div>
 
           <div className="bg-white border rounded border-grey-light w-3/4 sm:w-1/2 lg:w-2/5 xl:w-1/4 px-8 py-4">
-
             <RegistrationForm />
           </div>
           <div className="p-4 text-grey-dark text-sm">
