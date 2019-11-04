@@ -45,7 +45,7 @@ const RegistrationForm = (props) => {
       <h2 className="text-center mt-4 mb-6 text-grey-darker">
         Sign-up for your free 5 day trial
       </h2>
-      <div className="mb-4">
+      <div className="mb-5">
         <label className="block text-grey-darkest text-sm font-bold mb-2" htmlFor="username">
           Username
         </label>
@@ -65,7 +65,7 @@ const RegistrationForm = (props) => {
         }
       </div>
 
-      <div className="mb-4">
+      <div className="mb-5">
         <label className="block text-grey-darkest text-sm font-bold mb-2" htmlFor="email">
           Email address
         </label>
@@ -84,7 +84,7 @@ const RegistrationForm = (props) => {
         }
       </div>
 
-      <div className="mb-4">
+      <div className="mb-5">
         <label className="block text-grey-darkest text-sm font-bold mb-2" htmlFor="password"> Password </label>
         <input
           value={userDetails.password}
@@ -101,7 +101,7 @@ const RegistrationForm = (props) => {
         }
       </div>
 
-      <div className="mb-4">
+      <div className="mb-5">
         <label className="block text-grey-darkest text-sm font-bold mb-2" htmlFor="password-confirmation"> Password confirmation </label>
         <input
           value={userDetails.password_confirmation}

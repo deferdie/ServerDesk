@@ -4780,6 +4780,10 @@ button,
           box-shadow: 7px 9px 5px -8px rgba(0, 0, 0, .75);
 }
 
+.mb-5 {
+  margin-bottom: 2rem;
+}
+
 @media (min-width: 576px) {
   .sm\:list-reset {
     list-style: none;

@@ -4,8 +4,18 @@ import GuestNav from '../components/GuestNav';
 import Grid from '@material-ui/core/Grid';
 import RegistrationForm from './auth/components/RegistrationForm';
 import Paper from '@material-ui/core/Paper';
+import { Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
+
+const useStyles = makeStyles(theme => ({
+  featureContainer: {
+    textAlign: 'center'
+  }
+}));
 
 const Welcome = () => {
+  const classes = useStyles();
+
   return (
     <DocumentTitle title={`Welcome - ${window.App.name}`}>
       <div className="min-h-screen homepage-background">
@@ -13,7 +23,7 @@ const Welcome = () => {
         <Grid container>
           <Grid item md={6} lg={6} xl={6}>
             <h1 className="p-2 text-white homepage-heading">
-              Hello <span>Developer!</span> <br /> Are you ready to deploy your app!
+              Hello <span>Developer,</span> <br /> Are you ready to deploy your app!
             </h1>
 
             <div>
@@ -35,6 +45,20 @@ const Welcome = () => {
             <Paper className="registrationForm">
               <RegistrationForm />
             </Paper>
+          </Grid>
+        </Grid>
+
+        <Grid container>
+          <Grid item xs={12}>
+            <Typography variant="h3" align="center">
+              Time saving features
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="p" align="right">
+              Features build to save you time, money and to allow you to get the best from your <br />
+              servers and deliver the best possible online experience for your customers and your applications
+            </Typography>
           </Grid>
         </Grid>
       </div>

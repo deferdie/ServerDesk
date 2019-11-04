@@ -38,8 +38,7 @@ const Topbar = props => {
     logoutUser,
     onSidebarOpen,
     showNotifications,
-    setShowNotifications,
-    ...rest
+    setShowNotifications
   } = props;
   const classes = useStyles();
   const [notifications, setNotifications] = useState({});
