@@ -17,7 +17,14 @@ const GuestNav = () => {
       <ul className="list-reset flex pt-4">
         <li className="px-4 py-2">
           <Link to="/signin"
-            className="no-underline font-medium text-grey-darker"
+            className="no-underline font-medium text-white"
+          >Pricing
+          </Link>
+        </li>
+
+        <li className="px-4 py-2">
+          <Link to="/signin"
+            className="no-underline font-medium text-white"
           >Sign in
           </Link>
         </li>
