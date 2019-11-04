@@ -4744,6 +4744,11 @@ button,
   }
 }
 
+.sign-in-gradient {
+  background-color: rgba(28, 206, 234, .82);
+  background: linear-gradient(-45deg, rgba(147, 26, 222, .83) 0%, rgba(28, 206, 234, .82) 100%);
+}
+
 @media (min-width: 576px) {
   .sm\:list-reset {
     list-style: none;
