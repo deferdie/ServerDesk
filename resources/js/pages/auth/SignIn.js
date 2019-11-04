@@ -23,36 +23,36 @@ const SignIn = (props) => {
 
   const [authDetails, setAuthDetails] = useState({
     email: '',
-    password: '',
+    password: ''
   });
   const [errors, setErrors] = useState({});
 
   const signInSuccess = () => {
     getIntendedUrl().then(url => history.push(url));
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     signInUser(authDetails)
       .then(response => signInSuccess())
       .catch(error => setErrors(destructServerErrors(error)));
-  }
+  };
 
   const handleInputChange = (e) => {
     setAuthDetails({
       ...authDetails,
-      [event.target.name]: event.target.value
+      [e.target.name]: e.target.value
     });
     setErrors(...errors, {
       [e.target.name]: ''
     });
-  }
+  };
 
   const handleGoogleSignInSuccess = (credentials) => {
     googleSignIn(credentials)
       .then(response => signInSuccess())
       .catch(error => setErrors(destructServerErrors(error))); ;
-  }
+  };
 
   return (
     <DocumentTitle title={`Sign in - ${window.App.name}`}>
