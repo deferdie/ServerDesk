@@ -19,10 +19,10 @@ import CodeIcon from '@material-ui/icons/Code';
 const styles = theme => ({
   root: {
     width: '100%',
-    color: '#fff',
+    color: '#211919',
     display: 'flex',
     overflow: 'hidden',
-    backgroundColor: '#3b13b0'
+    backgroundColor: '#ffffff'
   },
   container: {
     marginTop: theme.spacing(15),

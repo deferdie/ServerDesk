@@ -4750,8 +4750,8 @@ button,
 }
 
 .homepage-background {
-  background: url("/images/bak/banner_bg.jpg") no-repeat;
-  background-size: 100%;
+  background: -webkit-gradient(linear, left top, right top, color-stop(21%, #0b166d), color-stop(86%, #0c4ea1));
+  background: linear-gradient(90deg, #0b166d 21%, #0c4ea1 86%);
 }
 
 .registrationForm {
