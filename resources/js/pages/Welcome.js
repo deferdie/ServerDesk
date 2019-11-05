@@ -5,16 +5,11 @@ import Grid from '@material-ui/core/Grid';
 import RegistrationForm from './auth/components/RegistrationForm';
 import Paper from '@material-ui/core/Paper';
 import { Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
 
-const useStyles = makeStyles(theme => ({
-  featureContainer: {
-    textAlign: 'center'
-  }
-}));
+// Components
+import { FeatureList } from './Marketing';
 
 const Welcome = () => {
-  const classes = useStyles();
 
   return (
     <DocumentTitle title={`Welcome - ${window.App.name}`}>
@@ -49,17 +44,7 @@ const Welcome = () => {
         </Grid>
 
         <Grid container>
-          <Grid item xs={12}>
-            <Typography variant="h3" align="center">
-              Time saving features
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="p" align="right">
-              Features build to save you time, money and to allow you to get the best from your <br />
-              servers and deliver the best possible online experience for your customers and your applications
-            </Typography>
-          </Grid>
+          <FeatureList />
         </Grid>
       </div>
     </DocumentTitle>
