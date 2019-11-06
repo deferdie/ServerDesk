@@ -115,4 +115,18 @@ class UpTimeCheckTest extends TestCase
             'label' => 'ferdie'
         ]);
     }
+    
+    public function test_authenticated_users_can_delete_an_uptimecheck()
+    {
+        $user = $this->signIn();
+        $check = factory('App\UpTimeCheck')->create([
+            'user_id' => $user->id
+        ]);
+
+        $response = $this->makeDelete($user->token, route('api.uptime.delete', [$check->id]), $check->toArray());
+
+        $response->assertStatus(200);
+
+        $this->makeGet($user->token, route('api.uptime.show', [$check->id]))->assertStatus(404);
+    }
 }

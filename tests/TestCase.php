@@ -64,7 +64,7 @@ abstract class TestCase extends BaseTestCase
     }
     
     /**
-     * Makes an authenticated PUT request
+     * Makes a authenticated PUT request
      *
      * @param string $token
      * @param string $uri
@@ -76,6 +76,23 @@ abstract class TestCase extends BaseTestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
         ])->putJson($uri, $params);
+
+        return $response;
+    }
+    
+    /**
+     * Makes a authenticated DELETE request
+     *
+     * @param string $token
+     * @param string $uri
+     * @param array $params
+     * @return void
+     */
+    public function makeDelete(string $token, string $uri, array $params = [])
+    {
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->deleteJson($uri, $params);
 
         return $response;
     }

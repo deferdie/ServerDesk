@@ -63,4 +63,15 @@ class UpTimeCheckController extends Controller
 
         return new UpTimeCheckResource($uptimeCheck);
     }
+    
+    /**
+     * Delete an uptime check
+     *
+     * @param UpTimeCheck $uptimeCheck
+     * @return void
+     */
+    public function delete(UpTimeCheck $uptimeCheck)
+    {
+        $uptimeCheck->delete();
+    }
 }
