@@ -14,20 +14,21 @@ class CreateUpTimeChecksTable extends Migration
     public function up()
     {
         Schema::create('up_time_checks', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->bigIncrements('id');
+            $table->unsignedInteger('user_id');
             $table->string('label');
             $table->string('domain');
-            $table->unsignedInteger('port');
-            $table->float('latency');
-            $table->dateTime('last_online');
-            $table->boolean('send_sms');
-            $table->boolean('send_email');
+            $table->unsignedInteger('port')->default(80);
+            $table->float('latency')->nullable();
+            $table->dateTime('last_online')->nullable();
+            $table->boolean('send_sms')->default(false);
+            $table->boolean('send_email')->default(false);
             $table->enum('status', [
                 'running',
                 'stopped',
                 'processing',
                 'restarting'
-            ]);
+            ])->default('stopped');
             $table->timestamps();
         });
     }

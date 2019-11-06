@@ -118,6 +118,8 @@ Route::name('api.')->namespace('Api')->group(function () {
 
         // Uptime
         Route::get('/uptime', 'UpTimeCheckController@index')->name('uptime.index');
+        Route::post('/uptime', 'UpTimeCheckController@store')->name('uptime.store');
+        Route::get('/uptime/{uptimeCheck}', 'UpTimeCheckController@show')->name('uptime.show');
     });
 
     Broadcast::routes();

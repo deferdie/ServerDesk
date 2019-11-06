@@ -9,6 +9,12 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
+    /**
+     * Authenticates the user and returns a token
+     *
+     * @param User $user
+     * @return string
+     */
     public function signIn(User $user = null)
     {
         $user = $user ?? factory('App\User')->create();
@@ -18,6 +24,42 @@ abstract class TestCase extends BaseTestCase
             'password' => 'secret',
         ]);
 
-        return $token;
+        $user->token = $token;
+
+        return $user;
+    }
+
+    /**
+     * Makes an authenticated GET request
+     *
+     * @param string $token
+     * @param string $uri
+     * @param array $params
+     * @return void
+     */
+    public function makeGet(string $token, string $uri, array $params = [])
+    {
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->getJson($uri, $params);
+
+        return $response;
+    }
+    
+    /**
+     * Makes an authenticated POST request
+     *
+     * @param string $token
+     * @param string $uri
+     * @param array $params
+     * @return void
+     */
+    public function makePost(string $token, string $uri, array $params = [])
+    {
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->postJson($uri, $params);
+
+        return $response;
     }
 }
