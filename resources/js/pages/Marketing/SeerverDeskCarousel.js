@@ -9,7 +9,7 @@ const tutorialSteps = [
   },
   {
     label: 'Bird',
-    imgPath: '/images/screenshot/servers.jpg'
+    imgPath: '/images/screenshot/applications.jpg'
   },
   {
     label: 'Bali, Indonesia',
@@ -19,6 +19,7 @@ const tutorialSteps = [
 
 const useStyles = makeStyles(theme => ({
   root: {
+    textAlign: 'center',
     minWidth: '100%',
     flexGrow: 1
   },
@@ -27,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     maxHeight: '600px',
     overflow: 'hidden',
     display: 'block',
-    width: '100%'
+    width: '600px'
   }
 }));
 
@@ -54,10 +55,6 @@ export default function SeerverDeskCarousel () {
         className={classes.img}
         src={tutorialSteps[activeStep].imgPath}
         alt={tutorialSteps[activeStep].label}
-      />
-      <MobileStepper
-        steps={maxSteps}
-        activeStep={activeStep}
       />
     </div>
   );

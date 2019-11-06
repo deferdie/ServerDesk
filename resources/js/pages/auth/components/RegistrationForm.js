@@ -58,7 +58,7 @@ const RegistrationForm = (props) => {
           className="appearance-none border rounded w-full py-2 px-3 text-grey-darker leading-tight"
           placeholder="jane doe"
           required
-          autoFocus />
+        />
 
         {hasError(errors, 'name') &&
           <p className="text-red text-xs pt-2">{getError(errors, 'name')}</p>
