@@ -7,7 +7,7 @@ RUN apk add --update libcurl curl libxml2-dev libsodium-dev
 
 # Install PHP and various php dependencies
 RUN apk add php7 php7-fileinfo php7-intl php7-bz2 php7-apcu php7-fpm php7-openssl php7-pdo_mysql \
-    php7-mbstring php7-tokenizer php7-xml php7-ctype \
+    php7-mbstring php7-tokenizer php7-xml php7-ctype php7-pdo_sqlite php7-sqlite3 \
     php7-json php7-session php7-dom php7-curl php7-bcmath \
     php7-xmlwriter zlib php7-phar php7-zip php7-mysqli php7-sodium openssh-client
 
