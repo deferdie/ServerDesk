@@ -23,11 +23,12 @@ const useStyles = makeStyles(theme => ({
     }
   },
   root: {
-    backgroundColor: theme.palette.white,
+    color: '#fff',
+    height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
+    background: 'linear-gradient(-45deg, rgb(19, 19, 40) 0%, rgb(31, 47, 80) 100%);'
   },
   divider: {
     margin: theme.spacing(2, 0)
@@ -92,7 +93,6 @@ const Sidebar = props => {
         {...rest}
         className={clsx(classes.root, className)}
       >
-        <Divider className={classes.divider} />
         <SidebarNav
           className={classes.nav}
           pages={pages}
