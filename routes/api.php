@@ -1,17 +1,5 @@
 <?php
 
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
 Route::name('api.')->namespace('Api')->group(function () {
     // Unprotected routes
     Route::group(['middleware' => 'guest:api'], function () {
@@ -127,6 +115,9 @@ Route::name('api.')->namespace('Api')->group(function () {
         // The team for the user
         Route::get('/teams', 'TeamController@index')->name('teams');
         Route::post('/teams', 'TeamController@store')->name('teams.store');
+
+        // Uptime
+        Route::get('/uptime', 'UpTimeCheckController@index')->name('uptime.index');
     });
 
     Broadcast::routes();
