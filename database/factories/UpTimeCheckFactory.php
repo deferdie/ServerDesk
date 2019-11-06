@@ -12,9 +12,7 @@ $factory->define(UpTimeCheck::class, function (Faker $faker) {
         'domain' => $faker->domainName,
         'status' => 'running',
         'user_id' => factory('App\User')->create()->id,
-        'latency' => null,
         'send_sms' => false,
         'send_email' => false,
-        'last_online' => null,
     ];
 });

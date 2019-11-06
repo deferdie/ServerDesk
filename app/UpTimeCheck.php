@@ -17,11 +17,9 @@ class UpTimeCheck extends Model
         'domain',
         'status',
         'user_id',
-        'latency',
         'interval',
         'send_sms',
         'send_email',
-        'last_online',
     ];
 
     /**
@@ -32,5 +30,15 @@ class UpTimeCheck extends Model
     public function user()
     {
         $this->belongsTo(User::class);
+    }
+
+    /**
+     * An uptime check has many uptime check histories
+     *
+     * @return void
+     */
+    public function history()
+    {
+        return $this->hasMany(UpTimeCheckHistory::class);
     }
 }

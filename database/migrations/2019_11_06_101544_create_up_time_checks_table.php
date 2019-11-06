@@ -19,8 +19,6 @@ class CreateUpTimeChecksTable extends Migration
             $table->string('label');
             $table->string('domain');
             $table->unsignedInteger('port')->default(80);
-            $table->float('latency')->nullable();
-            $table->dateTime('last_online')->nullable();
             $table->boolean('send_sms')->default(false);
             $table->boolean('send_email')->default(false);
             $table->unsignedInteger('interval')->default(1);

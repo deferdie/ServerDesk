@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\UpTimeCheck;
+use App\UpTimeCheckHistory;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -37,7 +38,10 @@ class UpTimeCheckJob implements ShouldQueue
      */
     public function handle()
     {
-        
+        UpTimeCheckHistory::create([
+            'up_time_check_id' => $this->check->id,
+            'status' => 'processing'
+        ]);
     }
 
     /**
