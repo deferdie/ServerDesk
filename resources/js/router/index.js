@@ -17,6 +17,7 @@ import Profile from '../pages/Profile';
 import SignIn from '../pages/auth/SignIn';
 import Dashboard from '../pages/Dashboard';
 import Register from '../pages/auth/Register';
+import UpTimeChecks from '../pages/UpTimeChecks';
 import Applications from '../pages/Applications';
 import ServerEdit from '../pages/Servers/server.edit';
 import SourceProviders from '../pages/SourceProviders';
@@ -64,6 +65,7 @@ class App extends Component {
           <AuthRoute path="/source-providers/:provider" component={SourceProviders} />
           <AuthRoute path="/source-providers" component={SourceProviders} />
           <AuthRoute path="/profile/:id" component={Profile} />
+          <AuthRoute path="/uptime/" component={UpTimeChecks} />
 
           <AuthRoute path="/setup" component={SetUp} />
 

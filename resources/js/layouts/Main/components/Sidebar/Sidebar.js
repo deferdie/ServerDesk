@@ -9,6 +9,7 @@ import DnsIcon from '@material-ui/icons/Dns';
 import MergeTypeIcon from '@material-ui/icons/MergeType';
 import AppsIcon from '@material-ui/icons/Apps';
 import GroupIcon from '@material-ui/icons/Group';
+import ImportExportIcon from '@material-ui/icons/ImportExport';
 
 // Components
 import { SidebarNav, UpgradePlan } from './components';
@@ -56,6 +57,11 @@ const Sidebar = props => {
       title: 'Servers',
       href: '/servers',
       icon: <DnsIcon />
+    },
+    {
+      title: 'Uptime',
+      href: '/uptime',
+      icon: <ImportExportIcon />
     },
     {
       title: 'Servers providers',
