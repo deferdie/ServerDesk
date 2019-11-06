@@ -39,8 +39,8 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
+            'throttle:30,1',
             ApiAuthUnauthenticatedRequest::class,
-            'throttle:60,1',
             'bindings',
         ],
     ];
