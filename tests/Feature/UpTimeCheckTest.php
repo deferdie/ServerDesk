@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Jobs\UpTimeCheckJob;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -73,6 +75,8 @@ class UpTimeCheckTest extends TestCase
     
     public function test_authenticated_users_can_store_an_uptimecheck()
     {
+        Bus::fake();
+
         $user = $this->signIn();
         $check = factory('App\UpTimeCheck')->make([
             'user_id' => $user->id,
@@ -87,6 +91,28 @@ class UpTimeCheckTest extends TestCase
         
         $response->assertStatus(200)->assertJsonFragment([
             'label' => $check->label
+        ]);
+
+        Bus::assertDispatched(UpTimeCheckJob::class);
+    }
+    
+    public function test_authenticated_users_can_update_an_uptimecheck()
+    {
+        $user = $this->signIn();
+        $check = factory('App\UpTimeCheck')->create([
+            'user_id' => $user->id
+        ]);
+
+        $check->label = 'ferdie';
+
+        $response = $this->makePut($user->token, route('api.uptime.update', [$check->id]), $check->toArray());
+
+        $response->assertStatus(200);
+
+        $response = $this->makeGet($user->token, route('api.uptime.show', [$check->id]));
+        
+        $response->assertStatus(200)->assertJsonFragment([
+            'label' => 'ferdie'
         ]);
     }
 }

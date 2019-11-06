@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\UpTimeCheck;
+use App\Jobs\UpTimeCheckJob;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpTimeCheckStoreRequest;
 use App\Http\Resources\UpTimeCheckResource;
+use App\Http\Requests\UpTimeCheckStoreRequest;
+use App\Http\Requests\UpTimeCheckUpdateRequest;
 
 class UpTimeCheckController extends Controller
 {
@@ -44,6 +46,21 @@ class UpTimeCheckController extends Controller
             'user_id' => auth()->user()->id
         ]);
 
+        UpTimeCheckJob::dispatch($check);
+
         return new UpTimeCheckResource($check);
+    }
+    
+    /**
+     * Update an uptime check
+     *
+     * @param UpTimeCheck $uptimeCheck
+     * @return void
+     */
+    public function update(UpTimeCheckUpdateRequest $request, UpTimeCheck $uptimeCheck)
+    {
+        $uptimeCheck->update($request->all());
+
+        return new UpTimeCheckResource($uptimeCheck);
     }
 }

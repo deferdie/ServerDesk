@@ -120,6 +120,7 @@ Route::name('api.')->namespace('Api')->group(function () {
         Route::get('/uptime', 'UpTimeCheckController@index')->name('uptime.index');
         Route::post('/uptime', 'UpTimeCheckController@store')->name('uptime.store');
         Route::get('/uptime/{uptimeCheck}', 'UpTimeCheckController@show')->name('uptime.show');
+        Route::put('/uptime/{uptimeCheck}', 'UpTimeCheckController@update')->name('uptime.update');
     });
 
     Broadcast::routes();

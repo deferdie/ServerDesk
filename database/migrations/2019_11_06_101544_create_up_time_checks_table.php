@@ -23,6 +23,7 @@ class CreateUpTimeChecksTable extends Migration
             $table->dateTime('last_online')->nullable();
             $table->boolean('send_sms')->default(false);
             $table->boolean('send_email')->default(false);
+            $table->unsignedInteger('interval')->default(1);
             $table->enum('status', [
                 'running',
                 'stopped',

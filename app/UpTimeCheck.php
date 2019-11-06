@@ -18,6 +18,7 @@ class UpTimeCheck extends Model
         'status',
         'user_id',
         'latency',
+        'interval',
         'send_sms',
         'send_email',
         'last_online',

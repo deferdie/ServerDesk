@@ -62,4 +62,21 @@ abstract class TestCase extends BaseTestCase
 
         return $response;
     }
+    
+    /**
+     * Makes an authenticated PUT request
+     *
+     * @param string $token
+     * @param string $uri
+     * @param array $params
+     * @return void
+     */
+    public function makePut(string $token, string $uri, array $params = [])
+    {
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->putJson($uri, $params);
+
+        return $response;
+    }
 }
