@@ -40,7 +40,6 @@ class Kernel extends HttpKernel
 
         'api' => [
             'throttle:30,1',
-            ApiAuthUnauthenticatedRequest::class,
             'bindings',
         ],
     ];
@@ -53,6 +52,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
+        'apiAuth' => ApiAuthUnauthenticatedRequest::class,
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
