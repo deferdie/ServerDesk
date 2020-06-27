@@ -4,7 +4,9 @@ namespace App\ServerProviders\DigitalOcean;
 
 use DigitalOceanV2\DigitalOceanV2;
 use App\UserServerProviderCredential;
+use DigitalOceanV2\Exception\HttpException;
 use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
+use App\Exceptions\FailedToCreateServerException;
 
 class DigitalOcean extends DigitalOceanV2
 {
@@ -54,17 +56,21 @@ class DigitalOcean extends DigitalOceanV2
      */
     public function createServer($plan, $region, $osId, $scriptId, $sshKeyId, $label)
     {
-        return $this->droplet()->create(
-            $label, // The label for the server
-            $region,
-            $plan, // The users selected DO plan
-            $osId, // Image name
-            false, // Enable backups
-            false, // Enable IPV6
-            false, // Option for private netowrking
-            $sshKeyId,
-            $scriptId
-        );
+        try {
+            return $this->droplet()->create(
+                $label, // The label for the server
+                $region,
+                $plan, // The users selected DO plan
+                $osId, // Image name
+                false, // Enable backups
+                false, // Enable IPV6
+                false, // Option for private netowrking
+                $sshKeyId,
+                $scriptId
+            );
+        } catch (HttpException $e) {
+            throw new FailedToCreateServerException();
+        }
     }
 
     /**
