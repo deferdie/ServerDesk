@@ -71,6 +71,17 @@ const ServerTable = props => {
                 </TableRow>
               </TableHead>
               <TableBody>
+                {servers.length === 0 ? (
+                  <TableRow
+                    className={classes.tableRow}
+                    hover
+                    key="No Servers"
+                  >
+                    <TableCell>
+                      <Typography variant="body1">You have no servers created.</Typography>
+                    </TableCell>
+                  </TableRow>
+                ) : ''}
                 {servers.map((server, index) => (
                   <TableRow
                     className={classes.tableRow}
