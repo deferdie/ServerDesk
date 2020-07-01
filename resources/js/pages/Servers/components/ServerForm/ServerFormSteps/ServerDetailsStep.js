@@ -5,6 +5,7 @@ import {
   TextField
 } from '@material-ui/core';
 import _ from 'lodash';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 // Components
 import { hasError, getError } from '../.././../../../helpers/error';
@@ -17,6 +18,7 @@ const ServerDetailsStep = (props) => {
     serverChanged,
     userServerCreds,
     serverProviders,
+    loadingProviderPlan,
     serverProviderPlans
   } = props;
 
@@ -109,7 +111,13 @@ const ServerDetailsStep = (props) => {
             md={12}
             xs={12}
           >
-            <TextField
+            <ClipLoader
+              sizeUnit={'px'}
+              size={20}
+              color={'#123abc'}
+              loading={loadingProviderPlan}
+            />
+            {!loadingProviderPlan ? <TextField
               fullWidth
               label="Select your plan"
               margin="dense"
@@ -133,6 +141,7 @@ const ServerDetailsStep = (props) => {
                 </option>
               ))}
             </TextField>
+              : ''}
           </Grid>
         </React.Fragment>
       )}
@@ -184,6 +193,7 @@ ServerDetailsStep.propTypes = {
   serverChanged: PropTypes.func,
   userServerCreds: PropTypes.array,
   serverProviders: PropTypes.array,
+  loadingProviderPlan: PropTypes.bool,
   serverProviderPlans: PropTypes.array
 };
 

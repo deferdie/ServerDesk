@@ -24,6 +24,7 @@ const ServerForm = (props) => {
 
   const [serverProviders, setServerProviders] = useState([]);
   const [userServerCreds, setUserServerCreds] = useState([]);
+  const [loadingProviderPlan, setLoadingProviderPlan] = useState(false);
   const [serverProviderPlans, setServerProviderPlans] = useState([]);
 
   useEffect(() => {
@@ -53,10 +54,13 @@ const ServerForm = (props) => {
     let provider = event.target.value;
 
     if (serverFormData.user_server_provider_credential_id !== '') {
+      setLoadingProviderPlan(true);
+
       axios.get(`/api/server-providers/${provider}/${serverFormData.user_server_provider_credential_id}`).then(data => {
         const providerPlans = { ...serverProviderPlans };
         _.set(providerPlans, provider, data.data);
         setServerProviderPlans(providerPlans);
+        setLoadingProviderPlan(false);
       });
     }
 
@@ -84,6 +88,7 @@ const ServerForm = (props) => {
                 serverChanged={serverChanged}
                 serverProviders={serverProviders}
                 userServerCreds={userServerCreds}
+                loadingProviderPlan={loadingProviderPlan}
                 serverProviderPlans={serverProviderPlans}
               />
             ),
