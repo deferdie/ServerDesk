@@ -83,14 +83,26 @@ class DeployServer implements ShouldQueue
             );
 
             $this->server->provider_server_id = $server->id;
+            $this->server->save();
 
-            $server = $do->droplet()->waitForActive($do->droplet()->getById($server->id), 300);
+            // Check if the server is ready
+            $server = $do->droplet()->getById($this->server->provider_server_id);
 
-            foreach ($server->networks as $network) {
-                if ($network->type == 'public' && $network->version == 4) {
-                    $this->server->ip_address = $network->ipAddress;
+            while (in_array($server->status, ['new', 'pending'])) {
+                $server = $do->droplet()->getById($this->server->provider_server_id);
+                sleep(4);
+
+                if ($server->status === 'active') {
+                    break;
                 }
-                break;
+            }
+
+            $network = $server->networks[1];
+
+            if ($network->type == 'public' && $network->version == 4) {
+                $this->server->ip_address = $network->ipAddress;
+                $this->server->save();
+                $this->server = $this->server->fresh();
             }
         }
 
@@ -129,8 +141,8 @@ class DeployServer implements ShouldQueue
         // Check if the server is ready
         $client = new Client();
         $siteReady = false;
-        
-        while($siteReady === false) {
+
+        while ($siteReady === false) {
             try {
                 $httpStatus = $client->request('GET', $this->server->ip_address)->getStatusCode();
                 if ($httpStatus === 200) {
@@ -182,7 +194,13 @@ class DeployServer implements ShouldQueue
      */
     public function failed()
     {
+        $this->server = $this->server->fresh();
         broadcast(new ServerFailedToCreate($this->server->id));
+
+        if ($this->server->provider_server_id) {
+            (new DigitalOcean($this->server->credential))->deleteServer($this->server->provider_server_id);
+        }
+
         $this->server->delete();
     }
 }

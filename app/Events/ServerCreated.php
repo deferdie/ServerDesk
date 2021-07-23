@@ -16,13 +16,6 @@ class ServerCreated implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * The server that was created
-     *
-     * @var \App\Server
-     */
-    protected $server;
-
-    /**
      * The name of the server
      *
      * @var string
@@ -43,9 +36,8 @@ class ServerCreated implements ShouldBroadcast
      */
     public function __construct(Server $server, $channel = null)
     {
-        $this->server = $server;
-        $this->serverName = $this->server->name;
-        $this->channel = $channel;
+        $this->serverName = $server->name;
+        $this->channel = $channel ?? 'App.User.' . $server->user_id;
     }
 
     /**
@@ -55,6 +47,6 @@ class ServerCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel($this->channel ?? 'App.User.' . $this->server->user_id);
+        return new PrivateChannel($this->channel);
     }
 }

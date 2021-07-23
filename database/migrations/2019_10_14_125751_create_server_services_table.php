@@ -1,5 +1,6 @@
 <?php
 
+use App\ServerService;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -17,12 +18,7 @@ class CreateServerServicesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('server_id');
             $table->unsignedInteger('service_id');
-            $table->enum('status', [
-                'running',
-                'stopped',
-                'installing',
-                'restarting'
-            ]);
+            $table->enum('status', ServerService::STATUSES);
             $table->timestamps();
         });
     }

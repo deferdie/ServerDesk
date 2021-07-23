@@ -8,10 +8,11 @@ use App\ServerService;
 use App\Jobs\InstallPHP;
 use App\Jobs\InstallMySQL;
 use App\Jobs\InstallNodeJS;
-use App\Http\Controllers\Controller;
 use App\Filters\ServerServiceFilter;
-use App\Http\Requests\ServerServiceStoreRequest;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerServiceResource;
+use App\Http\Requests\ServerServicDeleteRequest;
+use App\Http\Requests\ServerServiceStoreRequest;
 
 class ServerServiceController extends Controller
 {
@@ -46,14 +47,14 @@ class ServerServiceController extends Controller
         if ($service->name == 'NodeJS') {
             InstallNodeJS::dispatch($server, $serverService);
         }
-        
+
         if ($service->name == 'PHP-FPM') {
             $server->wants_php = true;
             $server->php_version = $request->php_version;
             $server->save();
             InstallPHP::dispatch($server, $serverService);
         }
-        
+
         if ($service->name == 'MySQL') {
             $server->wants_mysql = true;
             $server->mysql_version = $request->mysql_version;
@@ -62,5 +63,16 @@ class ServerServiceController extends Controller
         }
 
         return new ServerServiceResource($serverService);
+    }
+
+    /**
+     * Delete a service from a server.
+     *
+     * @param ServerServicDeleteRequest $request
+     * @param ServerService $service
+     * @return void
+     */
+    public function delete(ServerServicDeleteRequest $request, ServerService $service)
+    {
     }
 }

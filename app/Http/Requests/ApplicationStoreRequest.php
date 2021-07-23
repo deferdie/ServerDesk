@@ -37,13 +37,13 @@ class ApplicationStoreRequest extends FormRequest
         ];
 
         if (request()->has('type') && request()->type != 'WordPress') {
-            array_push($rules, [
+            $rules = $rules + [
                 'respository' => 'required',
                 'directory' => 'string|nullable',
                 'user_source_provider_id' => 'required|alpha_num'
-            ]);
+            ];
         }
-        
+
         if (request()->has('type') && request()->type === 'WordPress') {
             $rules['mysql_database_id'] = 'required';
         }

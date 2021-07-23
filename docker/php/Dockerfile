@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.13
 
 # Set the working directory
 WORKDIR /app
@@ -9,7 +9,7 @@ RUN apk add --update libcurl curl libxml2-dev libsodium-dev
 RUN apk add php7 php7-fileinfo php7-intl php7-bz2 php7-apcu php7-fpm php7-openssl php7-pdo_mysql \
     php7-mbstring php7-tokenizer php7-xml php7-ctype php7-pdo_sqlite php7-sqlite3 \
     php7-json php7-session php7-dom php7-curl php7-bcmath \
-    php7-xmlwriter zlib php7-phar php7-zip php7-mysqli php7-sodium openssh-client
+    php7-xmlwriter zlib php7-phar php7-zip php7-mysqli php7-simplexml php7-sodium php7-pecl-imagick php7-imagick php7-redis php7-xdebug imagemagick openssh-client
 
 # Configure php.ini
 RUN sed -i "s|;*max_execution_time\s*=\s*30|max_execution_time = 60|g" /etc/php7/php.ini
@@ -23,10 +23,6 @@ RUN sed -i "s|;*listen\s*=\s*127.0.0.1:9000|listen = 0.0.0.0:9000|g" /etc/php7/p
     sed -i "s|;*clear_env\s*=\s*no|clear_env = no|g" /etc/php7/php-fpm.d/www.conf && \
     echo "catch_workers_output = yes" >> /etc/php7/php-fpm.d/www.conf
 
-
-# Clean apk cache
-RUN rm -rf /var/cache/apk/*
-
 # Copy composer files
 COPY composer.* /app/
 
@@ -38,13 +34,9 @@ RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer && \
     rm /tmp/composer-setup.php && \
     mv composer.phar /usr/local/bin/composer
 
-# Copy the application
-COPY . /app
 
-# Run composer install
-RUN composer install --no-dev --no-scripts --no-autoloader
-
-RUN composer dump-autoload --optimize
+# Clean apk cache
+RUN rm -rf /var/cache/apk/*
 
 # Expose the PHP-fpm port
 EXPOSE 9000

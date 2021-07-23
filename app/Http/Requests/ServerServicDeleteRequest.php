@@ -2,12 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\ServerService;
-use App\Service;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ServerServiceStoreRequest extends FormRequest
+class ServerServicDeleteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -16,7 +13,7 @@ class ServerServiceStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**

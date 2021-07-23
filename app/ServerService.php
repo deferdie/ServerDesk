@@ -10,6 +10,16 @@ class ServerService extends Model
     use Filterable;
 
     /**
+     * The avaliable statuses for a service.
+     */
+    const STATUSES = [
+        'running',
+        'stopped',
+        'installing',
+        'restarting'
+    ];
+
+    /**
      * The fillable attributes for this model
      *
      * @var array

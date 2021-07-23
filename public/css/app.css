@@ -611,8 +611,8 @@ textarea::-webkit-input-placeholder {
   opacity: .5;
 }
 
-input:-ms-input-placeholder,
-textarea:-ms-input-placeholder {
+input::-moz-placeholder,
+textarea::-moz-placeholder {
   color: inherit;
   opacity: .5;
 }
@@ -3584,7 +3584,6 @@ button,
 }
 
 .sticky {
-  position: -webkit-sticky;
   position: sticky;
 }
 
@@ -7708,7 +7707,6 @@ button,
   }
 
   .sm\:sticky {
-    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -11677,7 +11675,6 @@ button,
   }
 
   .md\:sticky {
-    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -15646,7 +15643,6 @@ button,
   }
 
   .lg\:sticky {
-    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -19615,7 +19611,6 @@ button,
   }
 
   .xl\:sticky {
-    position: -webkit-sticky;
     position: sticky;
   }
 
