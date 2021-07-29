@@ -9,7 +9,6 @@ services:
     volumes:
       - '.:/app'
     environment:
-      DB_PASSWORD: secret
       DB_DATABASE: serverdesk
       DB_USER: serverdesk
       DB_PASSWORD: secret
