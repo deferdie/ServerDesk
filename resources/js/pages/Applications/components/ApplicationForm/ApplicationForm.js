@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Grid
-} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import axios from 'axios';
 import _ from 'lodash';
 
@@ -16,13 +14,8 @@ import WordPressSettingStep from './ApplicationStepperPages/WordPressSettingStep
 import ApplicationSettingStep from './ApplicationStepperPages/ApplicationSettingStep';
 import ApplicationEnvironmentStep from './ApplicationStepperPages/ApplicationEnvironmentStep';
 
-const ApplicationForm = (props) => {
-  const {
-    formErrors,
-    formAction,
-    applicationFormData,
-    setApplicationFormData
-  } = props;
+const ApplicationForm = props => {
+  const { formErrors, formAction, applicationFormData, setApplicationFormData } = props;
 
   const [userSourceProviders, setUserSourceProviders] = useState([]);
   const [servers, setServers] = useState([]);
@@ -49,10 +42,7 @@ const ApplicationForm = (props) => {
   };
 
   return (
-    <Grid
-      container
-      spacing={3}
-    >
+    <Grid container spacing={3}>
       <VerticalStepper
         onFinish={formAction}
         steps={[
@@ -69,15 +59,16 @@ const ApplicationForm = (props) => {
               />
             ),
             error: () => {
-              return [
-                'server_id',
-                'user_source_provider_id'
-              ].map((field) => {
-                if (hasError(formErrors, field) === true) {
-                  return true;
+              return ['server_id', 'respository', 'user_source_provider_id'].map(
+                field => {
+                  let error = false;
+                  if (hasError(formErrors, field)) {
+                    error = true;
+                  }
+
+                  return error;
                 }
-                return false;
-              })[0];
+              )[0];
             }
           },
           {
@@ -90,10 +81,7 @@ const ApplicationForm = (props) => {
               />
             ),
             error: () => {
-              return [
-                'type',
-                'domain'
-              ].map((field) => {
+              return ['type', 'domain'].map(field => {
                 if (hasError(formErrors, field) === true) {
                   return true;
                 }
@@ -112,9 +100,7 @@ const ApplicationForm = (props) => {
               />
             ),
             error: () => {
-              return [
-                'env_variables'
-              ].map((field) => {
+              return ['env_variables'].map(field => {
                 if (hasError(formErrors, field) === true) {
                   return true;
                 }
@@ -134,9 +120,7 @@ const ApplicationForm = (props) => {
               />
             ),
             error: () => {
-              return [
-                'mysql_database_id'
-              ].map((field) => {
+              return ['mysql_database_id'].map(field => {
                 if (hasError(formErrors, field) === true) {
                   return true;
                 }
@@ -144,7 +128,8 @@ const ApplicationForm = (props) => {
               })[0];
             }
           }
-        ]} />
+        ]}
+      />
     </Grid>
   );
 };

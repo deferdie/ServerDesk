@@ -25,7 +25,7 @@ class ApplicationController extends Controller
             Application::where('user_id', auth()->user()->id)->get()
         );
     }
-    
+
     /**
      * Show an application
      *
@@ -35,7 +35,7 @@ class ApplicationController extends Controller
     {
         return new ApplicationResource($application);
     }
-    
+
     /**
      * Update an application
      *
@@ -45,10 +45,10 @@ class ApplicationController extends Controller
     {
         $application->update($request->all());
         $application->save();
-        
+
         return new ApplicationResource($application);
     }
-    
+
     /**
      * Create an application
      *
@@ -59,19 +59,20 @@ class ApplicationController extends Controller
         $user = auth()->user();
 
         // Get the server
-        $server = Server::where('user_id', $user->id)->where('id', $request->server_id)->first();
+        $server = Server::where('user_id', $user->id)
+            ->where('id', $request->server_id)
+            ->where('status', 'running')
+            ->first();
 
-        if (! $server) {
-            // Thow 401 exception
+        if (!$server) {
             abort(401);
         }
 
         if ($request->type != 'WordPress') {
             // Get the users desired source provider
             $provider = UserSourceProvider::user($user->id)->where('id', $request->user_source_provider_id)->first();
-    
-            if (! $provider) {
-                // Thow 401 exception
+
+            if (!$provider) {
                 abort(401);
             }
         }

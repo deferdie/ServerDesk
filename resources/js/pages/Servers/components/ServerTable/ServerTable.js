@@ -39,22 +39,33 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ServerTable = props => {
-  const {
-    className,
-    servers,
-    ...rest
-  } = props;
+  const { className, servers, ...rest } = props;
   const classes = useStyles();
 
   const CustomRouterLink = forwardRef((props, ref) => (
     <RouterLink {...props} ref={ref} />
   ));
 
+  const getActions = server => {
+    if (server.status === 'creating') {
+      return;
+    }
+
+    return (
+      <Fab
+        to={`/servers/${server.id}`}
+        size="small"
+        color="secondary"
+        aria-label="edit"
+        component={CustomRouterLink}
+      >
+        <EditIcon />
+      </Fab>
+    );
+  };
+
   return (
-    <Card
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
+    <Card {...rest} className={clsx(classes.root, className)}>
       <CardContent className={classes.content}>
         <PerfectScrollbar>
           <div className={classes.inner}>
@@ -72,29 +83,23 @@ const ServerTable = props => {
               </TableHead>
               <TableBody>
                 {servers.length === 0 ? (
-                  <TableRow
-                    className={classes.tableRow}
-                    hover
-                    key="No Servers"
-                  >
+                  <TableRow className={classes.tableRow} hover key="No Servers">
                     <TableCell>
-                      <Typography variant="body1">You have no servers created.</Typography>
+                      <Typography variant="body1">
+                        You have no servers created.
+                      </Typography>
                     </TableCell>
                   </TableRow>
-                ) : ''}
+                ) : (
+                  ''
+                )}
                 {servers.map((server, index) => (
-                  <TableRow
-                    className={classes.tableRow}
-                    hover
-                    key={server.id}
-                  >
+                  <TableRow className={classes.tableRow} hover key={server.id}>
                     <TableCell>
                       <Typography variant="body1">{_.get(server, 'name')}</Typography>
                     </TableCell>
                     <TableCell>{_.get(server, 'server_provider.name')}</TableCell>
-                    <TableCell>
-                      {_.get(server, 'ip_address')}
-                    </TableCell>
+                    <TableCell>{_.get(server, 'ip_address')}</TableCell>
                     <TableCell>
                       {_.get(server, 'memory')} / {_.get(server, 'cpus')}
                     </TableCell>
@@ -105,17 +110,7 @@ const ServerTable = props => {
                       <ServerStatusIcon server={server} />
                     </TableCell>
                     <TableCell>
-                      <React.Fragment>
-                        <Fab
-                          to={`/servers/${server.id}`}
-                          size="small"
-                          color="secondary"
-                          aria-label="edit"
-                          component={CustomRouterLink}
-                        >
-                          <EditIcon />
-                        </Fab>
-                      </React.Fragment>
+                      <React.Fragment>{getActions(server)}</React.Fragment>
                     </TableCell>
                   </TableRow>
                 ))}

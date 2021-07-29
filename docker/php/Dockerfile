@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.13
 
 # Set the working directory
 WORKDIR /app
@@ -23,10 +23,6 @@ RUN sed -i "s|;*listen\s*=\s*127.0.0.1:9000|listen = 0.0.0.0:9000|g" /etc/php7/p
     sed -i "s|;*clear_env\s*=\s*no|clear_env = no|g" /etc/php7/php-fpm.d/www.conf && \
     echo "catch_workers_output = yes" >> /etc/php7/php-fpm.d/www.conf
 
-
-# Clean apk cache
-RUN rm -rf /var/cache/apk/*
-
 # Copy composer files
 COPY composer.* /app/
 
@@ -37,6 +33,10 @@ RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer && \
     php /tmp/composer-setup.php --quiet && \
     rm /tmp/composer-setup.php && \
     mv composer.phar /usr/local/bin/composer
+
+
+# Clean apk cache
+RUN rm -rf /var/cache/apk/*
 
 # Expose the PHP-fpm port
 EXPOSE 9000
